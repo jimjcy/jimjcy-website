@@ -1,0 +1,60 @@
+@use "sass:map";
+@use "sass:color";
+// class name
+// text-color
+// background-color
+// hover-color
+// border-color
+// page-color
+
+$theme: (
+  light: (
+    text-color: #0d1117,      
+    hover-color: #bdc3c7,
+    border-color: #2c3e50,
+    background-color: #e0e0e0,
+    page-color: #ffffff
+  ),
+  dark: (
+  	text-color: #e0e0e0,
+	  hover-color: #1e242a,
+	  border-color: #383838,
+	  background-color: #0d1117,
+	  page-color: #000000
+  ),
+  orange: (
+    text-color: #333333,
+    hover-color: #FFA000,
+    border-color: #FFE580,
+    background-color: #FFC107,
+    page-color: #F5A623,
+  ),
+  cyan: (
+    text-color: #333333,
+    hover-color: #72E1D5, 
+    border-color: #12D8FA,
+    background-color: #A6FFCB,
+    page-color: #00d2ff,
+  ),
+  purple: (
+    text-color: #e0e0e0,
+    background-color: #4A2F70,
+    hover-color: #7B54B2,
+    border-color: #5E3F8C,
+    page-color: #1E1233
+  )
+);
+
+$curTheme: "light";
+@mixin useTheme($anythingElse: "") {
+  @each $key, $value in $theme {
+    $curTheme: $key !global;
+
+    html[data-theme="#{'' + $key}"]#{$anythingElse} & {
+      @content;
+    }
+  }
+}
+@function getTheme($paramName) {
+  @return map.get($map: map.get($theme, $curTheme), $key: $paramName);
+}

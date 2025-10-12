@@ -1,0 +1,42 @@
+@use './styles/themes.scss' as *;
+
+html {
+  @include useTheme {
+    background-color: getTheme(background-color);
+  }
+
+  /* ::-webkit-scrollbar {
+    width: 10px;
+  } */
+  scrollbar-width: none;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: calc(100% - 75px);
+}
+
+* {
+  transition: all .3s;
+}
+.block {
+  margin: 15px;
+  border-radius: 25px;
+  border: solid 2px;
+  @include useTheme {
+    background-color: getTheme(background-color);
+    border-color: getTheme(border-color);
+    * {
+      color: getTheme(text-color);
+    }
+  }
+}
+
+.title {
+  margin: 15px;
+  @include useTheme {
+    color: getTheme(text-color);
+  }
+}
