@@ -48,5 +48,8 @@
 }
 .block {
   text-align: center;
+  // p {
+  //   font-size: 1vw;
+  // }
 }
 </style>

@@ -44,11 +44,8 @@ function submit_button() {
 
 <template>
   <h1 class="title">登录</h1>
-  <div class="block form">
-    <div class="input_box">
-      <p>用户名或邮箱：</p>
-      <input type="text" placeholder="用户名或邮箱" v-model="username" />
-    </div>
+  <div class="block form center">
+    <data-input title="用户名" width="300" height="70"/>
     <div class="input_box">
       <p>密码：</p>
       <input type="password" placeholder="密码" v-model="password" />
@@ -75,52 +72,6 @@ function submit_button() {
 </template>
 
 <style lang="scss" scoped>
-.title {
-  text-align: center;
-  color: white;
-  margin-top: 15px;
-}
-
-.input_box {
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  align-content: center;
-}
-
-.block {
-  text-align: center;
-  align-content: center;
-  align-items: center;
-  justify-content: center;
-  background-color: #5eadf2;
-  border-radius: 25px;
-  margin: 15px;
-  
-  p,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    text-align: center;
-    color: white;
-  }
-
-  a {
-    text-decoration: none;
-    color: yellow;
-
-    &:hover {
-      background-color: #f29c50;
-      color: white;
-      transition: all 0.5s;
-    }
-  }
-}
-
 .form {
   input[type="text"],
   input[type="password"] {

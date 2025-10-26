@@ -236,13 +236,13 @@ function openThemeWindow() {
 @use "./styles/themes.scss" as *;
 
 .content {
-  height: 100%;
+  height: calc(100% - 4px);
   display: flex;
   @include useTheme {
     background-color: getTheme(page-color);
   }
   .sidebar {
-    height: 100%;
+    height: calc(100% - 4px);
     overflow-y: scroll;
     overflow-x: hidden;
     scrollbar-width: none;
@@ -256,9 +256,9 @@ function openThemeWindow() {
       margin: 10px 10px;
       height: 55px;
       border-radius: 20px;
-      border-width: 4px;
+      border-width: 0.15em;
       width: calc(100% - 20px);
-      font-size: 20px;
+      font-size: 1.4em;
     }
     .footer {
       width: 100%;
@@ -270,6 +270,7 @@ function openThemeWindow() {
         @include useTheme {
           color: getTheme(text-color);
         }
+        margin-bottom: 0;
       }
 
       a {
@@ -295,7 +296,7 @@ function openThemeWindow() {
 .navbar {
   display: flex;
   position: sticky;
-  height: 80px;
+  height: 5em;
   top: 0;
   align-items: center;
   border: solid 2px;
@@ -307,16 +308,16 @@ function openThemeWindow() {
   .welcome {
     margin: auto;
     text-align: center;
-    font-size: 25px;
+    font-size: 1.7em;
     @include useTheme {
       color: getTheme(text-color);
     }
   }
 
   .but {
-    font-size: 23px;
+    font-size: 1.3em;
     height: calc(100% - 5px);
-    width: 90px;
+    width: 4em;
   }
 }
 
@@ -325,11 +326,10 @@ function openThemeWindow() {
 }
 
 .unfold {
-  width: 200px;
+  width: 12em;
 }
 
 .selection {
   display: flex;
-  transition: all 0.3s;
 }
 </style>

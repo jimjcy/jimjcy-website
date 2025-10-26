@@ -1,4 +1,4 @@
-@use './styles/themes.scss' as *;
+@use "./styles/themes.scss" as *;
 
 html {
   @include useTheme {
@@ -16,22 +16,46 @@ body {
   margin: 0;
   padding: 0;
   height: calc(100% - 75px);
+  @media (max-width: 600px) {
+    font-size: 14px;
+  }
+  @media (min-width: 601px) and (max-width: 1200px) {
+    font-size: 17px;
+  }
+  @media (min-width: 1201px) {
+    font-size: 20px;
+  }
 }
 
 * {
-  transition: all .3s;
+  transition: all 0.3s;
 }
+
 .block {
   margin: 15px;
   border-radius: 25px;
   border: solid 2px;
+  font-size: 1em;
+  a {
+    text-decoration: none;
+  }
   @include useTheme {
     background-color: getTheme(background-color);
     border-color: getTheme(border-color);
     * {
       color: getTheme(text-color);
     }
+    a:hover {
+      background-color: getTheme(hover-color);
+    }
   }
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .title {
