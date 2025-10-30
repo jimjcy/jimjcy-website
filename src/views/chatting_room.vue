@@ -1,5 +1,5 @@
 <script setup>
-import colorButton from "@/component/buttonComponent.vue";
+import colorButton from "@/component/input/clickButton.vue";
 import axios from "axios";
 import hljs from "highlight.js";
 import "highlight.js/styles/dark.css";

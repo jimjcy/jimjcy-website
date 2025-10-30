@@ -1,13 +1,13 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router.js'
-import buttonComponent from './component/buttonComponent.vue'
-import windowInfo from './component/windowInfo.vue'
-import dataInput from './component/dataInput.vue'
+import clickButton from './component/input/clickButton.vue'
+import windowInfo from './component/window/windowInfo.vue'
+import textLine from './component/input/text-line.vue'
 
 const app = createApp(App)
 app.use(router)
-app.component('center-button', buttonComponent)
+app.component('click-button', clickButton)
 app.component('window-info', windowInfo)
-app.component('data-input', dataInput)
+app.component('text-line', textLine)
 app.mount('#app')

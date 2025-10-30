@@ -18,7 +18,7 @@ const status = computed(() => {
     <input
       class="input"
       v-model="text"
-      :style="{ height: `${height}px`, width: `${width}px` }"
+      :style="{ height: `${height}em`, width: `${width}em` }"
       :class="status"
     />
     <p class="title">{{ title }}</p>
@@ -26,7 +26,7 @@ const status = computed(() => {
   </div>
 </template>
 <style lang="scss" scoped>
-@use "../styles/themes.scss" as *;
+@use "../../styles/themes.scss" as *;
 
 .group {
   position: relative;

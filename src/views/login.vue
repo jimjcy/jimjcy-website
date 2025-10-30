@@ -18,7 +18,7 @@ function imageReload() {
 }
 imageReload();
 
-function submit_button() {
+function login() {
   error.value = "";
   if (username.value === "" || password.value === "" || code.value === "") {
     error.value = "请输入完整的表单";
@@ -44,15 +44,11 @@ function submit_button() {
 
 <template>
   <h1 class="title">登录</h1>
-  <div class="block form center">
-    <data-input title="用户名" width="300" height="70"/>
-    <div class="input_box">
-      <p>密码：</p>
-      <input type="password" placeholder="密码" v-model="password" />
-    </div>
-    <div class="input_box">
-      <p>验证码：</p>
-      <input type="text" placeholder="验证码" maxlength="4" v-model="code" />
+  <div class="block center">
+    <text-line title="用户名" width="17" height="2" />
+    <text-line title="密码" width="17" height="2" />
+    <div class="code">
+      <text-line title="验证码" width="17" height="2" />
       <img alt="验证码" @click="imageReload" :src="image" />
     </div>
     <p class="error" v-text="error"></p>
@@ -62,61 +58,27 @@ function submit_button() {
         >去找回</RouterLink
       >
     </p>
-    <input
-      type="submit"
-      value="登录"
-      @click="submit_button"
-      @keyup.enter="submit_button"
-    />
+    <click-button @click="login" class="but">
+      <p>登录</p>
+    </click-button>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.form {
-  input[type="text"],
-  input[type="password"] {
-    font-size: medium;
-    border: none;
-    outline: none;
-    width: 250px;
-    height: 30px;
-    background-color: yellowgreen;
-    margin-top: 5px;
-
-    &::placeholder {
-      color: white;
-    }
-  }
-
-  input[type="submit"] {
-    font-size: medium;
-    border: none;
-    outline: none;
-    width: 150px;
-    height: 30px;
-    background-color: #f29c50;
-    margin-top: 5px;
-    margin-bottom: 5px;
-
-    &:hover {
-      background-color: #f29c50;
-      color: white;
-      transition: all 0.5s;
-    }
-  }
-
-  img {
-    vertical-align: middle;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    width: 150px;
-    block-size: 30px;
-  }
-}
-
-.error {
-  background-color: red;
-  font-size: small;
+.title {
   text-align: center;
+}
+.but {
+  font-size: 1.2em;
+  width: 7em;
+}
+.code {
+  display: flex;
+  align-items: center;
+  img {
+    margin-left: 20px;
+    height: 50px;
+    cursor: pointer;
+  }
 }
 </style>

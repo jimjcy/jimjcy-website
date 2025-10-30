@@ -119,33 +119,33 @@ function openThemeWindow() {
 
 <template>
   <header class="navbar">
-    <center-button
+    <click-button
       class="but"
       @click="fold = fold === 'fold' ? 'unfold' : 'fold'"
     >
       <p>菜单</p>
-    </center-button>
+    </click-button>
     <p v-text="welcome" class="welcome"></p>
-    <center-button
+    <click-button
       class="but"
       @click="openThemeWindow"
       style="margin-right: 20px"
     >
       <p>主题</p>
-    </center-button>
-    <center-button class="but" style="margin-right: 20px"
-      ><p>新闻</p></center-button
+    </click-button>
+    <click-button class="but" style="margin-right: 20px"
+      ><p>新闻</p></click-button
     >
-    <center-button @click="router.push('/login')" class="but" v-if="!isLogin"
-      ><p>登录</p></center-button
+    <click-button @click="router.push('/login')" class="but" v-if="!isLogin"
+      ><p>登录</p></click-button
     >
-    <center-button @click="router.push('/profile')" class="link" v-if="isLogin">
+    <click-button @click="router.push('/profile')" class="link" v-if="isLogin">
       {{ username }}
-    </center-button>
+    </click-button>
   </header>
   <div class="content">
     <div class="sidebar" :class="fold">
-      <center-button
+      <click-button
         class="but"
         v-for="(value, key) in routes"
         :key="key"
@@ -153,31 +153,31 @@ function openThemeWindow() {
       >
         <!-- <RouterLink :to="key">{{ value }}</RouterLink> -->
         <p>{{ value }}</p>
-      </center-button>
-      <center-button class="but" v-if="!isLogin" @click="router.push('/login')">
+      </click-button>
+      <click-button class="but" v-if="!isLogin" @click="router.push('/login')">
         <!-- <RouterLink to="/login">登录</RouterLink> -->
         <p>登录</p>
-      </center-button>
-      <center-button
+      </click-button>
+      <click-button
         class="but"
         v-if="!isLogin"
         @click="router.push('/register')"
       >
         <!-- <RouterLink to="/register">注册</RouterLink> -->
         <p>注册</p>
-      </center-button>
-      <center-button
+      </click-button>
+      <click-button
         class="but"
         v-if="isLogin"
         @click="router.push('/profile')"
       >
         <!-- <RouterLink to="/profile">个人中心</RouterLink>F -->
         <p>个人中心</p>
-      </center-button>
+      </click-button>
       <img
         src="./assets/pic.jpg"
         alt="小井井的头像"
-        style="height: 100px; width: 100%"
+        style="height: 7em; width: 100%"
       />
       <div class="footer">
         <p>Copyright © 2025 小井井的网站 jimjcy.top All Rights Reserved.</p>
@@ -235,29 +235,62 @@ function openThemeWindow() {
 <style lang="scss" scoped>
 @use "./styles/themes.scss" as *;
 
-.content {
-  height: calc(100% - 4px);
+.navbar {
   display: flex;
+  position: sticky;
+  height: 5em;
+  top: 0;
+  align-items: center;
+  border: solid 2px;
+  z-index: 2;
+  @include useTheme {
+    background-color: getTheme(background-color);
+    border-color: getTheme(border-color);
+  }
+
+  .welcome {
+    margin: auto;
+    text-align: center;
+    font-size: 1.7em;
+    @include useTheme {
+      color: getTheme(text-color);
+    }
+  }
+
+  .but {
+    font-size: 1.3em;
+    height: calc(100% - 5px);
+    width: 4em;
+  }
+}
+
+.content {
+  height: calc(100% - 5em - 4px);
+  position: relative;
   @include useTheme {
     background-color: getTheme(page-color);
   }
   .sidebar {
+    position: absolute;
+    top: 0;
+    max-height: calc(100% - 4px);
     height: calc(100% - 4px);
     overflow-y: scroll;
     overflow-x: hidden;
     scrollbar-width: none;
     transition: all 0.35s ease-out;
     border: solid 2px;
+    z-index: 2;
     @include useTheme {
       background-color: getTheme(background-color);
       border-color: getTheme(border-color);
     }
     .but {
-      margin: 10px 10px;
-      height: 55px;
-      border-radius: 20px;
+      margin: .5em .5em;
+      height: 2.3em;
+      border-radius: 1.2em;
       border-width: 0.15em;
-      width: calc(100% - 20px);
+      width: calc(100% - 1em);
       font-size: 1.4em;
     }
     .footer {
@@ -287,37 +320,11 @@ function openThemeWindow() {
   }
 
   .page {
-    flex: 1;
-    height: 100%;
+    z-index: 1;
+    max-height: calc(100% - 4px);
     width: 100%;
-  }
-}
-
-.navbar {
-  display: flex;
-  position: sticky;
-  height: 5em;
-  top: 0;
-  align-items: center;
-  border: solid 2px;
-  @include useTheme {
-    background-color: getTheme(background-color);
-    border-color: getTheme(border-color);
-  }
-
-  .welcome {
-    margin: auto;
-    text-align: center;
-    font-size: 1.7em;
-    @include useTheme {
-      color: getTheme(text-color);
-    }
-  }
-
-  .but {
-    font-size: 1.3em;
-    height: calc(100% - 5px);
-    width: 4em;
+    overflow-y: scroll;
+    overflow-x: hidden;
   }
 }
 

@@ -43,7 +43,7 @@ defineExpose({ open, close });
   </dialog>
 </template>
 <style scoped lang="scss">
-@use "../styles/themes.scss" as *;
+@use "../../styles/themes.scss" as *;
 .window {
   position: fixed;
   @include useTheme {
