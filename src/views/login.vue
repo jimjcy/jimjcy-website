@@ -45,10 +45,10 @@ function login() {
 <template>
   <h1 class="title">登录</h1>
   <div class="block center">
-    <text-line title="用户名" width="17" height="2" />
-    <text-line title="密码" width="17" height="2" />
+    <text-line class="text" title="用户名" v-model="username"/>
+    <text-line class="text" title="密码" v-model="password" type="password"/>
     <div class="code">
-      <text-line title="验证码" width="17" height="2" />
+      <text-line class="text" title="验证码" v-model="code"/>
       <img alt="验证码" @click="imageReload" :src="image" />
     </div>
     <p class="error" v-text="error"></p>
@@ -67,6 +67,11 @@ function login() {
 <style lang="scss" scoped>
 .title {
   text-align: center;
+}
+.text {
+  margin-top: 50px;
+  width: 17em;
+  height: 2em;
 }
 .but {
   font-size: 1.2em;

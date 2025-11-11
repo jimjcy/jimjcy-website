@@ -27,7 +27,9 @@ socket.on("data", function (data) {
   if (data.id === socket.id) {
     console.log(data.result);
     for (let i = data.result.length - 1; i >= 0; i--) {
-      data.result[i].date = moment(data.result[i].date).format("YYYY-MM-DD HH:mm:ss");
+      data.result[i].date = moment(data.result[i].date).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
       message_list.value.unshift(data.result[i]);
     }
     lastId = data.result[0].id;
@@ -65,19 +67,19 @@ function sendMessage() {
 }
 onMounted(() => {
   socket.connect();
-  watch(
-    message_list,
-    () => {
-      nextTick(() => {
-        history.value.scrollTo({
-          top: 0,
-          behavior: "smooth",
-        });
-      });
-    },
-    // { deep: true, once: true }
-    { deep: true }
-  );
+  // watch(
+  //   message_list,
+  //   () => {
+  //     nextTick(() => {
+  //       history.value.scrollTo({
+  //         top: 0,
+  //         behavior: "smooth",
+  //       });
+  //     });
+  //   },
+  //   // { deep: true, once: true }
+  //   { deep: true }
+  // );
   watch(
     message_list,
     () => {
@@ -102,161 +104,128 @@ onUnmounted(() => {
   <div class="chat">
     <div class="history" ref="history">
       <div class="middle">
-        <colorButton
-          text="获取更多"
-          style="padding: 15px; font-size: 17px"
-          @click="getMore"
-          v-if="lastId !== 1"
-        />
-        <p v-else>好像没有更多了哦</p>
+        <click-button @click="getMore" v-if="lastId !== 1" class="but"
+          ><p>获取更多</p></click-button
+        >
+        <p class="text" v-else>好像没有更多了哦~</p>
       </div>
-      <!-- -->
-      <div v-for="message in message_list" :key="message.id">
-        <div class="left_message_box" v-if="message.username !== username">
+      <div
+        v-for="message in message_list"
+        :key="message.id"
+        :class="message.username !== username ? 'left' : 'right'"
+      >
+        <div class="message-box">
           <div class="info">
-            <p class="user">{{ message.username }}</p>
-            <p class="time">{{ message.date.substring(0, 10) }}</p>
-            <p class="time">{{ message.date.substring(11, 19) }}</p>
+            <p>
+              {{ message.username }} {{ message.date.substring(0, 10) }}
+              {{ message.date.substring(11, 19) }}
+            </p>
           </div>
-          <div class="message_content">
+          <div class="message-content">
             <p>{{ message.content }}</p>
           </div>
         </div>
-        <div class="right_message_box" v-else>
-          <div class="message_content">
-            <p>{{ message.content }}</p>
-          </div>
-          <div class="info">
-            <p class="user">{{ username }}</p>
-            <p class="time">{{ message.date.substring(0, 10) }}</p>
-            <p class="time">{{ message.date.substring(11, 19) }}</p>
-          </div>
-        </div>
       </div>
-      <!-- -->
     </div>
     <div class="input">
-      <p class="error">{{ error }}</p>
-      <textarea
+      <text-area
+        class="text"
         v-model="message"
-        class="input_box"
-        placeholder="按下Ctrl+Enter以发送"
+        title="按下Ctrl+Enter以发送"
         @keyup.ctrl.enter="sendMessage"
-      ></textarea>
-      <input
-        type="button"
-        value="发送"
-        @click="sendMessage"
-        class="submit"
-        ref="submit"
-      />
+      ></text-area>
+      <click-button @click="sendMessage" class="but"><p>发送</p></click-button>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 @use "../styles/themes.scss" as *;
-p {
-  margin-left: 15px;
-  margin-right: 15px;
-}
-
-.middle {
-  align-items: center;
-  text-align: center;
-  margin-bottom: 10px;
-  color: white;
-}
 
 .chat {
-  display: flex;
   height: 100%;
-  flex-direction: column;
-
+  width: 100%;
+  @include useTheme {
+    background-color: getTheme(background-color);
+  }
   .history {
-    background-color: #5eadf2;
+    height: calc(100% - 10em - 4px);
     overflow-y: scroll;
-    flex: 1 1 0;
+    overflow-x: auto;
+    padding: 0 2px;
     scrollbar-width: thin;
+    display: flex;
+    flex-direction: column;
+    .middle {
+      align-self: center;
+      .text,
+      .but {
+        margin: 20px 0;
+        height: 3em;
+        width: 10em;
+        font-size: 1.3em;
+      }
+    }
+    .left {
+      align-self: flex-start;
+    }
+    .right {
+      align-self: flex-end;
+    }
+    .left,
+    .right {
+      margin-bottom: 15px;
+      .message-box {
+        .info {
+          text-align: right;
+        }
+        .message-content {
+          padding: 20px;
+          min-width: 5em;
+          // max-width: max(100%, 50em);
+          max-width: 40em;
+          overflow-x: auto;
+          border-radius: 10px;
+          font-size: 1.1em;
+          @include useTheme {
+            background-color: getTheme(hover-color);
+            border: solid 2px getTheme(border-color);
+            color: getTheme(text-color);
+          }
+          p {
+            margin: 0;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+          }
+        }
+      }
+    }
   }
-
   .input {
-    background-color: #0476d9;
-    height: 250px;
-    flex: 0 0 auto;
+    height: 10em;
+    position: relative;
+    @include useTheme {
+      border: solid 2px getTheme(border-color);
+    }
+    .text {
+      position: relative;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 4px);
+    }
+    .but {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      font-size: 1.3em;
+      height: 2.5em;
+      width: 7em;
+      opacity: 0.5;
+      &:hover {
+        opacity: 0.8;
+      }
+    }
   }
-}
-
-.select {
-  width: 100%;
-  border: none;
-  background-color: yellowgreen;
-  font-size: 17.5px;
-  border-radius: 25px;
-  align-content: center;
-  text-align: center;
-  outline: none;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.submit {
-  width: 100%;
-  border: none;
-  background-color: #f29c50;
-  color: black;
-  font-size: 20px;
-  border-radius: 25px;
-  margin-bottom: 10px;
-
-  &:hover {
-    background-color: #f29c50;
-    color: white;
-    transition: all 0.5s;
-  }
-}
-
-.input_box {
-  margin-top: 10px;
-  width: 100%;
-  background-color: yellowgreen;
-  height: 100px;
-  border: none;
-  resize: none;
-  outline: none;
-  font-size: 20px;
-}
-
-.error {
-  background-color: red;
-  font-size: small;
-  text-align: center;
-}
-
-.left_message_box {
-  display: flex;
-  margin-bottom: 5px;
-  align-items: flex-start;
-}
-
-.right_message_box {
-  display: flex;
-  justify-content: right;
-  margin-bottom: 5px;
-  align-items: flex-start;
-}
-
-.message_content {
-  background-color: #f29c50;
-  border-radius: 10px;
-  margin-left: 15px;
-  margin-right: 15px;
-  white-space: pre-wrap;
-  word-break: break-all;
-}
-
-.user {
-  margin-left: 15px;
-  margin-right: 15px;
 }
 </style>

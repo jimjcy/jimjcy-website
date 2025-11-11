@@ -1,10 +1,12 @@
 <script setup>
 defineProps({
   title: String,
-  width: Number,
-  height: Number,
+  type: {
+    type: String,
+    default: "text",
+  },
 });
-const text = defineModel("text");
+const text = defineModel();
 const status = computed(() => {
   if (text.value && text.value.length > 0) {
     return "open";
@@ -18,8 +20,8 @@ const status = computed(() => {
     <input
       class="input"
       v-model="text"
-      :style="{ height: `${height}em`, width: `${width}em` }"
       :class="status"
+      :type="type"
     />
     <p class="title">{{ title }}</p>
     <div class="decoration"></div>
@@ -30,7 +32,6 @@ const status = computed(() => {
 
 .group {
   position: relative;
-  margin-top: 20px;
   .title {
     position: absolute;
     top: calc((100% - 1.3em) / 2);

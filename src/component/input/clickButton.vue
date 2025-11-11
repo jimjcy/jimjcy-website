@@ -1,10 +1,11 @@
 <script setup>
 const props = defineProps({
   text: String,
+  disabled: Boolean,
 });
 </script>
 <template>
-  <button class="but">
+  <button class="but" :disabled="disabled">
     <slot></slot>
   </button>
 </template>

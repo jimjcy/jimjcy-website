@@ -3,7 +3,7 @@ import constant from "./constant";
 
 const LOGOUTSESSIONID = "00000000000000000000000000000000";
 
-const fold = ref("fold");
+const fold = ref(false);
 const barcontent = ref("菜单");
 
 const welcome = ref("欢迎来到小井井的网站！");
@@ -92,9 +92,9 @@ constant.req
     }
   });
 
-if (localStorage.version === undefined || localStorage.version !== "2.1.0") {
+if (localStorage.version === undefined || localStorage.version !== "3.0.0") {
   localStorage.clear();
-  localStorage.version = "2.1.0";
+  localStorage.version = "3.0.0";
 }
 
 if (localStorage.codesession === undefined) {
@@ -121,7 +121,7 @@ function openThemeWindow() {
   <header class="navbar">
     <click-button
       class="but"
-      @click="fold = fold === 'fold' ? 'unfold' : 'fold'"
+      @click="fold = fold === true ? false : true"
     >
       <p>菜单</p>
     </click-button>
@@ -144,73 +144,79 @@ function openThemeWindow() {
     </click-button>
   </header>
   <div class="content">
-    <div class="sidebar" :class="fold">
-      <click-button
-        class="but"
-        v-for="(value, key) in routes"
-        :key="key"
-        @click="router.push(key)"
-      >
-        <!-- <RouterLink :to="key">{{ value }}</RouterLink> -->
-        <p>{{ value }}</p>
-      </click-button>
-      <click-button class="but" v-if="!isLogin" @click="router.push('/login')">
-        <!-- <RouterLink to="/login">登录</RouterLink> -->
-        <p>登录</p>
-      </click-button>
-      <click-button
-        class="but"
-        v-if="!isLogin"
-        @click="router.push('/register')"
-      >
-        <!-- <RouterLink to="/register">注册</RouterLink> -->
-        <p>注册</p>
-      </click-button>
-      <click-button
-        class="but"
-        v-if="isLogin"
-        @click="router.push('/profile')"
-      >
-        <!-- <RouterLink to="/profile">个人中心</RouterLink>F -->
-        <p>个人中心</p>
-      </click-button>
-      <img
-        src="./assets/pic.jpg"
-        alt="小井井的头像"
-        style="height: 7em; width: 100%"
-      />
-      <div class="footer">
-        <p>Copyright © 2025 小井井的网站 jimjcy.top All Rights Reserved.</p>
-        <div class="links">
-          <a href="https://beian.miit.gov.cn/" target="_blank"
-            >赣ICP备2024027845号-1</a
-          >
-          <a
-            href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=36070202001004"
-            target="_blank"
-            >赣公网安备 36070202001004号</a
-          >
+    <Transition name="sidebar">
+      <div class="sidebar" v-if="fold">
+        <click-button
+          class="but"
+          v-for="(value, key) in routes"
+          :key="key"
+          @click="router.push(key)"
+        >
+          <!-- <RouterLink :to="key">{{ value }}</RouterLink> -->
+          <p>{{ value }}</p>
+        </click-button>
+        <click-button
+          class="but"
+          v-if="!isLogin"
+          @click="router.push('/login')"
+        >
+          <!-- <RouterLink to="/login">登录</RouterLink> -->
+          <p>登录</p>
+        </click-button>
+        <click-button
+          class="but"
+          v-if="!isLogin"
+          @click="router.push('/register')"
+        >
+          <!-- <RouterLink to="/register">注册</RouterLink> -->
+          <p>注册</p>
+        </click-button>
+        <click-button
+          class="but"
+          v-if="isLogin"
+          @click="router.push('/profile')"
+        >
+          <!-- <RouterLink to="/profile">个人中心</RouterLink>F -->
+          <p>个人中心</p>
+        </click-button>
+        <img
+          src="./assets/pic.jpg"
+          alt="小井井的头像"
+          style="height: 7em; width: 100%"
+        />
+        <div class="footer">
+          <p>Copyright © 2025 小井井的网站 jimjcy.top All Rights Reserved.</p>
+          <div class="links">
+            <a href="https://beian.miit.gov.cn/" target="_blank"
+              >赣ICP备2024027845号-1</a
+            >
+            <a
+              href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=36070202001004"
+              target="_blank"
+              >赣公网安备 36070202001004号</a
+            >
+          </div>
+          <p>
+            Powered by Vue+Vite+VueRouter Designed by Xiaojingjing &
+            <a target="_blank" href="https://github.com/grassblock123"
+              >grassblock</a
+            >
+          </p>
+          <p>
+            友情链接：<a target="_blank" href="https://kuankuan.site"
+              >宽宽的小天地</a
+            >
+            <a target="_blank" href="https://python666.cn">crossin的个人博客</a>
+            <a target="_blank" href="http://bsynet.cc">思远的网站</a>
+            <a target="_blank" href="http://hezi.xyxpz.cn">鹤子的网站</a>
+            <a target="_blank" href="https://neongel.github.io"
+              >小皮鸭(neongel工作室)的网站</a
+            >
+          </p>
+          <!-- <br /><br /><br /><br /> -->
         </div>
-        <p>
-          Powered by Vue+Vite+VueRouter Designed by Xiaojingjing &
-          <a target="_blank" href="https://github.com/grassblock123"
-            >grassblock</a
-          >
-        </p>
-        <p>
-          友情链接：<a target="_blank" href="https://kuankuan.site"
-            >宽宽的小天地</a
-          >
-          <a target="_blank" href="https://python666.cn">crossin的个人博客</a>
-          <a target="_blank" href="http://bsynet.cc">思远的网站</a>
-          <a target="_blank" href="http://hezi.xyxpz.cn">鹤子的网站</a>
-          <a target="_blank" href="https://neongel.github.io"
-            >小皮鸭(neongel工作室)的网站</a
-          >
-        </p>
-        <!-- <br /><br /><br /><br /> -->
-      </div>
-    </div>
+      </div></Transition
+    >
     <div class="page">
       <RouterView />
     </div>
@@ -281,12 +287,15 @@ function openThemeWindow() {
     transition: all 0.35s ease-out;
     border: solid 2px;
     z-index: 2;
+    width: 12em;
+    transform-origin: left;
     @include useTheme {
       background-color: getTheme(background-color);
       border-color: getTheme(border-color);
+      box-shadow: 3px 0 5px getTheme(border-color);
     }
     .but {
-      margin: .5em .5em;
+      margin: 0.5em 0.5em;
       height: 2.3em;
       border-radius: 1.2em;
       border-width: 0.15em;
@@ -321,21 +330,29 @@ function openThemeWindow() {
 
   .page {
     z-index: 1;
-    max-height: calc(100% - 4px);
+    height: calc(100% - 4px);
     width: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
   }
 }
-
-.fold {
-  width: 0px;
+.sidebar-enter-to,
+.sidebar-leave-from {
+  transform: scaleX(1);
+  opacity: 1;
 }
-
-.unfold {
-  width: 12em;
+.sidebar-enter-active {
+  transform: scaleX(1.3);
+  transition: all .2s ease-out;
 }
-
+.sidebar-leave-active {
+  transition: all .2s ease-in;
+}
+.sidebar-enter-from,
+.sidebar-leave-to {
+  transform: scaleX(0);
+  opacity: 0;
+}
 .selection {
   display: flex;
 }
