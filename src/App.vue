@@ -1,8 +1,6 @@
 <script setup>
 import constant from "./constant";
 
-const LOGOUTSESSIONID = "00000000000000000000000000000000";
-
 const fold = ref(false);
 const barcontent = ref("菜单");
 
@@ -50,47 +48,46 @@ let fromUrl = "";
 let toUrl = "";
 
 const router = useRouter();
-router.beforeEach(async (to, from) => {
-  fromUrl = from.fullPath.split("/")[1];
-  toUrl = to.fullPath.split("/")[1];
-  if (toUrl === "") {
-    toUrl = "home";
-  }
-  if (fromUrl === "") {
-    fromUrl = "home";
-  }
-  console.log(fromUrl, toUrl);
-  document.title = titles[toUrl] + "-小井井的网站";
-  if (from.fullPath !== "login") localStorage.fromUrl = from.fullPath;
-  else localStorage.fromUrl = to.fullPath;
-  if (
-    (toUrl === "report_issues" ||
-      toUrl === "chatting_room" ||
-      toUrl === "ai_chatting") &&
-    !isLogin.value
-  ) {
-    router.push("/login");
-    localStorage.fromUrl = to.fullPath;
-  }
-});
+// router.beforeEach(async (to, from) => {
+//   fromUrl = from.fullPath.split("/")[1];
+//   toUrl = to.fullPath.split("/")[1];
+//   if (toUrl === "") {
+//     toUrl = "home";
+//   }
+//   if (fromUrl === "") {
+//     fromUrl = "home";
+//   }
+//   console.log(fromUrl, toUrl);
+//   document.title = titles[toUrl] + "-小井井的网站";
+//   if (from.fullPath !== "login") localStorage.fromUrl = from.fullPath;
+//   else localStorage.fromUrl = to.fullPath;
+//   if (
+//     (toUrl === "report_issues" ||
+//       toUrl === "chatting_room" ||
+//       toUrl === "ai_chatting") &&
+//     !isLogin.value
+//   ) {
+//     router.push("/login");
+//     localStorage.fromUrl = to.fullPath;
+//   }
+// });
 
 if (localStorage.sessionid === undefined) {
-  localStorage.sessionid = LOGOUTSESSIONID;
+  localStorage.sessionid = constant.LOGOUTSESSIONID;
 }
 
-constant.req
-  .post("/login/check", {
-    sessionid: localStorage.sessionid,
-  })
-  .then((response) => {
-    if (response.data.status) {
-      isLogin.value = true;
-      username.value = response.data.username;
-      welcome.value = "欢迎" + response.data.username + "来到小井井的网站！";
-    } else {
-      localStorage.sessionid = LOGOUTSESSIONID;
-    }
-  });
+onBeforeMount(() => {
+  constant.req
+    .post("/login/check", {
+      sessionid: localStorage.sessionid,
+    })
+    .then((response) => {
+      if (response.data.status) {
+        username.value = response.data.username;
+        welcome.value = "欢迎" + response.data.username + "来到小井井的网站！";
+      }
+    });
+});
 
 if (localStorage.version === undefined || localStorage.version !== "3.0.0") {
   localStorage.clear();
@@ -119,10 +116,7 @@ function openThemeWindow() {
 
 <template>
   <header class="navbar">
-    <click-button
-      class="but"
-      @click="fold = fold === true ? false : true"
-    >
+    <click-button class="but" @click="fold = fold === true ? false : true">
       <p>菜单</p>
     </click-button>
     <p v-text="welcome" class="welcome"></p>
@@ -343,10 +337,10 @@ function openThemeWindow() {
 }
 .sidebar-enter-active {
   transform: scaleX(1.3);
-  transition: all .2s ease-out;
+  transition: all 0.2s ease-out;
 }
 .sidebar-leave-active {
-  transition: all .2s ease-in;
+  transition: all 0.2s ease-in;
 }
 .sidebar-enter-from,
 .sidebar-leave-to {

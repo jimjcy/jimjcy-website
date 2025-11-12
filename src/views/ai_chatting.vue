@@ -4,6 +4,7 @@ import { marked } from "marked";
 import hljs from "highlight.js";
 import "highlight.js/styles/dark.css";
 import io from "socket.io-client";
+import constant from "@/constant";
 
 const username = ref("");
 const message = ref("");
@@ -79,8 +80,20 @@ function sendMessage() {
   });
   message_list.value.push({ role: "assistant", content: "" });
 }
-onMounted(() => {
+const router = useRouter();
+onBeforeMount(() => {
   socket.connect();
+  constant.req
+    .post("/login/check", {
+      sessionid: localStorage.sessionid,
+    })
+    .then((response) => {
+      if (!response.data.status) {
+        router.push("/login");
+      }
+    });
+});
+onMounted(() => {
   watch(
     message_list,
     () => {
@@ -103,17 +116,23 @@ onUnmounted(() => {
 <template>
   <div class="chat">
     <div class="history" ref="history">
-      <!-- -->
       <div class="left_message_box">
         <p class="user">System</p>
         <div class="message_content">
           <p>Now you can talk with AI!</p>
         </div>
       </div>
-      <div v-for="message in message_list" :key="message.id">
-        <div class="left_message_box" v-if="message.role === 'assistant'">
-          <p class="user">AI</p>
-          <div class="message_content">
+      <div
+        v-for="message in message_list"
+        :key="message.id"
+        :class="message.role === 'assistant' ? 'left' : 'right'"
+      >
+        <div class="message-box">
+          <p
+            class="info"
+            v-text="message.role === 'assistant' ? 'AI' : 'User'"
+          ></p>
+          <div class="content">
             <!-- <article
             class="left_message_content"
             v-html="marked.parse(message.content)"
@@ -125,12 +144,6 @@ onUnmounted(() => {
             ></VueShowdown> -->
             <!-- <p class="left_token">token: {{ message.token }}</p> -->
           </div>
-        </div>
-        <div class="right_message_box" v-else>
-          <div class="message_content">
-            <p>{{ message.content }}</p>
-          </div>
-          <p class="user">{{ username }}</p>
         </div>
       </div>
       <!-- -->
@@ -163,96 +176,110 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
-p {
-  margin-left: 15px;
-  margin-right: 15px;
-}
+@use "../styles/themes.scss" as *;
 
 .chat {
-  display: flex;
   height: 100%;
-  flex-direction: column;
-
+  width: 100%;
+  @include useTheme {
+    background-color: getTheme(background-color);
+  }
   .history {
-    background-color: #5eadf2;
+    height: calc(100% - 10em - 4px);
     overflow-y: scroll;
-    flex: 1 1 0;
+    overflow-x: auto;
+    padding: 0 2px;
     scrollbar-width: thin;
+    display: flex;
+    flex-direction: column;
+    .middle {
+      align-self: center;
+      .text,
+      .but {
+        margin: 20px 0;
+        height: 3em;
+        width: 10em;
+        font-size: 1.3em;
+      }
+    }
+    .left {
+      align-self: flex-start;
+      margin-left: 10px;
+      .message-box {
+        .info {
+          text-align: left;
+        }
+        // .content {
+        //   position: relative;
+        //   left: 0;
+        // }
+      }
+    }
+    .right {
+      align-self: flex-end;
+      margin-right: 10px;
+      .message-box {
+        .info {
+          text-align: right;
+        }
+        // .content {
+        //   position: relative;
+        //   right: 0;
+        // }
+      }
+    }
+    .left,
+    .right {
+      margin-bottom: 15px;
+      .message-box {
+        .content {
+          padding: 20px;
+          min-width: 3em;
+          // max-width: max(100%, 50em);
+          max-width: 40em;
+          overflow-x: auto;
+          border-radius: 10px;
+          font-size: 1.1em;
+          // width: fit-content;
+          @include useTheme {
+            background-color: getTheme(hover-color);
+            border: solid 2px getTheme(border-color);
+            color: getTheme(text-color);
+          }
+          p {
+            margin: 0;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+          }
+        }
+      }
+    }
   }
-
   .input {
-    background-color: #0476d9;
-    height: 250px;
-    flex: 0 0 auto;
+    height: 10em;
+    position: relative;
+    @include useTheme {
+      border: solid 2px getTheme(border-color);
+    }
+    .text {
+      position: relative;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 4px);
+    }
+    .but {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      font-size: 1.3em;
+      height: 2.5em;
+      width: 7em;
+      opacity: 0.5;
+      &:hover {
+        opacity: 0.8;
+      }
+    }
   }
-}
-
-.select {
-  width: 100%;
-  border: none;
-  background-color: yellowgreen;
-  font-size: 17.5px;
-  border-radius: 25px;
-  align-content: center;
-  text-align: center;
-  outline: none;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.submit {
-  width: 100%;
-  border: none;
-  background-color: #f29c50;
-  color: black;
-  font-size: 20px;
-  border-radius: 25px;
-  margin-bottom: 10px;
-
-  &:hover {
-    background-color: #f29c50;
-    color: white;
-    transition: all 0.5s;
-  }
-}
-
-.input_box {
-  margin-top: 10px;
-  width: 100%;
-  background-color: yellowgreen;
-  height: 100px;
-  border: none;
-  resize: none;
-  outline: none;
-  font-size: 20px;
-}
-
-.error {
-  background-color: red;
-  font-size: small;
-  text-align: center;
-}
-
-.left_message_box {
-  display: flex;
-  margin-bottom: 5px;
-}
-
-.right_message_box {
-  display: flex;
-  justify-content: right;
-  margin-bottom: 5px;
-}
-
-.message_content {
-  background-color: #f29c50;
-  border-radius: 10px;
-  margin-left: 15px;
-  margin-right: 15px;
-}
-
-.user {
-  margin-left: 15px;
-  margin-right: 15px;
 }
 </style>

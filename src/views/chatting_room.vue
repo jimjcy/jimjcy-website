@@ -5,6 +5,8 @@ import hljs from "highlight.js";
 import "highlight.js/styles/dark.css";
 import io from "socket.io-client";
 import moment from "moment";
+import constant from "@/constant";
+import { onBeforeMount } from "vue";
 
 const username = ref("");
 const message = ref("");
@@ -65,8 +67,20 @@ function sendMessage() {
   });
   message.value = "";
 }
-onMounted(() => {
+const router = useRouter();
+onBeforeMount(() => {
   socket.connect();
+  constant.req
+    .post("/login/check", {
+      sessionid: localStorage.sessionid,
+    })
+    .then((response) => {
+      if (!response.data.status) {
+        router.push("/login");
+      }
+    });
+});
+onMounted(() => {
   // watch(
   //   message_list,
   //   () => {
@@ -121,7 +135,7 @@ onUnmounted(() => {
               {{ message.date.substring(11, 19) }}
             </p>
           </div>
-          <div class="message-content">
+          <div class="content">
             <p>{{ message.content }}</p>
           </div>
         </div>
@@ -168,25 +182,43 @@ onUnmounted(() => {
     }
     .left {
       align-self: flex-start;
+      margin-left: 10px;
+      .message-box {
+        .info {
+          text-align: left;
+        }
+        // .content {
+        //   position: relative;
+        //   left: 0;
+        // }
+      }
     }
     .right {
       align-self: flex-end;
+      margin-right: 10px;
+      .message-box {
+        .info {
+          text-align: right;
+        }
+        // .content {
+        //   position: relative;
+        //   right: 0;
+        // }
+      }
     }
     .left,
     .right {
       margin-bottom: 15px;
       .message-box {
-        .info {
-          text-align: right;
-        }
-        .message-content {
+        .content {
           padding: 20px;
-          min-width: 5em;
+          min-width: 3em;
           // max-width: max(100%, 50em);
           max-width: 40em;
           overflow-x: auto;
           border-radius: 10px;
           font-size: 1.1em;
+          // width: fit-content;
           @include useTheme {
             background-color: getTheme(hover-color);
             border: solid 2px getTheme(border-color);

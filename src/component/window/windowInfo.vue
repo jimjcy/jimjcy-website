@@ -35,7 +35,7 @@ defineExpose({ open, close });
   >
     <div class="windowTitle">
       <p>{{ title }}</p>
-      <center-button class="close" @click="close">✕</center-button>
+      <click-button class="close" @click="close">✕</click-button>
     </div>
     <div class="windowContent">
       <slot></slot>
