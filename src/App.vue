@@ -83,6 +83,7 @@ onBeforeMount(() => {
     })
     .then((response) => {
       if (response.data.status) {
+        isLogin.value = true;
         username.value = response.data.username;
         welcome.value = "欢迎" + response.data.username + "来到小井井的网站！";
       }

@@ -1,6 +1,7 @@
 <script setup>
 import axios from "axios";
 import { marked } from "marked";
+import markedKatex from "marked-katex-extension";
 import hljs from "highlight.js";
 import "highlight.js/styles/dark.css";
 import io from "socket.io-client";
@@ -22,18 +23,25 @@ let isConnected = false;
 //   "通义千问-max": "max",
 //   deepseek: "deepseek",
 // };
+marked.use(
+  markedKatex({
+    throwOnError: false,
+    inlineDelimiters: [["$", "$"]],
+    blockDelimiters: [["$$", "$$"]],
+  })
+);
+marked.setOptions({
+  // highlight: (code, lang) => {
+  //   return lang
+  //     ? hljs.highlight(code, { language: lang }).value
+  //     : hljs.highlightAuto(code).value;
+  // },
+  gfm: true,
+  breaks: true,
+  sanitize: false,
+  smartypants: false,
+});
 
-// marked.setOptions({
-//   renderer: new marked.Renderer(),
-//   highlight: function (code, language) {
-//     const validLanguage = hljs.getLanguage(language) ? language : "plaintext";
-//     // return hljs.highlight(code, { language: language }).value;
-//     return hljs.highlight(validLanguage, code).value;
-//   },
-//   gfm: true,
-//   tables: true,
-// });
-// console.log(hljs.highlight("javascript", "console.log('Hello, world!')").value);
 const socket = io("https://api.jimjcy.top", {
   path: "/ai/ws",
   transports: ["websocket"],
@@ -44,17 +52,17 @@ socket.on("connect", function () {
 });
 socket.on("result", function (data) {
   if (data.id === socket.id) {
-    message_list.value[data.index].content += data.result;
+    message_list.value[data.index].rawcontent += data.result;
+    message_list.value[data.index].content = marked.parse(
+      message_list.value[data.index].rawcontent
+    );
   }
-  // message_list.value[data.index].content = marked.parse(
-  //   message_list.value[data.index].content
-  // );
 });
 socket.on("stop", function (data) {
-  // message_list.value[data.index].content = marked.parse(
-  //   message_list.value[data.index].content
-  // );
   if (socket.id === data.id) {
+    message_list.value[data.index].content = marked.parse(
+      message_list.value[data.index].rawcontent
+    );
     submit.value.value = "发送";
     submit.value.disabled = false;
   }
@@ -78,7 +86,7 @@ function sendMessage() {
     model: model.value,
     index: message_list.value.length,
   });
-  message_list.value.push({ role: "assistant", content: "" });
+  message_list.value.push({ role: "assistant", content: "", rawcontent: "" });
 }
 const router = useRouter();
 onBeforeMount(() => {
@@ -116,10 +124,12 @@ onUnmounted(() => {
 <template>
   <div class="chat">
     <div class="history" ref="history">
-      <div class="left_message_box">
-        <p class="user">System</p>
-        <div class="message_content">
-          <p>Now you can talk with AI!</p>
+      <div class="left">
+        <div class="message-box">
+          <p class="info">System</p>
+          <div class="content">
+            <p>Now you can talk with AI!</p>
+          </div>
         </div>
       </div>
       <div
@@ -132,30 +142,38 @@ onUnmounted(() => {
             class="info"
             v-text="message.role === 'assistant' ? 'AI' : 'User'"
           ></p>
-          <div class="content">
-            <!-- <article
+          <div
+            class="content"
+            v-html="message.content"
+            v-if="message.role === 'assistant'"
+          ></div>
+          <div class="content" v-else>
+            <p>{{ message.content }}</p>
+          </div>
+          <!-- <div class="content"> -->
+          <!-- <article
             class="left_message_content"
             v-html="marked.parse(message.content)"
           ></article> -->
-            <p>{{ message.content }}</p>
-            <!-- <VueShowdown
+          <!-- <p>{{ message.content }}</p> -->
+          <!-- <VueShowdown
               :markdown="message.content"
               flavor="vanilla"
             ></VueShowdown> -->
-            <!-- <p class="left_token">token: {{ message.token }}</p> -->
-          </div>
+          <!-- <p class="left_token">token: {{ message.token }}</p> -->
+          <!-- </div> -->
         </div>
       </div>
       <!-- -->
     </div>
     <div class="input">
-      <p class="error">{{ error }}</p>
-      <textarea
+      <!-- <p class="error">{{ error }}</p> -->
+      <text-area
         v-model="message"
-        class="input_box"
-        placeholder="按下Ctrl+Enter以发送"
+        class="text"
+        title="按下Ctrl+Enter以发送"
         @keyup.ctrl.enter="sendMessage"
-      ></textarea>
+      ></text-area>
       <select v-model="model" class="select">
         <option value="qwen-long">通义千问-long</option>
         <option value="qwen-turbo">通义千问-turbo</option>
@@ -164,13 +182,14 @@ onUnmounted(() => {
         <option value="qwq-plus">通义qwq-plus</option>
         <option value="deepseek">deepseek</option>
       </select>
-      <input
+      <click-button
         type="button"
         value="发送"
         @click="sendMessage"
         class="submit"
         ref="submit"
-      />
+        ><p>发送</p></click-button
+      >
     </div>
   </div>
 </template>
@@ -268,10 +287,37 @@ onUnmounted(() => {
       width: 100%;
       height: calc(100% - 4px);
     }
+    .select {
+      position: absolute;
+      bottom: 2px;
+      right: calc(7em + 10px);
+      font-size: 1.3em;
+      height: 2.5em;
+      width: 10em;
+      opacity: 0.3;
+      @include useTheme {
+        background-color: getTheme(background-color);
+        border: solid 2px getTheme(border-color);
+        color: getTheme(text-color);
+      }
+      option {
+        opacity: 0.6;
+        @include useTheme {
+          background-color: getTheme(background-color);
+          color: getTheme(text-color);
+        }
+        &:hover {
+          @include useTheme {
+            background-color: getTheme(hover-color);
+            color: getTheme(text-color);
+          }
+        }
+      }
+    }
     .but {
       position: absolute;
-      bottom: 0;
-      right: 0;
+      bottom: 2px;
+      right: 2px;
       font-size: 1.3em;
       height: 2.5em;
       width: 7em;
@@ -281,5 +327,10 @@ onUnmounted(() => {
       }
     }
   }
+}
+</style>
+<style lang="scss">
+.katex-html {
+  display: none;
 }
 </style>
