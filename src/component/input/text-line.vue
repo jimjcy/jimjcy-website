@@ -39,6 +39,7 @@ const status = computed(() => {
     margin: 0;
     font-size: 1.3em;
     opacity: .5;
+    user-select: none;
   }
   .input {
     position: relative;

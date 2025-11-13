@@ -2,7 +2,6 @@
 import constant from "../constant";
 
 const router = useRouter();
-const LOGOUTSESSIONID = "00000000000000000000000000000000";
 
 const text = ref("");
 const username = ref("");
@@ -180,233 +179,129 @@ function reset_email() {
 }
 
 function logout() {
-  localStorage.sessionid = LOGOUTSESSIONID;
+  localStorage.sessionid = constant.LOGOUTSESSIONID;
   window.location.href = "/login";
 }
 </script>
 
 <template>
-  <div class="form">
-    <h1 v-text="text"></h1>
-    <div class="block">
-      <h2>基础信息</h2>
-      <h3>用户名</h3>
-      <div class="input_box">
-        <p>用户名：</p>
-        <input type="text" v-model="username" placeholder="用户名" />
-      </div>
-      <div class="input_box">
-        <p>验证码：</p>
-        <input type="text" placeholder="验证码" v-model="code" maxlength="4" />
-        <img :src="image" @click="imageReload" alt="验证码" />
-      </div>
-      <input type="submit" value="确定修改" @click="reset_username" />
-      <br />
-      <!--*************************************************-->
-      <h3>性别</h3>
-      <div class="input_box">
-        <p>性别：</p>
-        <select v-model="sex">
-          <option value="保密" selected>保密</option>
-          <option value="男">男</option>
-          <option value="女">女</option>
-          <option value="未知">未知</option>
-        </select>
-      </div>
-      <div class="input_box">
-        <p>验证码：</p>
-        <input type="text" placeholder="验证码" v-model="code" maxlength="4" />
-        <img :src="image" @click="imageReload" alt="验证码" />
-      </div>
-      <input type="submit" value="确定修改" @click="reset_sex" />
+  <h1 class="title" v-text="text"></h1>
+  <div class="block center">
+    <h2>基础信息</h2>
+    <h3>用户名</h3>
+    <text-line class="text" title="当前用户名" :value="username" />
+    <div class="code">
+      <text-line class="text" title="验证码" v-model="code" />
+      <img :src="image" @click="imageReload" alt="验证码" />
     </div>
-    <h4 class="error" v-text="error"></h4>
-    <!--***********************************************-->
-    <div class="block">
-      <h2>其它设置</h2>
-      <div>
-        <h3>密码设置</h3>
-        <div class="input_box">
-          <p>原密码：</p>
-          <input
-            type="password"
-            placeholder="原密码"
-            v-model="password_before"
-          />
-        </div>
-        <div class="input_box">
-          <p>新密码：</p>
-          <input type="password" placeholder="新密码" v-model="password_new" />
-        </div>
-        <div class="input_box">
-          <p>验证码：</p>
-          <input
-            type="text"
-            placeholder="验证码"
-            v-model="code"
-            maxlength="4"
-          />
-          <img :src="image" @click="imageReload" alt="验证码" />
-        </div>
-        <input type="submit" value="确定修改" @click="reset_password" />
-      </div>
-      <br /><!--**********************************************-->
-      <div>
-        <h3>邮箱设置</h3>
-        <div class="input_box">
-          <p>修改的邮箱：</p>
-          <input type="text" placeholder="修改的邮箱" v-model="email" />
-        </div>
-        <div class="input_box">
-          <p>验证码：</p>
-          <input
-            type="text"
-            placeholder="验证码"
-            v-model="code"
-            maxlength="4"
-          />
-          <img :src="image" @click="imageReload" alt="验证码" />
-        </div>
-        <div class="input_box">
-          <p>邮箱验证码：</p>
-          <input
-            type="text"
-            placeholder="邮箱验证码"
-            v-model="email_code"
-            maxlength="5"
-          />
-          <input
-            type="submit"
-            value="发送验证码"
-            @click="send_email"
-            ref="email_code_button"
-          />
-        </div>
-        <input type="submit" value="确定修改" @click="reset_email" />
-      </div>
+    <click-button class="but" @click="reset_username">
+      <p>确定修改</p>
+    </click-button>
+    <!--*************************************************-->
+    <h3>性别</h3>
+    <div class="code">
+      <p>性别：</p>
+      <select v-model="sex">
+        <option value="保密" selected>保密</option>
+        <option value="男">男</option>
+        <option value="女">女</option>
+        <option value="未知">未知</option>
+      </select>
     </div>
-    <!--**************************************************************-->
-    <input type="button" value="退出登录" class="logout" @click="logout" />
+    <div class="code">
+      <text-line class="text" title="验证码" v-model="code" />
+      <img :src="image" @click="imageReload" alt="验证码" />
+    </div>
+    <click-button class="but" @click="reset_sex">
+      <p>确定修改</p>
+    </click-button>
+  </div>
+  <h4 class="error" v-text="error"></h4>
+  <!--***********************************************-->
+  <div class="block center">
+    <h2>隐私设置</h2>
+    <h3>密码设置</h3>
+    <text-line
+      class="text"
+      title="原密码"
+      :value="password_before"
+      type="password"
+    />
+    <text-line
+      class="text"
+      title="新密码"
+      :value="password_new"
+      type="password"
+    />
+    <div class="code">
+      <text-line class="text" title="验证码" v-model="code" />
+      <img :src="image" @click="imageReload" alt="验证码" />
+    </div>
+    <click-button class="but" @click="reset_password">
+      <p>确定修改</p>
+    </click-button>
+    <!--**********************************************-->
+    <h3>邮箱设置</h3>
+    <text-line class="text" title="修改的邮箱" :value="email" />
+    <div class="code">
+      <text-line class="text" title="验证码" v-model="code" />
+      <img :src="image" @click="imageReload" alt="验证码" />
+    </div>
+    <div class="code">
+      <text-line class="text" title="邮箱验证码" v-model="email_code" />
+      <click-button class="but" @click="send_email">
+        <p>发送验证码</p>
+      </click-button>
+    </div>
+    <click-button class="but" @click="reset_email">
+      <p>确定修改</p>
+    </click-button>
+  </div>
+  <div class="center">
+    <click-button class="but" @click="logout">
+      <p>退出登录</p>
+    </click-button>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.input_box {
+@use "../styles/themes.scss" as *;
+
+.title {
+  text-align: center;
+}
+.text {
+  margin-top: 50px;
+  width: 17em;
+  height: 2em;
+}
+.but {
+  font-size: 1.2em;
+  width: 7em;
+}
+.code {
   display: flex;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  align-content: center;
-}
-
-.block {
-  text-align: center;
-  align-content: center;
   align-items: center;
   justify-content: center;
-  background-color: #5eadf2;
-  border-radius: 25px;
-
-  p,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    text-align: center;
-    color: white;
-  }
-
-  a {
-    text-decoration: none;
-    color: yellow;
-
-    &:hover {
-      background-color: #f29c50;
-      color: white;
-      transition: all 0.5s;
-    }
-  }
-}
-
-.form {
-  input[type="text"],
-  input[type="password"] {
-    font-size: medium;
-    border: none;
-    outline: none;
-    width: 250px;
-    height: 30px;
-    background-color: yellowgreen;
-    margin-top: 5px;
-
-    &::placeholder {
-      color: white;
-    }
-  }
-
-  input[type="submit"] {
-    font-size: medium;
-    border: none;
-    outline: none;
-    width: 150px;
-    height: 30px;
-    background-color: #f29c50;
-    margin-top: 5px;
-    margin-bottom: 5px;
-
-    &:hover {
-      background-color: #f29c50;
-      color: white;
-      transition: all 0.5s;
-    }
-  }
-
   img {
-    vertical-align: middle;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    width: 150px;
-    block-size: 30px;
+    margin-left: 20px;
+    height: 50px;
+    cursor: pointer;
   }
-
+  button {
+    margin-left: 20px;
+    height: 50px;
+  }
   select {
-    font-size: medium;
-    border: none;
+    margin-left: 20px;
+    height: 50px;
+    font-size: 1.2em;
+    border: 2px solid;
     outline: none;
-    width: 250px;
-    height: 30px;
-    background-color: yellowgreen;
-    margin-top: 5px;
-
-    option {
-      font-size: medium;
-      border: none;
-      outline: none;
-      width: 250px;
-      height: 30px;
-      background-color: yellowgreen;
-      margin-top: 5px;
+    border-radius: 0.5em;
+    @include useTheme {
+      background-color: getTheme(background-color);
     }
   }
-}
-
-.logout {
-  margin-top: 30px;
-  border: none;
-  background-color: #f29c50;
-  border-radius: 90px;
-  color: white;
-  width: 99%;
-  height: 60px;
-  text-align: center;
-  font-size: 30px;
-}
-
-.error {
-  background-color: red;
-  font-size: small;
-  text-align: center;
 }
 </style>

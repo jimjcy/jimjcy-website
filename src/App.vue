@@ -37,40 +37,31 @@ const routes = {
 };
 
 const theme = [
-  { name: "light", display: "浅色主题", color: "" },
-  { name: "dark", display: "深色主题", color: "" },
-  { name: "orange", display: "橙色主题", color: "" },
-  { name: "cyan", display: "青绿色主题", color: "" },
-  { name: "purple", display: "紫色主题", color: "" },
+  { name: "light", display: "浅色主题", color: "#e0e0e0" },
+  { name: "dark", display: "深色主题", color: "#0d1117" },
+  { name: "orange", display: "橙色主题", color: "#ffc107" },
+  { name: "cyan", display: "青绿色主题", color: "#a6ffcb" },
+  { name: "purple", display: "紫色主题", color: "#5e3f8c" },
 ];
 
 let fromUrl = "";
 let toUrl = "";
 
 const router = useRouter();
-// router.beforeEach(async (to, from) => {
-//   fromUrl = from.fullPath.split("/")[1];
-//   toUrl = to.fullPath.split("/")[1];
-//   if (toUrl === "") {
-//     toUrl = "home";
-//   }
-//   if (fromUrl === "") {
-//     fromUrl = "home";
-//   }
-//   console.log(fromUrl, toUrl);
-//   document.title = titles[toUrl] + "-小井井的网站";
-//   if (from.fullPath !== "login") localStorage.fromUrl = from.fullPath;
-//   else localStorage.fromUrl = to.fullPath;
-//   if (
-//     (toUrl === "report_issues" ||
-//       toUrl === "chatting_room" ||
-//       toUrl === "ai_chatting") &&
-//     !isLogin.value
-//   ) {
-//     router.push("/login");
-//     localStorage.fromUrl = to.fullPath;
-//   }
-// });
+router.beforeEach(async (to, from) => {
+  fromUrl = from.fullPath.split("/")[1];
+  toUrl = to.fullPath.split("/")[1];
+  if (toUrl === "") {
+    toUrl = "home";
+  }
+  if (fromUrl === "") {
+    fromUrl = "home";
+  }
+  console.log(fromUrl, toUrl);
+  document.title = titles[toUrl] + "-小井井的网站";
+  if (from.fullPath !== "login") localStorage.fromUrl = from.fullPath;
+  else localStorage.fromUrl = to.fullPath;
+});
 
 if (localStorage.sessionid === undefined) {
   localStorage.sessionid = constant.LOGOUTSESSIONID;
@@ -220,15 +211,20 @@ function openThemeWindow() {
     @close="themeWindow.value.close()"
     title="主题选择"
     ref="themeWindow"
+    height="500"
+    width="500"
   >
     <div class="selection">
-      <button
+      <click-button
         v-for="color in theme"
         class="themeButton"
         @click="changeTheme(color.name)"
       >
-        {{ color.display }}
-      </button>
+        <div class="theme-box">
+          <div class="color" :style="{backgroundColor: color.color}"></div>
+          <p v-text="color.display" class="name"></p>
+        </div>
+      </click-button>
     </div>
   </window-info>
 </template>
@@ -337,7 +333,7 @@ function openThemeWindow() {
   opacity: 1;
 }
 .sidebar-enter-active {
-  transform: scaleX(1.3);
+  transform: scaleX(1.1);
   transition: all 0.2s ease-out;
 }
 .sidebar-leave-active {
@@ -350,5 +346,36 @@ function openThemeWindow() {
 }
 .selection {
   display: flex;
+  flex-wrap: wrap;
+
+  .themeButton {
+    margin: 10px;
+    flex: 1;
+    width: 5em;
+    height: 8em;
+    font-size: 1.2em;
+    padding: 5px;
+    .theme-box {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      .color {
+        width: 2em;
+        height: 2em;
+        border-radius: .6em;
+        @include useTheme {
+          border: 2px solid getTheme(border-color);
+        }
+      }
+      .name {
+        @include useTheme {
+          color: getTheme(text-color);
+        }
+      }
+    }
+  }
 }
 </style>

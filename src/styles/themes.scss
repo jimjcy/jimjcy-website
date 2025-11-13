@@ -9,40 +9,40 @@
 
 $theme: (
   light: (
-    text-color: #0d1117,      
+    text-color: #0d1117,
     hover-color: #bdc3c7,
     border-color: #2c3e50,
     background-color: #e0e0e0,
-    page-color: #ffffff
+    page-color: #ffffff,
   ),
   dark: (
-  	text-color: #e0e0e0,
-	  hover-color: #1e242a,
-	  border-color: #383838,
-	  background-color: #0d1117,
-	  page-color: #000000
+    text-color: #e0e0e0,
+    hover-color: #1e242a,
+    border-color: #383838,
+    background-color: #0d1117,
+    page-color: #000000,
   ),
   orange: (
     text-color: #333333,
-    hover-color: #FFA000,
-    border-color: #FFE580,
-    background-color: #FFC107,
-    page-color: #F5A623,
+    hover-color: #ffa000,
+    border-color: #ffe580,
+    background-color: #ffc107,
+    page-color: #f5a623,
   ),
   cyan: (
     text-color: #333333,
-    hover-color: #72E1D5, 
-    border-color: #12D8FA,
-    background-color: #A6FFCB,
+    hover-color: #72e1d5,
+    border-color: #12d8fa,
+    background-color: #a6ffcb,
     page-color: #00d2ff,
   ),
   purple: (
     text-color: #e0e0e0,
-    background-color: #4A2F70,
-    hover-color: #7B54B2,
-    border-color: #5E3F8C,
-    page-color: #1E1233
-  )
+    background-color: #4a2f70,
+    hover-color: #7b54b2,
+    border-color: #5e3f8c,
+    page-color: #1e1233,
+  ),
 );
 
 $curTheme: "light";

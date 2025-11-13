@@ -39,7 +39,7 @@ function imageReload() {
       codesession: localStorage.codesession,
     })
     .then((response) => {
-      image.value = response.data;
+      image.value = "data:image/svg+xml;base64," + btoa(response.data);
     });
 }
 imageReload();
@@ -94,131 +94,61 @@ function submit_button() {
 </script>
 
 <template>
-    <h1>找回密码</h1>
-  <div class="block form">
-    <div class="input_box">
-      <p>邮箱：</p>
-      <input type="text" placeholder="邮箱" v-model="email" />
-    </div>
-    <div class="input_box">
-      <p>要修改的密码：</p>
-      <input type="password" placeholder="要修改的密码" v-model="password" />
-    </div>
-    <div class="input_box">
-      <p>验证码：</p>
-      <input type="text" placeholder="验证码" maxlength="4" v-model="code" />
+  <h1 class="title">找回密码</h1>
+  <div class="block center">
+    <text-line class="text" title="邮箱" v-model="email" />
+    <text-line
+      class="text"
+      title="要修改的密码"
+      v-model="password"
+      type="password"
+    />
+    <div class="code">
+      <text-line class="text" title="验证码" v-model="code" />
       <img alt="验证码" @click="imageReload" :src="image" />
     </div>
-    <div class="input_box">
-      <p>邮箱验证码：</p>
-      <input
-        type="text"
-        placeholder="邮箱验证码"
-        maxlength="5"
-        v-model="email_code"
-      />
-      <input
-        type="submit"
-        value="发送验证码"
-        @click="send_email"
-        ref="email_code_button"
-      />
+    <div class="code">
+      <text-line class="text" title="邮箱验证码" v-model="email_code" />
+      <click-button @click="send_email" ref="email_code_button"
+        ><p>发送验证码</p></click-button
+      >
     </div>
     <p class="error" v-text="error"></p>
     <p>
       没有账号？<RouterLink class="links" to="/register">去注册</RouterLink>
       要登录？<RouterLink class="links" to="/login">去登录</RouterLink>
     </p>
-    <input type="submit" value="确定" @click="submit_button" />
+    <click-button class="but" @click="submit_button"><p>确定</p></click-button>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.input_box {
+@use "../styles/themes.scss" as *;
+
+.title {
+  text-align: center;
+}
+.text {
+  margin-top: 50px;
+  width: 17em;
+  height: 2em;
+}
+.but {
+  font-size: 1.2em;
+  width: 7em;
+}
+.code {
   display: flex;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  align-content: center;
-}
-
-.block {
-  text-align: center;
-  align-content: center;
   align-items: center;
   justify-content: center;
-  background-color: #5eadf2;
-  border-radius: 25px;
-  margin: 15px;
-
-  p,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    text-align: center;
-    color: white;
-  }
-
-  a {
-    text-decoration: none;
-    color: yellow;
-
-    &:hover {
-      background-color: orangered;
-      color: white;
-      transition: all 0.5s;
-    }
-  }
-}
-
-.form {
-  input[type="text"],
-  input[type="password"] {
-    font-size: medium;
-    border: none;
-    outline: none;
-    width: 250px;
-    height: 30px;
-    background-color: yellowgreen;
-    margin-top: 5px;
-
-    &::placeholder {
-      color: white;
-    }
-  }
-
-  input[type="submit"] {
-    font-size: medium;
-    border: none;
-    outline: none;
-    width: 150px;
-    height: 30px;
-    background-color: red;
-    margin-top: 5px;
-    margin-bottom: 5px;
-
-    &:hover {
-      background-color: orangered;
-      color: white;
-      transition: all 0.5s;
-    }
-  }
-
   img {
-    vertical-align: middle;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    width: 150px;
-    block-size: 30px;
+    margin-left: 20px;
+    height: 50px;
+    cursor: pointer;
   }
-}
-
-.error {
-  background-color: red;
-  font-size: small;
-  text-align: center;
+  button {
+    margin-left: 20px;
+    height: 50px;
+  }
 }
 </style>

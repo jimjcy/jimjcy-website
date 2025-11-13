@@ -121,24 +121,17 @@ function submit_button() {
 
 <template>
   <h1 class="title">注册</h1>
-  <div class="block form">
-    <div class="input_box">
-      <p>用户名：</p>
-      <input type="text" v-model="username" placeholder="用户名" />
-    </div>
-    <div class="input_box">
-      <p>密码：</p>
-      <input type="password" v-model="password" placeholder="密码" />
-    </div>
-    <div class="input_box">
-      <p>确认密码：</p>
-      <input type="password" v-model="repassword" placeholder="确认密码" />
-    </div>
-    <div class="input_box">
-      <p>邮箱：</p>
-      <input type="text" v-model="email" placeholder="邮箱" />
-    </div>
-    <div class="input_box">
+  <div class="block center">
+    <text-line class="text" title="用户名" v-model="username" />
+    <text-line class="text" title="密码" v-model="username" type="password" />
+    <text-line
+      class="text"
+      title="确认密码"
+      v-model="username"
+      type="password"
+    />
+    <text-line class="text" title="邮箱" v-model="username" />
+    <div class="code">
       <p>性别：</p>
       <select v-model="sex">
         <option value="保密" selected>保密</option>
@@ -147,25 +140,13 @@ function submit_button() {
         <option value="未知">未知</option>
       </select>
     </div>
-    <div class="input_box">
-      <p>验证码：</p>
-      <input type="text" placeholder="验证码" v-model="code" maxlength="4" />
+    <div class="code">
+      <text-line class="text" title="验证码" v-model="code" />
       <img alt="验证码" @click="imageReload" :src="image" />
     </div>
-    <div class="input_box">
-      <p>邮箱验证码：</p>
-      <input
-        type="text"
-        placeholder="邮箱验证码"
-        v-model="email_code"
-        maxlength="5"
-      />
-      <input
-        type="submit"
-        value="发送验证码"
-        @click="send_email"
-        ref="email_code_button"
-      />
+    <div class="code">
+      <text-line class="text" title="邮箱验证码" v-model="email_code" />
+      <click-button @click="send_email"><p>发送验证码</p></click-button>
     </div>
     <!--    <div class="input_box">-->
     <!--      <select v-model="year">-->
@@ -177,131 +158,50 @@ function submit_button() {
       已有账号？<RouterLink to="/login">去登录</RouterLink>
       忘记密码？<RouterLink to="/forget_password">去找回</RouterLink>
     </p>
-    <input
-      type="submit"
-      value="注册"
-      @click="submit_button"
-      @keyup.enter="submit_button"
-    />
+    <click-button class="but" @click="submit_button">
+      <p>注册</p>
+    </click-button>
   </div>
 </template>
 
 <style lang="scss" scoped>
+@use "../styles/themes.scss" as *;
+
 .title {
   text-align: center;
-  color: white;
-  margin: 15px;
 }
-.input_box {
+.text {
+  margin-top: 50px;
+  width: 17em;
+  height: 2em;
+}
+.but {
+  font-size: 1.2em;
+  width: 7em;
+}
+.code {
   display: flex;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  align-content: center;
-}
-
-.block {
-  text-align: center;
-  align-content: center;
   align-items: center;
   justify-content: center;
-  background-color: #5eadf2;
-  border-radius: 25px;
-  margin: 15px;
-  
-  p,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    text-align: center;
-    color: white;
-  }
-
-  a {
-    text-decoration: none;
-    color: yellow;
-
-    &:hover {
-      background-color: #f29c50;
-      color: white;
-      transition: all 0.5s;
-    }
-  }
-}
-
-.form {
-  input[type="text"],
-  input[type="password"] {
-    font-size: medium;
-    border: none;
-    outline: none;
-    width: 250px;
-    height: 30px;
-    background-color: yellowgreen;
-    margin-top: 5px;
-
-    &::placeholder {
-      color: white;
-    }
-  }
-
-  input[type="submit"] {
-    font-size: medium;
-    border: none;
-    outline: none;
-    width: 150px;
-    height: 30px;
-    background-color: #f29c50;
-    margin-top: 5px;
-    margin-bottom: 5px;
-
-    &:hover {
-      background-color: #f29c50;
-      color: white;
-      transition: all 0.5s;
-    }
-  }
-
   img {
-    vertical-align: middle;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    width: 150px;
-    block-size: 30px;
+    margin-left: 20px;
+    height: 50px;
+    cursor: pointer;
   }
-
+  button {
+    margin-left: 20px;
+    height: 50px;
+  }
   select {
-    font-size: medium;
-    border: none;
+    margin-left: 20px;
+    height: 50px;
+    font-size: 1.2em;
+    border: 2px solid;
     outline: none;
-    width: 250px;
-    height: 30px;
-    background-color: yellowgreen;
-    margin-top: 5px;
-
-    option {
-      font-size: medium;
-      border: none;
-      outline: none;
-      width: 250px;
-      height: 30px;
-      background-color: yellowgreen;
-      margin-top: 5px;
+    border-radius: 0.5em;
+    @include useTheme {
+      background-color: getTheme(background-color);
     }
   }
-}
-
-.error {
-  background-color: red;
-  font-size: small;
-  text-align: center;
 }
 </style>
-<!--.form select option:hover {-->
-<!--  background-color: orangered;-->
-<!--  color: white;-->
-<!--  transition: all 0.5s;-->
-<!--}-->

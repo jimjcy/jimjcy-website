@@ -294,6 +294,7 @@ onUnmounted(() => {
       font-size: 1.3em;
       height: 2.5em;
       width: 10em;
+      border-radius: 0.5em;
       opacity: 0.3;
       @include useTheme {
         background-color: getTheme(background-color);
