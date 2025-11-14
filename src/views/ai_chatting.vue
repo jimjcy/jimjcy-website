@@ -96,7 +96,6 @@ function sendMessage() {
 }
 const router = useRouter();
 onBeforeMount(() => {
-  socket.connect();
   constant.req
     .post("/login/check", {
       sessionid: localStorage.sessionid,
@@ -108,6 +107,7 @@ onBeforeMount(() => {
     });
 });
 onMounted(() => {
+  socket.connect();
   watch(
     message_list,
     () => {

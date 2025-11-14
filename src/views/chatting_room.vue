@@ -75,7 +75,6 @@ function sendMessage() {
 }
 const router = useRouter();
 onBeforeMount(() => {
-  socket.connect();
   constant.req
     .post("/login/check", {
       sessionid: localStorage.sessionid,
@@ -102,6 +101,7 @@ onMounted(() => {
   //   // { deep: true, once: true }
   //   { deep: true }
   // );
+  socket.connect();
   watch(
     message_list,
     () => {

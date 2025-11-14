@@ -10,6 +10,7 @@ const isLogin = ref(false);
 const username = ref("");
 const themeWindow = ref();
 const err = ref();
+const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
 
 const titles = {
   home: "主页",
@@ -81,9 +82,9 @@ onBeforeMount(() => {
     });
 });
 
-if (localStorage.version === undefined || localStorage.version !== "3.0.3") {
+if (localStorage.version === undefined || localStorage.version !== "3.0.4") {
   localStorage.clear();
-  localStorage.version = "3.0.3";
+  localStorage.version = "3.0.4";
 }
 
 if (localStorage.codesession === undefined) {
@@ -97,9 +98,13 @@ function changeTheme(color) {
   localStorage.theme = color;
 }
 if (localStorage.theme === undefined) {
-  localStorage.theme = "light";
+  localStorage.theme = systemTheme.matches ? "dark" : "light";
 }
 changeTheme(localStorage.theme);
+systemTheme.addEventListener("change", (e) => {
+  localStorage.theme = e.matches ? "dark" : "light";
+  changeTheme(localStorage.theme);
+});
 
 function openThemeWindow() {
   themeWindow.value.open();
@@ -221,7 +226,7 @@ function openThemeWindow() {
         @click="changeTheme(color.name)"
       >
         <div class="theme-box">
-          <div class="color" :style="{backgroundColor: color.color}"></div>
+          <div class="color" :style="{ backgroundColor: color.color }"></div>
           <p v-text="color.display" class="name"></p>
         </div>
       </click-button>
@@ -365,7 +370,7 @@ function openThemeWindow() {
       .color {
         width: 2em;
         height: 2em;
-        border-radius: .6em;
+        border-radius: 0.6em;
         @include useTheme {
           border: 2px solid getTheme(border-color);
         }
