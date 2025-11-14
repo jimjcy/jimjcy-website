@@ -57,7 +57,7 @@ router.beforeEach(async (to, from) => {
   if (fromUrl === "") {
     fromUrl = "home";
   }
-  console.log(fromUrl, toUrl);
+  // console.log(fromUrl, toUrl);
   document.title = titles[toUrl] + "-小井井的网站";
   if (from.fullPath !== "login") localStorage.fromUrl = from.fullPath;
   else localStorage.fromUrl = to.fullPath;
@@ -81,9 +81,9 @@ onBeforeMount(() => {
     });
 });
 
-if (localStorage.version === undefined || localStorage.version !== "3.0.0") {
+if (localStorage.version === undefined || localStorage.version !== "3.0.3") {
   localStorage.clear();
-  localStorage.version = "3.0.0";
+  localStorage.version = "3.0.3";
 }
 
 if (localStorage.codesession === undefined) {

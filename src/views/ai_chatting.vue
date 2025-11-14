@@ -12,8 +12,10 @@ const message = ref("");
 const message_list = ref([]);
 const model = ref("qwen-long");
 const error = ref("");
-const submit = useTemplateRef("submit");
 const history = useTemplateRef("history");
+
+const buttonText = ref("发送");
+const isButtonDisabled = ref(false);
 
 let isConnected = false;
 // const model_list = {
@@ -63,8 +65,8 @@ socket.on("stop", function (data) {
     message_list.value[data.index].content = marked.parse(
       message_list.value[data.index].rawcontent
     );
-    submit.value.value = "发送";
-    submit.value.disabled = false;
+    buttonText.value = "发送";
+    isButtonDisabled.value = false;
   }
 });
 function sendMessage() {
@@ -73,14 +75,18 @@ function sendMessage() {
     return;
   }
   error.value = "";
-  if (message.value === "") {
+  if (isButtonDisabled.value) {
+    error.value = "正在生成中，请稍后再试";
+    return;
+  }
+  if (message.value.trim() === "") {
     error.value = "请输入内容";
     return;
   }
-  message_list.value.push({ role: "user", content: message.value });
+  message_list.value.push({ role: "user", content: message.value.trim() });
   message.value = "";
-  submit.value.value = "生成中······";
-  submit.value.disabled = true;
+  buttonText.value = "生成中······";
+  isButtonDisabled.value = true;
   socket.emit("ask", {
     message_list: message_list.value,
     model: model.value,
@@ -164,7 +170,6 @@ onUnmounted(() => {
           <!-- </div> -->
         </div>
       </div>
-      <!-- -->
     </div>
     <div class="input">
       <!-- <p class="error">{{ error }}</p> -->
@@ -183,12 +188,10 @@ onUnmounted(() => {
         <option value="deepseek">deepseek</option>
       </select>
       <click-button
-        type="button"
-        value="发送"
         @click="sendMessage"
         class="submit"
-        ref="submit"
-        ><p>发送</p></click-button
+        :disabled="isButtonDisabled"
+        ><p>{{ buttonText }}</p></click-button
       >
     </div>
   </div>

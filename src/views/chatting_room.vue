@@ -59,7 +59,7 @@ function sendMessage() {
     error.value = "服务连接失败，请稍后再试";
     return;
   }
-  if (message.value === "") {
+  if (message.value.trim() === "") {
     error.value = "请输入内容";
     return;
   }
@@ -69,7 +69,7 @@ function sendMessage() {
   // }
   socket.emit("send", {
     username: username.value,
-    content: message.value,
+    content: message.value.trim(),
   });
   message.value = "";
 }
