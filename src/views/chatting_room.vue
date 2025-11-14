@@ -25,7 +25,7 @@ socket.on("connect", function () {
   isConnected = true;
   socket.emit("get", { end: "end", length: 15 });
 });
-socket.on("data", function (data) {
+socket.on("history", function (data) {
   if (data.id === socket.id) {
     console.log(data.result);
     for (let i = data.result.length - 1; i >= 0; i--) {
@@ -39,6 +39,12 @@ socket.on("data", function (data) {
 });
 socket.on("new", (data) => {
   message_list.value.push(data);
+  nextTick(() => {
+    history.value.scrollTo({
+      top: history.value.scrollHeight,
+      behavior: "smooth",
+    });
+  });
 });
 function getMore() {
   if (!isConnected) {
@@ -57,10 +63,10 @@ function sendMessage() {
     error.value = "请输入内容";
     return;
   }
-  if (message.value.length > 300) {
-    error.value = "内容过长";
-    return;
-  }
+  // if (message.value.length > 300) {
+  //   error.value = "内容过长";
+  //   return;
+  // }
   socket.emit("send", {
     username: username.value,
     content: message.value,
@@ -77,6 +83,8 @@ onBeforeMount(() => {
     .then((response) => {
       if (!response.data.status) {
         router.push("/login");
+      } else {
+        username.value = response.data.username;
       }
     });
 });
@@ -131,7 +139,8 @@ onUnmounted(() => {
         <div class="message-box">
           <div class="info">
             <p>
-              {{ message.username }} {{ message.date.substring(0, 10) }}
+              {{ message.username === username ? "" : message.username }}
+              {{ message.date.substring(0, 10) }}
               {{ message.date.substring(11, 19) }}
             </p>
           </div>
