@@ -123,14 +123,14 @@ function submit_button() {
   <h1 class="title">注册</h1>
   <div class="block center">
     <text-line class="text" title="用户名" v-model="username" />
-    <text-line class="text" title="密码" v-model="username" type="password" />
+    <text-line class="text" title="密码" v-model="password" type="password" />
     <text-line
       class="text"
       title="确认密码"
-      v-model="username"
+      v-model="repassword"
       type="password"
     />
-    <text-line class="text" title="邮箱" v-model="username" />
+    <text-line class="text" title="邮箱" v-model="email" />
     <div class="code">
       <p>性别：</p>
       <select v-model="sex">
