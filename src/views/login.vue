@@ -48,7 +48,7 @@ function login() {
     <text-line class="text" title="用户名" v-model="username"/>
     <text-line class="text" title="密码" v-model="password" type="password"/>
     <div class="code">
-      <text-line class="text" title="验证码" v-model="code"/>
+      <text-line title="验证码" maxlength="4" v-model="code"/>
       <img alt="验证码" @click="imageReload" :src="image" />
     </div>
     <p class="error" v-text="error"></p>
@@ -68,10 +68,10 @@ function login() {
 .title {
   text-align: center;
 }
-.text {
+.text, .code {
   margin-top: 50px;
   width: 17em;
-  height: 2em;
+  height: 3em;
 }
 .but {
   font-size: 1.2em;

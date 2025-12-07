@@ -5,6 +5,10 @@ defineProps({
     type: String,
     default: "text",
   },
+  maxlength: {
+    type: Number,
+    default: 256,
+  },
 });
 const text = defineModel();
 const status = computed(() => {
@@ -22,6 +26,7 @@ const status = computed(() => {
       v-model="text"
       :class="status"
       :type="type"
+      :maxlength="maxlength"
     />
     <p class="title">{{ title }}</p>
     <div class="decoration"></div>
@@ -37,16 +42,18 @@ const status = computed(() => {
     top: calc((100% - 1.3em) / 2);
     left: 0;
     margin: 0;
-    font-size: 1.3em;
+    font-size: 1.2em;
     opacity: .5;
+    pointer-events: none;
     user-select: none;
   }
   .input {
     position: relative;
     border: none;
     outline: none;
-    font-size: 1.3em;
+    font-size: 1.5em;
     width: 100%;
+    height: calc(100% - 2px);
     @include useTheme {
       background-color: getTheme(background-color);
     }

@@ -1,4 +1,5 @@
 <script setup>
+import { useTemplateRef } from "vue";
 import constant from "./constant";
 
 const fold = ref(false);
@@ -8,7 +9,7 @@ const welcome = ref("欢迎来到小井井的网站！");
 const isLogin = ref(false);
 // const isThemeWindowOpen = ref(false);
 const username = ref("");
-const themeWindow = ref();
+const themeWindow = useTemplateRef("themeWindow");
 const err = ref();
 const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
 
@@ -212,12 +213,12 @@ function openThemeWindow() {
       <RouterView />
     </div>
   </div>
+    <!-- @close="themeWindow.value.close()" -->
   <window-info
-    @close="themeWindow.value.close()"
     title="主题选择"
     ref="themeWindow"
-    height="500"
-    width="500"
+    height=500
+    width=500
   >
     <div class="selection">
       <click-button

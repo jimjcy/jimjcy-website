@@ -6,7 +6,7 @@ import register from "./views/register.vue";
 import forget_password from "./views/forget_password.vue";
 // import help_documents from './views/help_documents.vue'
 // import infomation from './views/information.vue'
-// import report_issues from './views/report_issues.vue'
+import report_issues from './views/report_issues.vue'
 // import download_files from './views/download_files.vue'
 // import translation from '/views/translation.vue'
 // import qrcode from '/views/qrcode.vue'
@@ -35,7 +35,7 @@ const router = createRouter({
     {
       path: "/report_issues",
       name: "report_issues",
-      // component: report_issues
+      component: report_issues
     },
     {
       path: "/download_files",
