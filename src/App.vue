@@ -17,7 +17,7 @@ const titles = {
   home: "主页",
   help_documents: "帮助文档",
   information: "网站资讯",
-  report_issues: "报告问题",
+  report: "报告问题",
   download_files: "下载资源",
   chatting_room: "聊天室",
   ai_chatting: "ai聊天",
@@ -31,7 +31,7 @@ const routes = {
   "/": "主页",
   help_documents: "帮助文档",
   information: "网站资讯",
-  report_issues: "报告问题",
+  report: "报告问题",
   download_files: "下载资源",
   chatting_room: "聊天室",
   ai_chatting: "ai聊天",
@@ -44,6 +44,7 @@ const theme = [
   { name: "orange", display: "橙色主题", color: "#ffc107" },
   { name: "cyan", display: "青绿色主题", color: "#a6ffcb" },
   { name: "purple", display: "紫色主题", color: "#5e3f8c" },
+  // { name: "auto", display: "跟随系统", color: "linear-gradient(to right, #0d1117, #e0e0e0)"}
 ];
 
 let fromUrl = "";
@@ -333,22 +334,20 @@ function openThemeWindow() {
     overflow-x: hidden;
   }
 }
-.sidebar-enter-to,
-.sidebar-leave-from {
-  transform: scaleX(1);
-  opacity: 1;
-}
-.sidebar-enter-active {
-  transform: scaleX(1.1);
-  transition: all 0.2s ease-out;
-}
-.sidebar-leave-active {
-  transition: all 0.2s ease-in;
-}
 .sidebar-enter-from,
 .sidebar-leave-to {
-  transform: scaleX(0);
+  // transform: scaleX(1);
+  transform: translateX(-12em);
   opacity: 0;
+}
+.sidebar-enter-active,
+.sidebar-leave-active {
+  transition: all 0.2s ease-in-out;
+}
+.sidebar-enter-to,
+.sidebar-leave-from {
+  transform: translateX(0);
+  opacity: 1;
 }
 .selection {
   display: flex;

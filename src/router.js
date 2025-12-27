@@ -6,13 +6,15 @@ import register from "./views/register.vue";
 import forget_password from "./views/forget_password.vue";
 // import help_documents from './views/help_documents.vue'
 // import infomation from './views/information.vue'
-import report_issues from './views/report_issues.vue'
+import report_issues from "./views/report_issues.vue";
+import report_detail from "./views/report_detail.vue";
 // import download_files from './views/download_files.vue'
 // import translation from '/views/translation.vue'
 // import qrcode from '/views/qrcode.vue'
 import chatting_room from "./views/chatting_room.vue";
 import ai_chatting from "./views/ai_chatting.vue";
 import about from "./views/about.vue";
+import error from "./views/error.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,9 +35,14 @@ const router = createRouter({
       // component: infomation
     },
     {
-      path: "/report_issues",
+      path: "/report",
       name: "report_issues",
-      component: report_issues
+      component: report_issues,
+    },
+    {
+      path: "/report/:id",
+      name: "report_detail",
+      component: report_detail,
     },
     {
       path: "/download_files",
@@ -86,6 +93,11 @@ const router = createRouter({
       path: "/about",
       name: "about",
       component: about,
+    },
+    {
+      path: "/:path(.*)*",
+      name: "error",
+      component: error,
     },
   ],
 });
