@@ -12,7 +12,7 @@ async function getPageIssue(cp, init = false) {
   if (pagesData.value[cp] === undefined) {
     const res = await constant.req.post("/get_issue", {
       page: cp,
-      id: 0
+      id: 0,
     });
     const data = res.data;
     if (data.status) {
@@ -37,7 +37,7 @@ async function getPageIssue(cp, init = false) {
   }
   pagesData.value[cp].forEach((item, index) => {
     setTimeout(() => {
-      item.time = moment(item.time).format("YYYY-MM-DD HH:mm:ss");
+      item.date = moment(item.date).format("YYYY-MM-DD HH:mm:ss");
       currentPageData.value.push(item);
       // console.log(ind);
     }, 100 * index);
