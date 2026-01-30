@@ -190,7 +190,7 @@ function logout() {
     <h2>基础信息</h2>
     <h3>用户名</h3>
     <text-line class="text" title="当前用户名" :value="username" />
-    <div class="code">
+    <div class="row">
       <text-line class="text" title="验证码" v-model="code" />
       <img :src="image" @click="imageReload" alt="验证码" />
     </div>
@@ -199,7 +199,7 @@ function logout() {
     </click-button>
     <!--*************************************************-->
     <h3>性别</h3>
-    <div class="code">
+    <div class="row">
       <p>性别：</p>
       <select v-model="sex">
         <option value="保密" selected>保密</option>
@@ -208,7 +208,7 @@ function logout() {
         <option value="未知">未知</option>
       </select>
     </div>
-    <div class="code">
+    <div class="row">
       <text-line class="text" title="验证码" v-model="code" />
       <img :src="image" @click="imageReload" alt="验证码" />
     </div>
@@ -233,7 +233,7 @@ function logout() {
       :value="password_new"
       type="password"
     />
-    <div class="code">
+    <div class="row">
       <text-line class="text" title="验证码" v-model="code" />
       <img :src="image" @click="imageReload" alt="验证码" />
     </div>
@@ -243,11 +243,11 @@ function logout() {
     <!--**********************************************-->
     <h3>邮箱设置</h3>
     <text-line class="text" title="修改的邮箱" :value="email" />
-    <div class="code">
+    <div class="row">
       <text-line class="text" title="验证码" v-model="code" />
       <img :src="image" @click="imageReload" alt="验证码" />
     </div>
-    <div class="code">
+    <div class="row">
       <text-line class="text" title="邮箱验证码" v-model="email_code" />
       <click-button class="but" @click="send_email">
         <p>发送验证码</p>
@@ -279,10 +279,7 @@ function logout() {
   font-size: 1.2em;
   width: 7em;
 }
-.code {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.row {
   img {
     margin-left: 20px;
     height: 50px;

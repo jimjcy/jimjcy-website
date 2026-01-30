@@ -207,7 +207,7 @@ onUnmounted(() => {
     background-color: getTheme(background-color);
   }
   .history {
-    height: calc(100% - 10em - 4px);
+    height: calc(100% - 10em - 6px);
     overflow-y: scroll;
     overflow-x: auto;
     padding: 0 2px;
@@ -280,19 +280,17 @@ onUnmounted(() => {
   .input {
     height: 10em;
     position: relative;
-    @include useTheme {
-      border: solid 2px getTheme(border-color);
-    }
     .text {
       position: relative;
       top: 0;
       left: 0;
       width: 100%;
-      height: calc(100% - 4px);
+      height: 100%;
+      width: 100%;
     }
     .select {
       position: absolute;
-      bottom: 2px;
+      bottom: 5px;
       right: calc(7em + 10px);
       font-size: 1.3em;
       height: 2.5em;
@@ -320,8 +318,8 @@ onUnmounted(() => {
     }
     .but {
       position: absolute;
-      bottom: 2px;
-      right: 2px;
+      bottom: 5px;
+      right: 3px;
       font-size: 1.3em;
       height: 2.5em;
       width: 7em;

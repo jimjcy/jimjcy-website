@@ -17,7 +17,7 @@ const titles = {
   home: "主页",
   help_documents: "帮助文档",
   information: "网站资讯",
-  report: "报告问题",
+  feedback: "报告问题",
   download_files: "下载资源",
   chatting_room: "聊天室",
   ai_chatting: "ai聊天",
@@ -28,14 +28,14 @@ const titles = {
 };
 
 const routes = {
-  "/": "主页",
-  help_documents: "帮助文档",
-  information: "网站资讯",
-  report: "报告问题",
-  download_files: "下载资源",
-  chatting_room: "聊天室",
-  ai_chatting: "ai聊天",
-  about: "联系方式",
+  "/": "主页", 
+  "/information": "网站资讯",
+  "/ai_chatting": "ai聊天", 
+  "/chatting_room": "聊天室",
+  "/download_files": "下载资源",
+  "/help_documents": "帮助文档",
+  "/feedback": "报告问题",
+  "/about": "联系方式"
 };
 
 const theme = [

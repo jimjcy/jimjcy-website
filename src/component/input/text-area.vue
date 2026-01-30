@@ -32,7 +32,6 @@ const status = computed(() => {
   }
   .input {
     position: relative;
-    border: none;
     outline: none;
     font-size: 1.3em;
     width: 100%;
@@ -40,8 +39,12 @@ const status = computed(() => {
     resize: none;
     // scrollbar-width: ;
     padding: 0 10px;
+    box-sizing: border-box;
     @include useTheme {
       background-color: getTheme(background-color);
+      border: 2px solid getTheme(border-color);
+      color: getTheme(text-color);
+      border-radius: 10px;
     }
     &:focus,
     &:active,

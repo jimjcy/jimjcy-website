@@ -65,3 +65,9 @@ body {
     color: getTheme(text-color);
   }
 }
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}

@@ -1,7 +1,10 @@
 <script setup>
 import constant from "@/constant";
 import moment from "moment";
+
 const router = useRouter();
+const route = useRoute();
+
 const currentPage = ref(1);
 const currentPageData = ref([]);
 const pagesData = ref({});
@@ -10,7 +13,7 @@ const pagesData = ref({});
 // });
 async function getPageIssue(cp, init = false) {
   if (pagesData.value[cp] === undefined) {
-    const res = await constant.req.post("/get_issue", {
+    const res = await constant.req.post("/get/feedback", {
       page: cp,
       id: 0,
     });
@@ -20,6 +23,7 @@ async function getPageIssue(cp, init = false) {
       pagesData.value[cp] = data.result;
     } else {
       currentPage.value--;
+      router.push({ query: { page: currentPage.value } });
       return;
     }
   }
@@ -38,6 +42,14 @@ async function getPageIssue(cp, init = false) {
   pagesData.value[cp].forEach((item, index) => {
     setTimeout(() => {
       item.date = moment(item.date).format("YYYY-MM-DD HH:mm:ss");
+      item.status =
+        item.status === 0
+          ? "等待处理"
+          : item.status === 1
+          ? "已关闭"
+          : item.status === 2
+          ? "已完成"
+          : "未知状态";
       currentPageData.value.push(item);
       // console.log(ind);
     }, 100 * index);
@@ -54,46 +66,57 @@ async function getPageIssue(cp, init = false) {
 function topre() {
   if (currentPage.value > 1) {
     currentPage.value--;
+    router.replace({ query: { page: currentPage.value } });
     getPageIssue(currentPage.value);
   }
 }
 function tonext() {
   currentPage.value++;
+  router.replace({ query: { page: currentPage.value } });
   getPageIssue(currentPage.value);
 }
 onMounted(() => {
+  console.log(route.query);
+  if (route.query.page !== undefined) {
+    currentPage.value = parseInt(route.query.page);
+  } else {
+    currentPage.value = 1;
+  }
   getPageIssue(currentPage.value, true);
 });
 </script>
 <template>
-  <h1 class="title">报告问题</h1>
+  <h1 class="title">反馈问题</h1>
   <h3 class="title">
     如果在使用网站的过程中发现什么奇奇怪怪的小问题欢迎提出，会第一时间进行修复哦awa
   </h3>
-  <div class="change">
+  <div class="center">
+    <click-button class="new" @click="router.push('/feedback/new')"
+      ><p>反馈</p></click-button
+    >
+  </div>
+  <div class="change center">
     <click-button @click="topre" class="but">上一页</click-button>
     <p>{{ currentPage }}</p>
     <click-button @click="tonext" class="but">下一页</click-button>
   </div>
   <TransitionGroup name="content" tag="div">
-    <div class="block" v-for="issue in currentPageData" :key="issue">
+    <div class="block center" v-for="issue in currentPageData" :key="issue">
       <h4>{{ issue.title }}</h4>
       <p>提交用户：{{ issue.username }}</p>
       <p>提交时间：{{ issue.date }}</p>
       <p>提交id：{{ issue.id }}</p>
       <p>当前状态：{{ issue.status }}</p>
-      <click-button @click="router.push('/report/' + issue.id)"
+      <click-button @click="router.push('/feedback/' + issue.id)"
         >详细信息</click-button
       >
     </div>
   </TransitionGroup>
 </template>
-<style scoped>
+<style lang="scss" scoped>
+@use "@/styles/themes.scss";
+
 .block {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   margin: 20px auto;
   width: calc(100% - 30px);
   * {
@@ -107,10 +130,13 @@ onMounted(() => {
 .title {
   text-align: center;
 }
+.new {
+  margin: 10px 0;
+  padding: 0 15px;
+  font-size: 1.1em;
+}
 .change {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: row;
   .but {
     height: 50px;
     margin: 10px 15px;

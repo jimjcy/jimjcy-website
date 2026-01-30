@@ -4,13 +4,14 @@ import profile from "./views/profile.vue";
 import login from "./views/login.vue";
 import register from "./views/register.vue";
 import forget_password from "./views/forget_password.vue";
-// import help_documents from './views/help_documents.vue'
-// import infomation from './views/information.vue'
-import report_issues from "./views/report_issues.vue";
-import report_detail from "./views/report_detail.vue";
-// import download_files from './views/download_files.vue'
-// import translation from '/views/translation.vue'
-// import qrcode from '/views/qrcode.vue'
+import help_documents from "./views/help_documents.vue";
+import infomation from "./views/information.vue";
+import feedback from "./views/feedback/feedback.vue";
+import feedback_detail from "./views/feedback/feedback_detail.vue";
+import new_feedback from "./views/feedback/new_feedback.vue";
+import download_files from "./views/download_files.vue";
+import translation from "./views/translation.vue";
+import qrcode from "./views/qrcode.vue";
 import chatting_room from "./views/chatting_room.vue";
 import ai_chatting from "./views/ai_chatting.vue";
 import about from "./views/about.vue";
@@ -27,37 +28,42 @@ const router = createRouter({
     {
       path: "/help_documents",
       name: "help_documents",
-      // component: help_documents
+      component: help_documents,
     },
     {
       path: "/information",
       name: "information",
-      // component: infomation
+      component: infomation,
     },
     {
-      path: "/report",
-      name: "report_issues",
-      component: report_issues,
+      path: "/feedback",
+      name: "feedback",
+      component: feedback,
     },
     {
-      path: "/report/:id",
-      name: "report_detail",
-      component: report_detail,
+      path: "/feedback/:id",
+      name: "feedback_detail",
+      component: feedback_detail,
+    },
+    {
+      path: "/feedback/new",
+      name: "new_feedback",
+      component: new_feedback,
     },
     {
       path: "/download_files",
       name: "download_files",
-      // component: download_files
+      component: download_files,
     },
     {
       path: "/translation",
       name: "translation",
-      // component: translation
+      component: translation,
     },
     {
       path: "/qrcode",
       name: "qrcode",
-      // component: qrcode
+      component: qrcode,
     },
     {
       path: "/chatting_room",
