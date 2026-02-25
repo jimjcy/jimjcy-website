@@ -1,15 +1,15 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({
   title: String,
-});
-const text = defineModel();
+})
+const text = defineModel()
 const status = computed(() => {
   if (text.value && text.value.length > 0) {
-    return "open";
+    return 'open'
   } else {
-    return "close";
+    return 'close'
   }
-});
+})
 </script>
 <template>
   <div class="group">
@@ -18,7 +18,7 @@ const status = computed(() => {
   </div>
 </template>
 <style lang="scss" scoped>
-@use "../../styles/themes.scss" as *;
+@use '../../styles/themes.scss' as *;
 
 .group {
   position: relative;

@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 defineProps({
   path: {
     type: String,
@@ -8,7 +8,7 @@ defineProps({
     type: Number,
     required: true,
   },
-});
+})
 </script>
 <template></template>
 <style lang="scss" scoped>

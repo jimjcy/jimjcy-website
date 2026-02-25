@@ -1,92 +1,90 @@
-<script setup>
-import colorButton from "@/component/input/clickButton.vue";
-import axios from "axios";
-import hljs from "highlight.js";
-import "highlight.js/styles/dark.css";
-import io from "socket.io-client";
-import moment from "moment";
-import constant from "@/constant";
-import { onBeforeMount } from "vue";
+<script lang="ts" setup>
+import colorButton from '@/component/input/clickButton.vue'
+import axios from 'axios'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/dark.css'
+import io from 'socket.io-client'
+import moment from 'moment'
+import constant from '@/constant'
+import { onBeforeMount } from 'vue'
 
-const username = ref("");
-const message = ref("");
-const message_list = ref([]);
-const error = ref("");
-const history = useTemplateRef("history");
+const username = ref('')
+const message = ref('')
+const message_list = ref([])
+const error = ref('')
+const history = useTemplateRef('history')
 
-let isConnected = false;
-let lastId;
+let isConnected = false
+let lastId
 
-const socket = io("https://api.jimjcy.top", {
-  path: "/chat/ws",
-  transports: ["websocket"],
-});
-socket.on("connect", function () {
-  isConnected = true;
-  socket.emit("get", { end: "end", length: 15 });
-});
-socket.on("history", function (data) {
+const socket = io('https://api.jimjcy.top', {
+  path: '/chat/ws',
+  transports: ['websocket'],
+})
+socket.on('connect', function () {
+  isConnected = true
+  socket.emit('get', { end: 'end', length: 15 })
+})
+socket.on('history', function (data) {
   if (data.id === socket.id) {
-    console.log(data.result);
+    console.log(data.result)
     for (let i = data.result.length - 1; i >= 0; i--) {
-      data.result[i].date = moment(data.result[i].date).format(
-        "YYYY-MM-DD HH:mm:ss"
-      );
-      message_list.value.unshift(data.result[i]);
+      data.result[i].date = moment(data.result[i].date).format('YYYY-MM-DD HH:mm:ss')
+      message_list.value.unshift(data.result[i])
     }
-    lastId = data.result[0].id;
+    lastId = data.result[0].id
   }
-});
-socket.on("new", (data) => {
-  message_list.value.push(data);
+})
+socket.on('new', (data) => {
+  message_list.value.push(data)
   nextTick(() => {
     history.value.scrollTo({
       top: history.value.scrollHeight,
-      behavior: "smooth",
-    });
-  });
-});
+      behavior: 'smooth',
+    })
+  })
+})
 function getMore() {
   if (!isConnected) {
-    error.value = "服务连接失败，请稍后再试";
-    return;
+    error.value = '服务连接失败，请稍后再试'
+    return
   }
-  socket.emit("get", { end: lastId, length: 15 });
+  socket.emit('get', { end: lastId, length: 15 })
 }
 function sendMessage() {
-  error.value = "";
+  error.value = ''
   if (!isConnected) {
-    error.value = "服务连接失败，请稍后再试";
-    return;
+    error.value = '服务连接失败，请稍后再试'
+    return
   }
-  if (message.value.trim() === "") {
-    error.value = "请输入内容";
-    return;
+  if (message.value.trim() === '') {
+    error.value = '请输入内容'
+    return
   }
   // if (message.value.length > 300) {
   //   error.value = "内容过长";
   //   return;
   // }
-  socket.emit("send", {
+  socket.emit('send', {
     username: username.value,
     content: message.value.trim(),
-  });
-  message.value = "";
+  })
+  message.value = ''
 }
-const router = useRouter();
+const router = useRouter()
 onBeforeMount(() => {
-  constant
-    .req.post("/login/check", {
+  constant.req
+    .post('/login/check', {
       sessionid: localStorage.sessionid,
     })
     .then((response) => {
       if (!response.data.status) {
-        router.push("/login");
+        router.push('/login')
       } else {
-        username.value = response.data.username;
+        username.value = response.data.username
       }
-    });
-});
+    })
+})
 onMounted(() => {
   // watch(
   //   message_list,
@@ -101,25 +99,25 @@ onMounted(() => {
   //   // { deep: true, once: true }
   //   { deep: true }
   // );
-  socket.connect();
+  socket.connect()
   watch(
     message_list,
     () => {
       nextTick(() => {
         history.value.scrollTo({
           top: history.value.scrollHeight,
-          behavior: "smooth",
-        });
-      });
+          behavior: 'smooth',
+        })
+      })
     },
-    { deep: true, once: true }
+    { deep: true, once: true },
     // { deep: true }
-  );
-});
+  )
+})
 onUnmounted(() => {
-  socket.disconnect();
-  isConnected = false;
-});
+  socket.disconnect()
+  isConnected = false
+})
 </script>
 
 <template>
@@ -139,7 +137,7 @@ onUnmounted(() => {
         <div class="message-box">
           <div class="info">
             <p>
-              {{ message.username === username ? "" : message.username }}
+              {{ message.username === username ? '' : message.username }}
               {{ message.date.substring(0, 10) }}
               {{ message.date.substring(11, 19) }}
             </p>
@@ -163,7 +161,7 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@use "../styles/themes.scss" as *;
+@use '../../styles/themes.scss' as *;
 
 .chat {
   height: 100%;

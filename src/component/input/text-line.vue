@@ -1,39 +1,33 @@
-<script setup>
+<script lang="ts" setup>
 defineProps({
   title: String,
   type: {
     type: String,
-    default: "text",
+    default: 'text',
   },
   maxlength: {
     type: Number,
     default: 256,
   },
-});
-const text = defineModel();
+})
+const text = defineModel()
 const status = computed(() => {
   if (text.value && text.value.length > 0) {
-    return "open";
+    return 'open'
   } else {
-    return "close";
+    return 'close'
   }
-});
+})
 </script>
 <template>
   <div class="group">
-    <input
-      class="input"
-      v-model="text"
-      :class="status"
-      :type="type"
-      :maxlength="maxlength"
-    />
+    <input class="input" v-model="text" :class="status" :type="type" :maxlength="maxlength" />
     <p class="title">{{ title }}</p>
     <div class="decoration"></div>
   </div>
 </template>
 <style lang="scss" scoped>
-@use "../../styles/themes.scss" as *;
+@use '../../styles/themes.scss' as *;
 
 .group {
   position: relative;
@@ -43,7 +37,7 @@ const status = computed(() => {
     left: 0;
     margin: 0;
     font-size: 1.2em;
-    opacity: .5;
+    opacity: 0.5;
     pointer-events: none;
     user-select: none;
   }
@@ -81,7 +75,7 @@ const status = computed(() => {
     // opacity: 0;
     width: 0%;
     transform: translateX(-50%);
-    transition: all ease-in-out .5s;
+    transition: all ease-in-out 0.5s;
     @include useTheme {
       background-color: getTheme(hover-color);
     }

@@ -1,49 +1,49 @@
-<script setup>
-import constant from "@/constant";
-import moment from "moment";
-const route = useRoute();
-const router = useRouter();
+<script lang="ts" setup>
+import constant from '@/constant'
+import moment from 'moment'
+const route = useRoute()
+const router = useRouter()
 
-const data = ref({});
-const isAdmin = ref(false);
-const status = ref(0);
-const reply = ref("");
-const setStatus = ref("");
+const data = ref({})
+const isAdmin = ref(false)
+const status = ref(0)
+const reply = ref('')
+const setStatus = ref('')
 
 const showedStatus = computed(() => {
-  if (status.value === 0) return "等待处理";
-  else if (status.value === 1) return "已关闭";
-  else if (status.value === 2) return "已完成";
-  else return "未知状态";
-});
-console.log(route.params.id);
+  if (status.value === 0) return '等待处理'
+  else if (status.value === 1) return '已关闭'
+  else if (status.value === 2) return '已完成'
+  else return '未知状态'
+})
+console.log(route.params.id)
 onBeforeMount(async () => {
-  let res = await constant.req.post("/get/feedback", {
+  let res = await constant.req.post('/get/feedback', {
     id: route.params.id,
     page: 0,
-  });
-  data.value = res.data.result[0];
-  status.value = data.value.status;
-  reply.value = data.value.reply;
-  data.value.date = moment(data.value.date).format("YYYY-MM-DD HH:mm:ss");
+  })
+  data.value = res.data.result[0]
+  status.value = data.value.status
+  reply.value = data.value.reply
+  data.value.date = moment(data.value.date).format('YYYY-MM-DD HH:mm:ss')
   // console.log(data.value);
-  res = await constant.req.post("/login/check", {
+  res = await constant.req.post('/login/check', {
     sessionid: localStorage.sessionid,
-  });
-  if (res.data.group === "admin") {
-    isAdmin.value = true;
+  })
+  if (res.data.group === 'admin') {
+    isAdmin.value = true
   } else {
-    isAdmin.value = false;
+    isAdmin.value = false
   }
-});
+})
 async function setReply() {
-  const res = await constant.req.post("/set/feedback", {
+  const res = await constant.req.post('/set/feedback', {
     id: route.params.id,
     status: status.value,
     reply: reply.value,
-  });
+  })
   if (res.data.status) {
-    setStatus.value = "OK";
+    setStatus.value = 'OK'
   }
 }
 </script>
@@ -77,9 +77,7 @@ async function setReply() {
       <p>留言</p>
       <text-area class="input" title="输入留言" v-model="reply"></text-area>
       <div class="row but">
-        <click-button class="middle" @click="setReply()"
-          ><p>保存</p></click-button
-        >
+        <click-button class="middle" @click="setReply()"><p>保存</p></click-button>
       </div>
       <div class="row">
         <p>{{ setStatus }}</p>
@@ -91,7 +89,7 @@ async function setReply() {
   </div>
 </template>
 <style lang="scss" scoped>
-@use "@/styles/themes.scss" as *;
+@use '@/styles/themes.scss' as *;
 .content {
   padding: 20px;
   // h1, h2, h3, h4 {

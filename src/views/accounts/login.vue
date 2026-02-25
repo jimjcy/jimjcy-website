@@ -1,30 +1,30 @@
-<script setup>
-import constant from "../constant";
+<script lang="ts" setup>
+import constant from '@/constant'
 
-const username = ref("");
-const password = ref("");
-const code = ref("");
-const error = ref("");
-const image = ref();
+const username = ref('')
+const password = ref('')
+const code = ref('')
+const error = ref('')
+const image = ref()
 
 function imageReload() {
   constant.req
-    .post("/get_image", {
+    .post('/get_image', {
       codesession: localStorage.codesession,
     })
     .then((response) => {
-      image.value = "data:image/svg+xml;base64," + btoa(response.data);
-    });
+      image.value = 'data:image/svg+xml;base64,' + btoa(response.data)
+    })
 }
-imageReload();
+imageReload()
 
 function login() {
-  error.value = "";
-  if (username.value === "" || password.value === "" || code.value === "") {
-    error.value = "请输入完整的表单";
+  error.value = ''
+  if (username.value === '' || password.value === '' || code.value === '') {
+    error.value = '请输入完整的表单'
   } else {
     constant.req
-      .post("/login", {
+      .post('/login', {
         username: username.value,
         password: password.value,
         code: code.value,
@@ -32,12 +32,12 @@ function login() {
       })
       .then((response) => {
         if (response.data.status) {
-          localStorage.sessionid = response.data.sessionid;
-          window.location.href = localStorage.fromUrl;
+          localStorage.sessionid = response.data.sessionid
+          window.location.href = localStorage.fromUrl
         } else {
-          error.value = response.data.errorMessage;
+          error.value = response.data.errorMessage
         }
-      });
+      })
   }
 }
 </script>
@@ -45,16 +45,17 @@ function login() {
 <template>
   <h1 class="title">登录</h1>
   <div class="block center">
-    <text-line class="text" title="用户名" v-model="username"/>
-    <text-line class="text" title="密码" v-model="password" type="password"/>
+    <text-line class="text" title="用户名" v-model="username" />
+    <text-line class="text" title="密码" v-model="password" type="password" />
     <div class="code">
-      <text-line title="验证码" maxlength="4" v-model="code"/>
+      <text-line title="验证码" maxlength="4" v-model="code" />
       <img alt="验证码" @click="imageReload" :src="image" />
     </div>
     <p class="error" v-text="error"></p>
     <p>
-      没有账号？<RouterLink class="links" to="/register">去注册</RouterLink>
-      忘记密码？<RouterLink class="links" to="/forget_password"
+      没有账号？<RouterLink class="links" to="/register">去注册</RouterLink> 忘记密码？<RouterLink
+        class="links"
+        to="/forget_password"
         >去找回</RouterLink
       >
     </p>
@@ -68,7 +69,8 @@ function login() {
 .title {
   text-align: center;
 }
-.text, .code {
+.text,
+.code {
   margin-top: 50px;
   width: 17em;
   height: 3em;

@@ -1,8 +1,8 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps({
   text: String,
   disabled: Boolean,
-});
+})
 </script>
 <template>
   <button class="but" :disabled="disabled">
@@ -10,12 +10,12 @@ const props = defineProps({
   </button>
 </template>
 <style lang="scss" scoped>
-@use "../../styles/themes.scss" as *;
+@use '../../styles/themes.scss' as *;
 .but {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: .5em;
+  border-radius: 0.5em;
   white-space: nowrap;
   cursor: pointer;
   transition: all 0.5s;

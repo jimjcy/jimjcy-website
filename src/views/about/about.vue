@@ -1,18 +1,18 @@
-<script setup>
+<script lang="ts" setup>
 const info = {
   QQ: {
-    name: "771732203",
-    url: "https://qm.qq.com/cgi-bin/qm/qr?k=vqy3IdrB90OaKlwk8BLE8JGass3Ji0Nn",
+    name: '771732203',
+    url: 'https://qm.qq.com/cgi-bin/qm/qr?k=vqy3IdrB90OaKlwk8BLE8JGass3Ji0Nn',
   },
-  微信: { name: "xiaojingjing_jim" },
+  微信: { name: 'xiaojingjing_jim' },
   bilibili: {
-    name: "小井井jimjcy",
-    url: "https://space.bilibili.com/519179845",
+    name: '小井井jimjcy',
+    url: 'https://space.bilibili.com/519179845',
   },
-  抖音: { name: "小井井" },
-  Github: { name: "jimjcy", url: "https://github.com/jimjcy" },
-  Email: { name: "771732203@qq.com", url: "mailto: 771732203@qq.com" },
-};
+  抖音: { name: '小井井' },
+  Github: { name: 'jimjcy', url: 'https://github.com/jimjcy' },
+  Email: { name: '771732203@qq.com', url: 'mailto: 771732203@qq.com' },
+}
 </script>
 <template>
   <h1 class="title">联系我</h1>
@@ -22,7 +22,7 @@ const info = {
   </div>
 </template>
 <style lang="scss" scoped>
-@use '../styles/themes.scss' as *;
+@use '@/styles/themes.scss' as *;
 
 .title {
   text-align: center;

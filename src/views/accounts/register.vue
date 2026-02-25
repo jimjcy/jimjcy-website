@@ -1,13 +1,13 @@
-<script setup>
-import constant from "../constant";
+<script lang="ts" setup>
+import constant from '@/constant'
 
-const username = ref();
-const password = ref();
-const repassword = ref();
-const email = ref();
-const code = ref();
-const email_code = ref();
-const sex = ref("保密");
+const username = ref()
+const password = ref()
+const repassword = ref()
+const email = ref()
+const code = ref()
+const email_code = ref()
+const sex = ref('保密')
 
 // const year = ref()
 // const month = ref()
@@ -25,38 +25,38 @@ const sex = ref("保密");
 // }
 // let days = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
-const error = ref();
-const email_code_button = ref();
+const error = ref()
+const email_code_button = ref()
 
-const router = useRouter();
+const router = useRouter()
 
 function startCountDown() {
-  let duration = 60;
-  let startButton = email_code_button.value;
-  startButton.disabled = true;
+  let duration = 60
+  let startButton = email_code_button.value
+  startButton.disabled = true
   let timer = setInterval(function () {
     if (duration <= 0) {
-      clearInterval(timer);
-      startButton.value = "发送验证码";
-      startButton.disabled = false;
+      clearInterval(timer)
+      startButton.value = '发送验证码'
+      startButton.disabled = false
     } else {
-      startButton.value = duration + "s";
-      duration--;
+      startButton.value = duration + 's'
+      duration--
     }
-  }, 1000);
+  }, 1000)
 }
 
-const image = ref();
+const image = ref()
 function imageReload() {
   constant.req
-    .post("/get_image", {
+    .post('/get_image', {
       codesession: localStorage.codesession,
     })
     .then((response) => {
-      image.value = "data:image/svg+xml;base64," + btoa(response.data);
-    });
+      image.value = 'data:image/svg+xml;base64,' + btoa(response.data)
+    })
 }
-imageReload();
+imageReload()
 
 function send_email() {
   if (
@@ -67,21 +67,21 @@ function send_email() {
     code.value === undefined ||
     sex.value === undefined
   ) {
-    error.value = "请填写完整表单";
-  } else if (email.value.indexOf("@") === -1) {
-    error.value = "请填写正确的邮箱";
+    error.value = '请填写完整表单'
+  } else if (email.value.indexOf('@') === -1) {
+    error.value = '请填写正确的邮箱'
   } else {
-    constant.req.post("/send_email", {
+    constant.req.post('/send_email', {
       codesession: localStorage.codesession,
       email: email.value,
-    });
-    window.alert("请求已发送，请查收邮件");
-    startCountDown();
+    })
+    window.alert('请求已发送，请查收邮件')
+    startCountDown()
   }
 }
 
 function submit_button() {
-  error.value = "";
+  error.value = ''
   if (
     username.value === undefined ||
     password.value === undefined ||
@@ -91,13 +91,13 @@ function submit_button() {
     email_code.value === undefined ||
     sex.value === undefined
   ) {
-    error.value = "请填写完整表单";
-  } else if (email.value.indexOf("@") === -1) {
-    error.value = "请填写正确的邮箱";
+    error.value = '请填写完整表单'
+  } else if (email.value.indexOf('@') === -1) {
+    error.value = '请填写正确的邮箱'
   } // else if ('?') {}
   else {
     constant.req
-      .post("/register", {
+      .post('/register', {
         codesession: localStorage.codesession,
         username: username.value,
         password: password.value,
@@ -109,12 +109,12 @@ function submit_button() {
       })
       .then((response) => {
         if (response.data.status) {
-          window.alert("注册成功！");
-          router.push("/login");
+          window.alert('注册成功！')
+          router.push('/login')
         } else {
-          error.value = response.data.errorMessage;
+          error.value = response.data.errorMessage
         }
-      });
+      })
   }
 }
 </script>
@@ -124,12 +124,7 @@ function submit_button() {
   <div class="block center">
     <text-line class="text" title="用户名" v-model="username" />
     <text-line class="text" title="密码" v-model="password" type="password" />
-    <text-line
-      class="text"
-      title="确认密码"
-      v-model="repassword"
-      type="password"
-    />
+    <text-line class="text" title="确认密码" v-model="repassword" type="password" />
     <text-line class="text" title="邮箱" v-model="email" />
     <div class="code">
       <p>性别：</p>
@@ -155,8 +150,10 @@ function submit_button() {
     <!--    </div>-->
     <p class="error" v-text="error"></p>
     <p>
-      已有账号？<RouterLink to="/login">去登录</RouterLink>
-      忘记密码？<RouterLink to="/forget_password">去找回</RouterLink>
+      已有账号？<RouterLink to="/login">去登录</RouterLink> 忘记密码？<RouterLink
+        to="/forget_password"
+        >去找回</RouterLink
+      >
     </p>
     <click-button class="but" @click="submit_button">
       <p>注册</p>
@@ -165,7 +162,7 @@ function submit_button() {
 </template>
 
 <style lang="scss" scoped>
-@use "../styles/themes.scss" as *;
+@use '@/styles/themes.scss' as *;
 
 .title {
   text-align: center;

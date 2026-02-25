@@ -1,115 +1,115 @@
-<script setup>
-import { useTemplateRef } from "vue";
-import constant from "./constant";
+<script lang="ts" setup>
+import { useTemplateRef } from 'vue'
+import constant from './constant'
 
-const fold = ref(false);
-const barcontent = ref("菜单");
+const fold = ref(false)
+const barcontent = ref('菜单')
 
-const welcome = ref("欢迎来到小井井的网站！");
-const isLogin = ref(false);
+const welcome = ref('欢迎来到小井井的网站！')
+const isLogin = ref(false)
 // const isThemeWindowOpen = ref(false);
-const username = ref("");
-const themeWindow = useTemplateRef("themeWindow");
-const err = ref();
-const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+const username = ref('')
+const themeWindow = useTemplateRef('themeWindow')
+const err = ref()
+const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
 
 const titles = {
-  home: "主页",
-  help_documents: "帮助文档",
-  information: "网站资讯",
-  feedback: "报告问题",
-  download_files: "下载资源",
-  chatting_room: "聊天室",
-  ai_chatting: "ai聊天",
-  login: "登录",
-  register: "注册",
-  profile: "个人中心",
-  about: "联系方式",
-};
+  home: '主页',
+  help_documents: '帮助文档',
+  information: '网站资讯',
+  feedback: '报告问题',
+  download_files: '下载资源',
+  chatting_room: '聊天室',
+  ai_chatting: 'ai聊天',
+  login: '登录',
+  register: '注册',
+  profile: '个人中心',
+  about: '联系方式',
+}
 
 const routes = {
-  "/": "主页", 
-  "/information": "网站资讯",
-  "/ai_chatting": "ai聊天", 
-  "/chatting_room": "聊天室",
-  "/download_files": "下载资源",
-  "/help_documents": "帮助文档",
-  "/feedback": "报告问题",
-  "/about": "联系方式"
-};
+  '/': '主页',
+  '/information': '网站资讯',
+  '/ai_chatting': 'ai聊天',
+  '/chatting_room': '聊天室',
+  '/download_files': '下载资源',
+  '/help_documents': '帮助文档',
+  '/feedback': '报告问题',
+  '/about': '联系方式',
+}
 
 const theme = [
-  { name: "light", display: "浅色主题", color: "#e0e0e0" },
-  { name: "dark", display: "深色主题", color: "#0d1117" },
-  { name: "orange", display: "橙色主题", color: "#ffc107" },
-  { name: "cyan", display: "青绿色主题", color: "#a6ffcb" },
-  { name: "purple", display: "紫色主题", color: "#5e3f8c" },
+  { name: 'light', display: '浅色主题', color: '#e0e0e0' },
+  { name: 'dark', display: '深色主题', color: '#0d1117' },
+  { name: 'orange', display: '橙色主题', color: '#ffc107' },
+  { name: 'cyan', display: '青绿色主题', color: '#a6ffcb' },
+  { name: 'purple', display: '紫色主题', color: '#5e3f8c' },
   // { name: "auto", display: "跟随系统", color: "linear-gradient(to right, #0d1117, #e0e0e0)"}
-];
+]
 
-let fromUrl = "";
-let toUrl = "";
+let fromUrl = ''
+let toUrl = ''
 
-const router = useRouter();
+const router = useRouter()
 router.beforeEach(async (to, from) => {
-  fromUrl = from.fullPath.split("/")[1];
-  toUrl = to.fullPath.split("/")[1];
-  if (toUrl === "") {
-    toUrl = "home";
+  fromUrl = from.fullPath.split('/')[1]
+  toUrl = to.fullPath.split('/')[1]
+  if (toUrl === '') {
+    toUrl = 'home'
   }
-  if (fromUrl === "") {
-    fromUrl = "home";
+  if (fromUrl === '') {
+    fromUrl = 'home'
   }
   // console.log(fromUrl, toUrl);
-  document.title = titles[toUrl] + "-小井井的网站";
-  if (from.fullPath !== "login") localStorage.fromUrl = from.fullPath;
-  else localStorage.fromUrl = to.fullPath;
-});
+  document.title = titles[toUrl] + '-小井井的网站'
+  if (from.fullPath !== 'login') localStorage.fromUrl = from.fullPath
+  else localStorage.fromUrl = to.fullPath
+})
 
 if (localStorage.sessionid === undefined) {
-  localStorage.sessionid = constant.LOGOUTSESSIONID;
+  localStorage.sessionid = constant.LOGOUTSESSIONID
 }
 
 onBeforeMount(() => {
   constant.req
-    .post("/login/check", {
+    .post('/login/check', {
       sessionid: localStorage.sessionid,
     })
     .then((response) => {
       if (response.data.status) {
-        isLogin.value = true;
-        username.value = response.data.username;
-        welcome.value = "欢迎" + response.data.username + "来到小井井的网站！";
+        isLogin.value = true
+        username.value = response.data.username
+        welcome.value = '欢迎' + response.data.username + '来到小井井的网站！'
       }
-    });
-});
+    })
+})
 
-if (localStorage.version === undefined || localStorage.version !== "3.0.4") {
-  localStorage.clear();
-  localStorage.version = "3.0.4";
+if (localStorage.version === undefined || localStorage.version !== '3.0.4') {
+  localStorage.clear()
+  localStorage.version = '3.0.4'
 }
 
 if (localStorage.codesession === undefined) {
-  constant.req.post("/generate_token").then((response) => {
-    localStorage.codesession = response.data;
-  });
+  constant.req.post('/generate_token').then((response) => {
+    localStorage.codesession = response.data
+  })
 }
 
 function changeTheme(color) {
-  document.documentElement.dataset.theme = color;
-  localStorage.theme = color;
+  document.documentElement.dataset.theme = color
+  localStorage.theme = color
 }
 if (localStorage.theme === undefined) {
-  localStorage.theme = systemTheme.matches ? "dark" : "light";
+  localStorage.theme = systemTheme.matches ? 'dark' : 'light'
 }
-changeTheme(localStorage.theme);
-systemTheme.addEventListener("change", (e) => {
-  localStorage.theme = e.matches ? "dark" : "light";
-  changeTheme(localStorage.theme);
-});
+changeTheme(localStorage.theme)
+systemTheme.addEventListener('change', (e) => {
+  localStorage.theme = e.matches ? 'dark' : 'light'
+  changeTheme(localStorage.theme)
+})
 
 function openThemeWindow() {
-  themeWindow.value.open();
+  themeWindow.value.open()
 }
 </script>
 
@@ -119,16 +119,10 @@ function openThemeWindow() {
       <p>菜单</p>
     </click-button>
     <p v-text="welcome" class="welcome"></p>
-    <click-button
-      class="but"
-      @click="openThemeWindow"
-      style="margin-right: 20px"
-    >
+    <click-button class="but" @click="openThemeWindow" style="margin-right: 20px">
       <p>主题</p>
     </click-button>
-    <click-button class="but" style="margin-right: 20px"
-      ><p>新闻</p></click-button
-    >
+    <click-button class="but" style="margin-right: 20px"><p>新闻</p></click-button>
     <click-button @click="router.push('/login')" class="but" v-if="!isLogin"
       ><p>登录</p></click-button
     >
@@ -148,41 +142,23 @@ function openThemeWindow() {
           <!-- <RouterLink :to="key">{{ value }}</RouterLink> -->
           <p>{{ value }}</p>
         </click-button>
-        <click-button
-          class="but"
-          v-if="!isLogin"
-          @click="router.push('/login')"
-        >
+        <click-button class="but" v-if="!isLogin" @click="router.push('/login')">
           <!-- <RouterLink to="/login">登录</RouterLink> -->
           <p>登录</p>
         </click-button>
-        <click-button
-          class="but"
-          v-if="!isLogin"
-          @click="router.push('/register')"
-        >
+        <click-button class="but" v-if="!isLogin" @click="router.push('/register')">
           <!-- <RouterLink to="/register">注册</RouterLink> -->
           <p>注册</p>
         </click-button>
-        <click-button
-          class="but"
-          v-if="isLogin"
-          @click="router.push('/profile')"
-        >
+        <click-button class="but" v-if="isLogin" @click="router.push('/profile')">
           <!-- <RouterLink to="/profile">个人中心</RouterLink>F -->
           <p>个人中心</p>
         </click-button>
-        <img
-          src="./assets/pic.jpg"
-          alt="小井井的头像"
-          style="height: 7em; width: 100%"
-        />
+        <img src="./assets/pic.jpg" alt="小井井的头像" style="height: 7em; width: 100%" />
         <div class="footer">
           <p>Copyright © 2025 小井井的网站 jimjcy.top All Rights Reserved.</p>
           <div class="links">
-            <a href="https://beian.miit.gov.cn/" target="_blank"
-              >赣ICP备2024027845号-1</a
-            >
+            <a href="https://beian.miit.gov.cn/" target="_blank">赣ICP备2024027845号-1</a>
             <a
               href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=36070202001004"
               target="_blank"
@@ -191,20 +167,14 @@ function openThemeWindow() {
           </div>
           <p>
             Powered by Vue+Vite+VueRouter Designed by Xiaojingjing &
-            <a target="_blank" href="https://github.com/grassblock123"
-              >grassblock</a
-            >
+            <a target="_blank" href="https://github.com/grassblock123">grassblock</a>
           </p>
           <p>
-            友情链接：<a target="_blank" href="https://kuankuan.site"
-              >宽宽的小天地</a
-            >
+            友情链接：<a target="_blank" href="https://kuankuan.site">宽宽的小天地</a>
             <a target="_blank" href="https://python666.cn">crossin的个人博客</a>
             <a target="_blank" href="http://bsynet.cc">思远的网站</a>
             <a target="_blank" href="http://hezi.xyxpz.cn">鹤子的网站</a>
-            <a target="_blank" href="https://neongel.github.io"
-              >小皮鸭(neongel工作室)的网站</a
-            >
+            <a target="_blank" href="https://neongel.github.io">小皮鸭(neongel工作室)的网站</a>
           </p>
           <!-- <br /><br /><br /><br /> -->
         </div>
@@ -214,19 +184,10 @@ function openThemeWindow() {
       <RouterView />
     </div>
   </div>
-    <!-- @close="themeWindow.value.close()" -->
-  <window-info
-    title="主题选择"
-    ref="themeWindow"
-    height=500
-    width=500
-  >
+  <!-- @close="themeWindow.value.close()" -->
+  <window-info title="主题选择" ref="themeWindow" height="500" width="500">
     <div class="selection">
-      <click-button
-        v-for="color in theme"
-        class="themeButton"
-        @click="changeTheme(color.name)"
-      >
+      <click-button v-for="color in theme" class="themeButton" @click="changeTheme(color.name)">
         <div class="theme-box">
           <div class="color" :style="{ backgroundColor: color.color }"></div>
           <p v-text="color.display" class="name"></p>
@@ -237,7 +198,7 @@ function openThemeWindow() {
 </template>
 
 <style lang="scss" scoped>
-@use "./styles/themes.scss" as *;
+@use './styles/themes.scss' as *;
 
 .navbar {
   display: flex;

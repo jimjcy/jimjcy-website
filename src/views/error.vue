@@ -1,8 +1,8 @@
-<script setup>
-import ClickButton from "@/component/input/clickButton.vue";
+<script lang="ts" setup>
+import ClickButton from '@/component/input/clickButton.vue'
 
-const router = useRouter();
-const route = useRoute();
+const router = useRouter()
+const route = useRoute()
 </script>
 <template>
   <div class="content">
@@ -14,7 +14,7 @@ const route = useRoute();
   </div>
 </template>
 <style lang="scss" scoped>
-@use "@/styles/themes.scss" as *;
+@use '@/styles/themes.scss' as *;
 .content {
   padding: 20px;
   text-align: center;
