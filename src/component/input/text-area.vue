@@ -31,6 +31,7 @@ const status = computed(() => {
     opacity: 0.5;
   }
   .input {
+    display: block;
     position: relative;
     outline: none;
     font-size: 1.3em;

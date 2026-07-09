@@ -1,0 +1,104 @@
+
+  <!-- <div class="block">
+    {
+      "about": {
+        "name": "小井井",
+        "age": 13,
+        ""
+      }
+    }
+    <h2>个人简介</h2>
+    <p>大家好啊，我是小井井</p>
+    <p>七年级初中生一枚</p>
+    <p>来自Crossin的编程教室</p>
+    <p>喜欢编程和学习（如果可以吸福瑞的话也不是不行doge）</p>
+    <p>
+      会Python，C++，HTML，JavaScript，CSS，汇编（也不是特别会），git
+    </p>
+  </div> -->
+  <!-- <div class="block">
+    <h2>关于本网站</h2>
+    <p>本网站由Vue+Vite+VueRouter前端框架和nodejs+express+socket.io后端框架制作</p>
+    <p>网站目前功能：</p>
+    <ul>
+      <li>主页</li>
+      <li>帮助文档（正在开发）</li>
+      <li>网站资讯（正在开发）</li>
+      <li>报告问题（正在开发）</li>
+      <li>下载资料（正在开发）</li>
+      <li>翻译（正在开发）</li>
+      <li>二维码生成（正在开发）</li>
+      <li>聊天室</li>
+      <li>ai聊天</li>
+      <li>注册</li>
+      <li>登录</li>
+      <li>忘记密码</li>
+      <li>个人资料</li>
+      <li>更多功能正在努力开发中······</li>
+    </ul>
+  </div> -->
+
+  
+  <!-- <div class="stickybox">
+    <div class="stickycontent">
+      <div class="intro" v-slide>
+        <div class="heading">基本信息</div>
+        <div class="subheading">Basic Information</div>
+        <div class="gap"></div>
+        <div class="text">
+          <p>大家好呀~我是小井井</p>
+          <p>今年14，马上要读初三了呢，坐标广东佛山（江西赣州）</p>
+          <p>不太喜欢打大型游戏（三分钟热度？），主玩休闲游戏如打歌、Steam上的休闲游戏以及MC</p>
+          <p>性格偏内向，如果熟了就不会了，INFJ</p>
+          <p>爱好主要为写代码。？</p>
+          <p>是个吃货呢，基本啥都能吃？</p>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <!-- <stickyContent :scale="1.5">
+    <div class="intro" ref="int">
+      <div class="heading">基本信息</div>
+      <div class="subheading">Basic Information</div>
+      <div class="gap"></div>
+      <div class="text">
+        <p>大家好呀~我是小井井</p>
+        <p>今年14，马上要读初三了呢，坐标广东佛山（江西赣州）</p>
+        <p>不太喜欢打大型游戏（三分钟热度？），主玩休闲游戏如打歌、Steam上的休闲游戏以及MC</p>
+        <p>性格偏内向，如果熟了就不会了，INFJ</p>
+        <p>爱好主要为写代码。？</p>
+        <p>是个吃货呢，基本啥都能吃？</p>
+      </div>
+    </div>
+  </stickyContent> -->
+  <!-- <stickyContent :scale="150">
+    <div class="intro" v-slide>
+      <div class="heading">网站信息</div>
+      <div class="subheading">Website Information</div>
+      <div class="gap"></div>
+      <div class="text">
+        <p>本网站使用Vue框架+VueRouter与Typescript制作</p>
+        <p>后端为Express框架</p>
+        <p>如有问题欢迎联系<a href="mailto:771732203@qq.com">771732203@qq.com</a>进行反馈</p>
+        <p>目前主要的功能有：AI以及聊天（不要问我别的是什么，问就是没写完。。</p>
+      </div>
+    </div>
+  </stickyContent>
+  <stickyContent :scale="150">
+    <div class="intro" v-slide>
+      <div class="heading">关于福瑞</div>
+      <div class="subheading">Furry Introduction</div>
+      <div class="gap"></div>
+      <div class="text">
+        <p>还没有想好写什么哦~</p>
+      </div>
+    </div>
+  </stickyContent>
+  <stickyContent :scale="150">
+    <div class="intro links" v-slide>
+      <div class="heading">网站导航</div>
+      <div class="subheading">Website Guide</div>
+      <div class="gap"></div>
+      <div class="text"></div>
+    </div>
+  </stickyContent> -->

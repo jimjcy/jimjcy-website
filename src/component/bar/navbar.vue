@@ -1,0 +1,232 @@
+<script lang="ts" setup>
+import utils from "@/common/utils";
+import { showThemeWindow } from "@/common/publicRefs";
+
+defineProps<{
+  showNavbar: boolean;
+}>();
+
+const fold = ref(false);
+
+const welcome = ref("小井井的网站");
+const isLogin = ref(false);
+
+const username = ref("");
+
+const router = useRouter();
+
+if (localStorage.sessionid === undefined) {
+  localStorage.sessionid = utils.LOGOUTSESSID;
+}
+
+// onBeforeMount(() => {
+//   utils.req
+//     .post("/login/check", {
+//       sessionid: localStorage.sessionid,
+//     })
+//     .then((response) => {
+//       if (response.data.status) {
+//         isLogin.value = true;
+//         username.value = response.data.username;
+//         welcome.value = "欢迎" + response.data.username + "来到小井井的网站！";
+//       }
+//     });
+// });
+
+if (localStorage.version === undefined || localStorage.version !== "3.0.4") {
+  localStorage.clear();
+  localStorage.version = "3.0.4";
+}
+
+if (localStorage.codesession === undefined) {
+  utils.req.post("/generate_token").then((response) => {
+    localStorage.codesession = response.data;
+  });
+}
+</script>
+<template>
+  <div class="navbarGroup">
+    <header class="navbar" v-show="showNavbar">
+      <click-button class="but" @click="fold = fold === true ? false : true">
+        <p>菜单</p>
+      </click-button>
+      <p v-text="welcome" class="welcome"></p>
+      <click-button class="but" @click="showThemeWindow = true">
+        <p>主题</p>
+      </click-button>
+      <click-button class="but"><p>新闻</p></click-button>
+      <click-button @click="router.push('/login')" class="but" v-if="!isLogin"
+        ><p>登录</p></click-button
+      >
+      <click-button @click="router.push('/profile')" class="link" v-if="isLogin">
+        {{ username }}
+      </click-button>
+    </header>
+    <div class="content">
+      <Transition name="sidebar">
+        <div class="sidebar" v-if="fold">
+          <click-button
+            class="but"
+            v-for="(value, key) in utils.routes"
+            :key="key"
+            @click="router.push(key)"
+          >
+            <!-- <RouterLink :to="key">{{ value }}</RouterLink> -->
+            <p>{{ value }}</p>
+          </click-button>
+          <click-button class="but" v-if="!isLogin" @click="router.push('/login')">
+            <!-- <RouterLink to="/login">登录</RouterLink> -->
+            <p>登录</p>
+          </click-button>
+          <click-button class="but" v-if="!isLogin" @click="router.push('/register')">
+            <!-- <RouterLink to="/register">注册</RouterLink> -->
+            <p>注册</p>
+          </click-button>
+          <click-button class="but" v-if="isLogin" @click="router.push('/profile')">
+            <!-- <RouterLink to="/profile">个人中心</RouterLink>F -->
+            <p>个人中心</p>
+          </click-button>
+
+          <img src="../assets/pic.jpg" alt="小井井的头像" style="height: 7em; width: 100%" />
+          <div class="footer">
+            <p>Copyright © 2024 - 2026 小井井的网站 jimjcy.top All Rights Reserved.</p>
+            <div class="links">
+              <a href="https://beian.miit.gov.cn/" target="_blank">赣ICP备2024027845号-1</a>
+              <a
+                href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=36070202001004"
+                target="_blank"
+                >赣公网安备 36070202001004号</a
+              >
+            </div>
+            <p>
+              Powered by Vue+Vite+VueRouter Designed by Xiaojingjing &
+              <a target="_blank" href="https://github.com/grassblock123">grassblock</a>
+            </p>
+            <p>
+              友情链接：<a target="_blank" href="https://kuankuan.site">宽宽的小天地</a>
+              <a target="_blank" href="https://python666.cn">crossin的个人博客</a>
+              <a target="_blank" href="http://bsynet.cc">思远的网站</a>
+              <a target="_blank" href="http://hezi.xyxpz.cn">鹤子的网站</a>
+              <a target="_blank" href="https://neongel.github.io">小皮鸭(neongel工作室)的网站</a>
+            </p>
+          </div>
+        </div>
+      </Transition>
+    </div>
+  </div>
+</template>
+<style lang="scss" scoped>
+@use "@/styles/themes.scss" as *;
+.navbarGroup {
+  position: relative;
+  .navbar {
+    display: flex;
+    position: fixed;
+    height: 5em;
+    width: 100%;
+    top: 0;
+    align-items: center;
+    border: solid 2px;
+    z-index: 2;
+    box-sizing: border-box;
+    @include useTheme {
+      background-color: getTheme(background-color);
+      border-color: getTheme(border-color);
+    }
+
+    .welcome {
+      margin: auto;
+      text-align: center;
+      font-size: 1.7em;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: clip;
+      @include useTheme {
+        color: getTheme(text-color);
+      }
+    }
+
+    .but {
+      font-size: 1.3em;
+      height: calc(100% - 5px);
+      width: 4em;
+      margin: 0 10px;
+    }
+  }
+
+  .content {
+    // height: calc(100% - 5em - 4px);
+    position: relative;
+    @include useTheme {
+      background-color: getTheme(page-color);
+    }
+    .sidebar {
+      position: fixed;
+      top: 5em;
+      height: calc(100% - 5em);
+      width: 12em;
+      scrollbar-width: none;
+      border: solid 2px;
+      box-sizing: border-box;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      transition: all 0.35s ease-out;
+      z-index: 1;
+      transform-origin: left;
+      @include useTheme {
+        background-color: getTheme(background-color);
+        border-color: getTheme(border-color);
+        box-shadow: 3px 0 5px getTheme(border-color);
+      }
+      .but {
+        margin: 0.5em 0.5em;
+        height: 2.3em;
+        border-radius: 1.2em;
+        border-width: 0.15em;
+        width: calc(100% - 1em);
+        font-size: 1.4em;
+      }
+      .footer {
+        width: 100%;
+        @include useTheme {
+          background-color: getTheme(background-color);
+        }
+
+        p {
+          @include useTheme {
+            color: getTheme(text-color);
+          }
+          margin-bottom: 0;
+        }
+
+        a {
+          @include useTheme {
+            color: getTheme(text-color);
+            &:hover {
+              color: getTheme(hover-color);
+            }
+          }
+          padding-left: 5px;
+          padding-right: 5px;
+        }
+      }
+    }
+  }
+}
+
+.sidebar-enter-from,
+.sidebar-leave-to {
+  // transform: scaleX(1);
+  transform: translateX(-12em);
+  opacity: 0;
+}
+.sidebar-enter-active,
+.sidebar-leave-active {
+  transition: all 0.2s ease-in-out;
+}
+.sidebar-enter-to,
+.sidebar-leave-from {
+  transform: translateX(0);
+  opacity: 1;
+}
+</style>

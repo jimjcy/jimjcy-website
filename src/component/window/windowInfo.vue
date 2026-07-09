@@ -13,21 +13,24 @@ const props = defineProps({
     default: "窗口标题",
   },
 });
+const emit = defineEmits(['closeWindow'])
 const isOpen = ref(false);
-const window = ref();
+const window = useTemplateRef("window")
 const open = () => {
   isOpen.value = true;
   nextTick(() => {
-    window.value.showModal();
+    if (window.value) window.value.showModal();
   });
 };
 const close = () => {
-  window.value.close();
+  isOpen.value = false;
+  emit("closeWindow")
 };
 defineExpose({ open, close });
 </script>
 <template>
-  <Transition name="dialog" @on-after-leave="close">
+  <!-- <Transition name="dialog" @on-after-leave="close"> -->
+  <Transition name="dialog">
     <dialog
       class="window"
       :style="{
@@ -41,7 +44,7 @@ defineExpose({ open, close });
     >
       <div class="window-title">
         <p>{{ title }}</p>
-        <click-button class="close" @click="isOpen = false">✕</click-button>
+        <click-button class="close" @click="close">✕</click-button>
       </div>
       <div class="window-content">
         <slot></slot>
