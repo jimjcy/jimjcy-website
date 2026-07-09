@@ -1,95 +1,112 @@
 <script lang="ts" setup>
-import stickyContent from "./common/component/stickyContent.vue";
-// import flatScroll from "./common/component/flatScroll.vue";
-
-function getViewportSize() {
-  return {
-    width: window.innerWidth,
-    height: window.innerHeight,
-  };
-}
+const pageEle = useTemplateRef('pageEle');
 const introPartNumber = 3;
+
+const introListScrollTop = ref<number>(0);
+const introListScroll = useTemplateRef('introListScroll');
+const scrollTop = ref<number>(0);
+const introListOffsetTop = ref<number>(0);
+
 const viewportSize = ref<{
   width: number;
   height: number;
-}>(getViewportSize());
-const introListScrollTop = ref<number>(0);
-const introListScroll = useTemplateRef("introListScroll");
+}>({ width: 0, height: 0 });
 
+function getViewportSize() {
+  return {
+    width: pageEle.value?.clientWidth || 0,
+    height: pageEle.value?.clientHeight || 0,
+  };
+}
 function onWindowResize() {
   viewportSize.value = getViewportSize();
   introListScrollTop.value = introListScroll.value?.scrollTop || 0;
+  introListOffsetTop.value = introListScroll.value?.offsetTop || 0;
+  scrollTop.value = pageEle.value?.scrollTop || 0;
+}
+function onScroll() {
+  scrollTop.value = pageEle.value?.scrollTop || 0;
 }
 
-window.addEventListener("resize", onWindowResize);
 onMounted(() => {
+  pageEle.value!.addEventListener('scroll', onScroll);
+  pageEle.value!.addEventListener('resize', onWindowResize);
   onWindowResize();
+  onScroll();
 });
 onUnmounted(() => {
-  window.removeEventListener("resize", onWindowResize);
+  window.removeEventListener('scroll', onScroll);
+  window.removeEventListener('resize', onWindowResize);
 });
 </script>
 <template>
   <div
-    class="content"
+    class="page"
+    ref="pageEle"
     :style="{
       '--viewport-height': viewportSize.height,
       '--viewport-width': viewportSize.width,
-      '--intro-list-scroll-top': introListScrollTop,
+      '--scroll-top': scrollTop,
     }"
   >
-    <div class="center">
-      <div class="welcome">
-        <div class="word" style="--dir: 1; --index: 0">欢</div>
-        <div class="word" style="--dir: -1; --index: 1">迎</div>
-        <div class="word" style="--dir: 1; --index: 2">来</div>
-        <div class="word" style="--dir: -1; --index: 3">到</div>
-      </div>
-      <div class="website" style="--dir: 1; --index: 4">小井井的网站</div>
-      <div class="mascot" style="--dir: 1; --index: 5">
-        吉祥物（？：<img class="img" src="../../assets/mascot.jpg" />
-      </div>
-      <div class="continue" style="--dir: 1; --index: 6">向下滚动了解更多</div>
-      <!-- <div class="arrow">↓</div>
+    <div class="content">
+      <div class="center">
+        <div class="welcome">
+          <div class="word" style="--dir: 1; --index: 0">欢</div>
+          <div class="word" style="--dir: -1; --index: 1">迎</div>
+          <div class="word" style="--dir: 1; --index: 2">来</div>
+          <div class="word" style="--dir: -1; --index: 3">到</div>
+        </div>
+        <div class="website" style="--dir: 1; --index: 4">小井井的网站</div>
+        <div class="mascot" style="--dir: 1; --index: 5">
+          吉祥物（？：<img class="img" src="../../assets/mascot.jpg" />
+        </div>
+        <div class="continue" style="--dir: 1; --index: 6">向下滚动了解更多</div>
+        <!-- <div class="arrow">↓</div>
       <div class="arrow">↓</div> -->
-    </div>
-  </div>
-  <div
-    class="intro-list-scroll"
-    :style="{
-      '--intro-part-number': introPartNumber,
-    }"
-    ref="introListScroll"
-  >
-    <div class="intro-list-area">
-      <div class="intro-list">
-        <div class="intro" style="background-color: red"></div>
-        <div class="intro" style="background-color: yellow"></div>
-        <div class="intro" style="background-color: blue"></div>
       </div>
     </div>
-  </div>
-  <div class="footer">
-    <p>Copyright © 2024 - 2026 小井井的网站 jimjcy.top All Rights Reserved.</p>
-    <a href="https://beian.miit.gov.cn/" target="_blank">赣ICP备2024027845号-1</a>
-    <a
-      href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=36070202001004"
-      target="_blank"
-      >赣公网安备 36070202001004号</a
+    <div
+      class="intro-list-scroll"
+      :style="{
+        '--intro-part-number': introPartNumber,
+        '--self-scroll': Math.max(
+          0,
+          Math.min(introPartNumber - 1, (scrollTop - introListOffsetTop) / viewportSize.height)
+        ),
+      }"
+      ref="introListScroll"
     >
-    <p>Powered by Vue+Vite+VueRouter Designed by jimjcy</p>
-    <p>
-      友情链接：<a target="_blank" href="https://kuankuan.site">宽宽的小天地</a>
-      <a target="_blank" href="https://python666.cn">crossin的个人博客</a>
-      <a target="_blank" href="http://bsynet.cc">思远的网站</a>
-      <a target="_blank" href="http://hezi.xyxpz.cn">鹤子的网站</a>
-      <a target="_blank" href="https://neongel.github.io">小皮鸭(neongel工作室)的网站</a>
-    </p>
+      <div class="intro-list-area">
+        <div class="intro-list">
+          <div class="intro" style="background-color: red"></div>
+          <div class="intro" style="background-color: yellow"></div>
+          <div class="intro" style="background-color: blue"></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <p>Copyright © 2024 - 2026 小井井的网站 jimjcy.top All Rights Reserved.</p>
+      <a href="https://beian.miit.gov.cn/" target="_blank">赣ICP备2024027845号-1</a>
+      <a
+        href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=36070202001004"
+        target="_blank"
+        >赣公网安备 36070202001004号</a
+      >
+      <p>Powered by Vue+Vite+VueRouter Designed by jimjcy</p>
+      <p>
+        友情链接：<a target="_blank" href="https://kuankuan.site">宽宽的小天地</a>
+        <a target="_blank" href="https://python666.cn">crossin的个人博客</a>
+        <a target="_blank" href="http://bsynet.cc">思远的网站</a>
+        <a target="_blank" href="http://hezi.xyxpz.cn">鹤子的网站</a>
+        <a target="_blank" href="https://neongel.github.io">小皮鸭(neongel工作室)的网站</a>
+      </p>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-@use "../../styles/themes.scss" as *;
+@use '../../styles/themes.scss' as *;
 
 $headerHeight: 5em;
 
@@ -97,23 +114,36 @@ $headerHeight: 5em;
 //   width: 100%;
 // }
 
-.intro-list-scroll {
-  height: calc(var(--viewport-height) * var(--intro-part-number) * 1px); // $headerHeight
+.page {
+  position: fixed;
+  inset: 0;
   width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.intro-list-scroll {
+  $partHeight: calc(var(--viewport-height) * 1px);
+  height: calc($partHeight * var(--intro-part-number));
+  width: 100%;
+
   .intro-list-area {
-    height: calc(var(--viewport-height) * 1px);
-    position: relative;
-    background-color: red;
     position: sticky;
+    height: $partHeight;
+    width: 100%;
     top: 0;
-    height: 100%;
+
     .intro-list {
+      width: 100%;
+      height: 100%;
       display: flex;
       flex-direction: row;
-      height: 100%;
+      transform: translate(calc(-1 * var(--self-scroll) * 100%), 0);
       .intro {
-        width: var(--viewport-width);
+        flex: 0 0 auto;
         height: 100%;
+        width: 100%;
       }
     }
   }
