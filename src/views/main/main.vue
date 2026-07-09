@@ -1,78 +1,120 @@
 <script lang="ts" setup>
-import stickyContent from "./common/component/stickyContent.vue";
-import flatScroll from "./common/component/flatScroll.vue";
+import stickyContent from './common/component/stickyContent.vue';
+import flatScroll from './common/component/flatScroll.vue';
+
+const scrollPage = useTemplateRef('scrollPage');
+const viewportHeight = ref(0);
+
+function updateScrollY() {
+  scrollY.value = scrollPage.value?.scrollTop || 0;
+}
+function updateSize() {
+  viewportHeight.value = scrollPage.value?.clientHeight || 0;
+}
+
+
+
+
+window.addEventListener('resize', () => {
+  updateSize();
+  updateScrollY();
+});
+
+const scrollY = ref(0);
+
+onMounted(() => {
+  scrollPage.value?.addEventListener('scroll', updateScrollY);
+  updateSize();
+  updateScrollY();
+});
 </script>
 <template>
-  <div class="content">
-    <div class="center">
-      <div class="welcome">
-        <div class="word" style="--dir: 1; --index: 0">欢</div>
-        <div class="word" style="--dir: -1; --index: 1">迎</div>
-        <div class="word" style="--dir: 1; --index: 2">来</div>
-        <div class="word" style="--dir: -1; --index: 3">到</div>
-      </div>
-      <div class="website" style="--dir: 1; --index: 4">小井井的网站</div>
-      <div class="mascot" style="--dir: 1; --index: 5">
-        吉祥物（？：<img class="img" src="../../assets/mascot.jpg" />
-      </div>
-      <div class="continue" style="--dir: 1; --index: 6">向下滚动了解更多</div>
-      <!-- <div class="arrow">↓</div>
-      <div class="arrow">↓</div> -->
-    </div>
-  </div>
-  <flatScroll>
-    <!-- // flat-scroll / FlatScroll -->
-    <!-- <div class="intro" v-slide> -->
-    <div class="intro">
-      <div class="heading">网站信息</div>
-      <div class="subheading">Website Information</div>
-      <div class="gap"></div>
-      <div class="text">
-        <p>本网站使用Vue框架+VueRouter与Typescript制作</p>
-        <p>后端为Express框架</p>
-        <p>如有问题欢迎联系<a href="mailto:771732203@qq.com">771732203@qq.com</a>进行反馈</p>
-        <p>目前主要的功能有：AI以及聊天（不要问我别的是什么，问就是没写完。。</p>
-      </div>
-    </div>
-    <!-- <div class="intro" v-slide> -->
-    <div class="intro">
-      <div class="heading">网站信息</div>
-      <div class="subheading">Website Information</div>
-      <div class="gap"></div>
-      <div class="text">
-        <p>本网站使用Vue框架+VueRouter与Typescript制作</p>
-        <p>后端为Express框架</p>
-        <p>如有问题欢迎联系<a href="mailto:771732203@qq.com">771732203@qq.com</a>进行反馈</p>
-        <p>目前主要的功能有：AI以及聊天（不要问我别的是什么，问就是没写完。。</p>
-      </div>
-    </div></flatScroll
+  <div
+    class="scroll-page"
+    ref="scrollPage"
+    :style="{
+      '--viewport-height': viewportHeight,
+      '--scroll': scrollY,
+      '--scroll-progress': scrollY / viewportHeight + 1,
+    }"
   >
-  <div class="footer">
-    <p>Copyright © 2024 - 2026 小井井的网站 jimjcy.top All Rights Reserved.</p>
-    <a href="https://beian.miit.gov.cn/" target="_blank">赣ICP备2024027845号-1</a>
-    <a
-      href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=36070202001004"
-      target="_blank"
-      >赣公网安备 36070202001004号</a
+    <div class="content">
+      <div class="center">
+        <div class="welcome">
+          <div class="word" style="--dir: 1; --index: 0">欢</div>
+          <div class="word" style="--dir: -1; --index: 1">迎</div>
+          <div class="word" style="--dir: 1; --index: 2">来</div>
+          <div class="word" style="--dir: -1; --index: 3">到</div>
+        </div>
+        <div class="website" style="--dir: 1; --index: 4">小井井的网站</div>
+        <div class="mascot" style="--dir: 1; --index: 5">
+          吉祥物（？：<img class="img" src="../../assets/mascot.jpg" />
+        </div>
+        <div class="continue" style="--dir: 1; --index: 6">向下滚动了解更多</div>
+        <!-- <div class="arrow">↓</div>
+      <div class="arrow">↓</div> -->
+      </div>
+    </div>
+    <flatScroll>
+      <!-- // flat-scroll / FlatScroll -->
+      <!-- <div class="intro" v-slide> -->
+      <div class="intro">
+        <div class="heading">网站信息</div>
+        <div class="subheading">Website Information</div>
+        <div class="gap"></div>
+        <div class="text">
+          <p>本网站使用Vue框架+VueRouter与Typescript制作</p>
+          <p>后端为Express框架</p>
+          <p>如有问题欢迎联系<a href="mailto:771732203@qq.com">771732203@qq.com</a>进行反馈</p>
+          <p>目前主要的功能有：AI以及聊天（不要问我别的是什么，问就是没写完。。</p>
+        </div>
+      </div>
+      <!-- <div class="intro" v-slide> -->
+      <div class="intro">
+        <div class="heading">网站信息</div>
+        <div class="subheading">Website Information</div>
+        <div class="gap"></div>
+        <div class="text">
+          <p>本网站使用Vue框架+VueRouter与Typescript制作</p>
+          <p>后端为Express框架</p>
+          <p>如有问题欢迎联系<a href="mailto:771732203@qq.com">771732203@qq.com</a>进行反馈</p>
+          <p>目前主要的功能有：AI以及聊天（不要问我别的是什么，问就是没写完。。</p>
+        </div>
+      </div></flatScroll
     >
-    <p>Powered by Vue+Vite+VueRouter Designed by jimjcy</p>
-    <p>
-      友情链接：<a target="_blank" href="https://kuankuan.site">宽宽的小天地</a>
-      <a target="_blank" href="https://python666.cn">crossin的个人博客</a>
-      <a target="_blank" href="http://bsynet.cc">思远的网站</a>
-      <a target="_blank" href="http://hezi.xyxpz.cn">鹤子的网站</a>
-      <a target="_blank" href="https://neongel.github.io">小皮鸭(neongel工作室)的网站</a>
-    </p>
+    <div class="footer">
+      <p>Copyright © 2024 - 2026 小井井的网站 jimjcy.top All Rights Reserved.</p>
+      <a href="https://beian.miit.gov.cn/" target="_blank">赣ICP备2024027845号-1</a>
+      <a
+        href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=36070202001004"
+        target="_blank"
+        >赣公网安备 36070202001004号</a
+      >
+      <p>Powered by Vue+Vite+VueRouter Designed by jimjcy</p>
+      <p>
+        友情链接：<a target="_blank" href="https://kuankuan.site">宽宽的小天地</a>
+        <a target="_blank" href="https://python666.cn">crossin的个人博客</a>
+        <a target="_blank" href="http://bsynet.cc">思远的网站</a>
+        <a target="_blank" href="http://hezi.xyxpz.cn">鹤子的网站</a>
+        <a target="_blank" href="https://neongel.github.io">小皮鸭(neongel工作室)的网站</a>
+      </p>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-@use "../../styles/themes.scss" as *;
+@use '../../styles/themes.scss' as *;
 
 // .stickybox {
 //   width: 100%;
 // }
-
+.scroll-page {
+  position: fixed;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  width: 100%;
+}
 .intro {
   min-width: calc(100% - 40px);
   height: calc(var(--viewport-height) * 1px - 40px - 5em);

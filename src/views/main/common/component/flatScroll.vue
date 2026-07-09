@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-const outerContainer = useTemplateRef("outerContainer");
-const innerContainer = useTemplateRef("innerContainer");
+const outerContainer = useTemplateRef('outerContainer');
+const innerContainer = useTemplateRef('innerContainer');
 const inHeight = ref(0);
 const outHeight = ref(0);
 const updateEle = () => {
@@ -19,8 +19,10 @@ const updateEle = () => {
     inHeight.value = outerContainer.value.getBoundingClientRect().top + window.scrollY;
   }
 };
-window.addEventListener("resize", updateEle);
-onMounted(updateEle);
+window.addEventListener('resize', updateEle);
+onMounted(() => {
+  setTimeout(updateEle, 0);
+});
 </script>
 <template>
   <div
