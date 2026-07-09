@@ -57,14 +57,7 @@ window.addEventListener("scroll", () => {
       </click-button>
     </div>
   </window-info>
-  <div
-    class="pages"
-    :style="{
-      '--viewport-height': viewportHeight,
-      '--scroll': scrollY,
-      '--scroll-progress': scrollY / viewportHeight + 1,
-    }"
-  >
+  <div class="pages">
     <router-view></router-view>
   </div>
 </template>

@@ -1,9 +1,43 @@
 <script lang="ts" setup>
 import stickyContent from "./common/component/stickyContent.vue";
-import flatScroll from "./common/component/flatScroll.vue";
+// import flatScroll from "./common/component/flatScroll.vue";
+
+function getViewportSize() {
+  return {
+    width: window.innerWidth,
+    height: window.innerHeight,
+  };
+}
+const introPartNumber = 3;
+const viewportSize = ref<{
+  width: number;
+  height: number;
+}>(getViewportSize());
+const introListScrollTop = ref<number>(0);
+const introListScroll = useTemplateRef("introListScroll");
+
+function onWindowResize() {
+  viewportSize.value = getViewportSize();
+  introListScrollTop.value = introListScroll.value?.scrollTop || 0;
+}
+
+window.addEventListener("resize", onWindowResize);
+onMounted(() => {
+  onWindowResize();
+});
+onUnmounted(() => {
+  window.removeEventListener("resize", onWindowResize);
+});
 </script>
 <template>
-  <div class="content">
+  <div
+    class="content"
+    :style="{
+      '--viewport-height': viewportSize.height,
+      '--viewport-width': viewportSize.width,
+      '--intro-list-scroll-top': introListScrollTop,
+    }"
+  >
     <div class="center">
       <div class="welcome">
         <div class="word" style="--dir: 1; --index: 0">欢</div>
@@ -20,33 +54,21 @@ import flatScroll from "./common/component/flatScroll.vue";
       <div class="arrow">↓</div> -->
     </div>
   </div>
-  <flatScroll>
-    <!-- // flat-scroll / FlatScroll -->
-    <!-- <div class="intro" v-slide> -->
-    <div class="intro">
-      <div class="heading">网站信息</div>
-      <div class="subheading">Website Information</div>
-      <div class="gap"></div>
-      <div class="text">
-        <p>本网站使用Vue框架+VueRouter与Typescript制作</p>
-        <p>后端为Express框架</p>
-        <p>如有问题欢迎联系<a href="mailto:771732203@qq.com">771732203@qq.com</a>进行反馈</p>
-        <p>目前主要的功能有：AI以及聊天（不要问我别的是什么，问就是没写完。。</p>
+  <div
+    class="intro-list-scroll"
+    :style="{
+      '--intro-part-number': introPartNumber,
+    }"
+    ref="introListScroll"
+  >
+    <div class="intro-list-area">
+      <div class="intro-list">
+        <div class="intro" style="background-color: red"></div>
+        <div class="intro" style="background-color: yellow"></div>
+        <div class="intro" style="background-color: blue"></div>
       </div>
     </div>
-    <!-- <div class="intro" v-slide> -->
-    <div class="intro">
-      <div class="heading">网站信息</div>
-      <div class="subheading">Website Information</div>
-      <div class="gap"></div>
-      <div class="text">
-        <p>本网站使用Vue框架+VueRouter与Typescript制作</p>
-        <p>后端为Express框架</p>
-        <p>如有问题欢迎联系<a href="mailto:771732203@qq.com">771732203@qq.com</a>进行反馈</p>
-        <p>目前主要的功能有：AI以及聊天（不要问我别的是什么，问就是没写完。。</p>
-      </div>
-    </div></flatScroll
-  >
+  </div>
   <div class="footer">
     <p>Copyright © 2024 - 2026 小井井的网站 jimjcy.top All Rights Reserved.</p>
     <a href="https://beian.miit.gov.cn/" target="_blank">赣ICP备2024027845号-1</a>
@@ -69,52 +91,32 @@ import flatScroll from "./common/component/flatScroll.vue";
 <style lang="scss" scoped>
 @use "../../styles/themes.scss" as *;
 
+$headerHeight: 5em;
+
 // .stickybox {
 //   width: 100%;
 // }
 
-.intro {
-  min-width: calc(100% - 40px);
-  height: calc(var(--viewport-height) * 1px - 40px - 5em);
-  padding: 1em;
-  margin: 0 20px;
-  position: relative;
-  display: flex;
-  box-sizing: border-box;
-  flex-direction: column;
-  .heading {
+.intro-list-scroll {
+  height: calc(var(--viewport-height) * var(--intro-part-number) * 1px); // $headerHeight
+  width: 100%;
+  .intro-list-area {
+    height: calc(var(--viewport-height) * 1px);
     position: relative;
-    font-size: 2.3em;
-    margin: 5px 0;
-  }
-  .subheading {
-    position: relative;
-    font-size: 1.2em;
-    margin: 5px 0;
-  }
-  .gap {
-    flex-grow: 1;
-  }
-  .text {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: end;
-    p {
-      font-size: 1.1em;
-      margin: 5px 0;
-      @include useTheme {
-        color: getTheme(text-color);
+    background-color: red;
+    position: sticky;
+    top: 0;
+    height: 100%;
+    .intro-list {
+      display: flex;
+      flex-direction: row;
+      height: 100%;
+      .intro {
+        width: var(--viewport-width);
+        height: 100%;
       }
     }
   }
-  @include useTheme {
-    background-color: getTheme(background-color);
-    color: getTheme(text-color);
-  }
-}
-
-.links {
 }
 
 .content {

@@ -39,13 +39,14 @@ onMounted(updateEle);
 <style lang="scss" scoped>
 .height-container {
   // height-container
-  width: 100%;
-  height: calc(var(--ele-height) * 1px);
+  // width: 100%;
+  // height: calc(var(--ele-height) * 1px);
+  height: 100%;
   // overflow-x: hidden;
   .width-container {
     position: sticky;
     top: 5em;
-    width: 100%;
+    // width: 100%;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
