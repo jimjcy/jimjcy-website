@@ -1,10 +1,6 @@
 <script lang="ts" setup>
 import stickyContent from "./common/component/stickyContent.vue";
 import flatScroll from "./common/component/flatScroll.vue";
-const int = useTemplateRef("int");
-onMounted(() => {
-  console.log(int.value?.getBoundingClientRect());
-});
 </script>
 <template>
   <div class="content">
