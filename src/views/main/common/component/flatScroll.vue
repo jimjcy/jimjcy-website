@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 const outerContainer = useTemplateRef("outerContainer");
 const innerContainer = useTemplateRef("innerContainer");
-const topHeight = ref(0);
-const bottomHeight = ref(0);
+const inHeight = ref(0);
 const outHeight = ref(0);
-onMounted(() => {
+const updateEle = () => {
+  inHeight.value = 0;
+  outHeight.value = 0;
   if (innerContainer.value) {
     for (let i = 0; i < innerContainer.value.children.length; i++) {
       const child = innerContainer.value.children[i] as HTMLElement;
@@ -15,36 +16,37 @@ onMounted(() => {
     }
   }
   if (outerContainer.value) {
-    topHeight.value = outerContainer.value.getBoundingClientRect().top;
-    bottomHeight.value = outerContainer.value.getBoundingClientRect().bottom;
+    inHeight.value = outerContainer.value.getBoundingClientRect().top + window.scrollY;
   }
-});
+};
+window.addEventListener("resize", updateEle);
+onMounted(updateEle);
 </script>
 <template>
   <div
-    class="heightContainer"
+    class="height-container"
     :style="{
       '--ele-height': outHeight,
-      '--top-height': topHeight,
-      '--bottom-height': bottomHeight,
+      '--in-height': inHeight,
     }"
     ref="outerContainer"
   >
-    <div class="widthContainer" ref="innerContainer">
+    <div class="width-container" ref="innerContainer">
       <slot></slot>
     </div>
   </div>
 </template>
 <style lang="scss" scoped>
-.heightContainer {
+.height-container {
   // height-container
-  width: 100%;
-  height: calc(var(--ele-height) * 1px);
+  // width: 100%;
+  // height: calc(var(--ele-height) * 1px);
+  height: 100%;
   // overflow-x: hidden;
-  .widthContainer {
+  .width-container {
     position: sticky;
     top: 5em;
-    width: 100%;
+    // width: 100%;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -56,7 +58,7 @@ onMounted(() => {
         0%,
         max(
           calc(
-            ((var(--scroll) - var(--top-height)) / (var(--ele-height) - var(--viewport-height))) *
+            ((var(--scroll) - var(--in-height)) / (var(--ele-height) - var(--viewport-height))) *
               -100%
           ),
           -100%

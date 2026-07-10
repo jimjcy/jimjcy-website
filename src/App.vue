@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import utils from "@/common/utils";
-import navbar from "./component/bar/navbar.vue/index.js";
+import navbar from "./component/bar/navbar.vue";
 import windowInfo from "./component/window/windowInfo.vue";
 import { showNavbar, showThemeWindow } from "./common/publicRefs.ts";
 import { changeTheme } from "@/common/theme.ts";
@@ -27,6 +27,7 @@ changeTheme(localStorage.theme);
 const viewportHeight = ref(window.innerHeight);
 window.addEventListener("resize", () => {
   viewportHeight.value = window.innerHeight;
+  scrollY.value = window.scrollY;
 });
 console.log(viewportHeight.value);
 const scrollY = ref(window.scrollY);
@@ -56,14 +57,7 @@ window.addEventListener("scroll", () => {
       </click-button>
     </div>
   </window-info>
-  <div
-    class="pages"
-    :style="{
-      '--viewport-height': viewportHeight,
-      '--scroll': scrollY,
-      '--scroll-progress': scrollY / viewportHeight + 1,
-    }"
-  >
+  <div class="pages">
     <router-view></router-view>
   </div>
 </template>
