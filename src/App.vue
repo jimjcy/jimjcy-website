@@ -24,6 +24,16 @@ watchEffect(() => {
 });
 changeTheme(localStorage.theme);
 
+const viewportHeight = ref(window.innerHeight);
+window.addEventListener("resize", () => {
+  viewportHeight.value = window.innerHeight;
+  scrollY.value = window.scrollY;
+});
+console.log(viewportHeight.value);
+const scrollY = ref(window.scrollY);
+window.addEventListener("scroll", () => {
+  scrollY.value = window.scrollY;
+});
 </script>
 <template>
   <navbar class="bar" :show-navbar="showNavbar" />
