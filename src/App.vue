@@ -23,7 +23,6 @@ watchEffect(() => {
   if (showThemeWindow.value) openThemeWindow();
 });
 changeTheme(localStorage.theme);
-
 </script>
 <template>
   <navbar class="bar" :show-navbar="showNavbar" />

@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-const pageEle = useTemplateRef('pageEle');
+const pageEle = useTemplateRef("pageEle");
 const introPartNumber = 3;
 
 const introListScrollTop = ref<number>(0);
-const introListScroll = useTemplateRef('introListScroll');
+const introListScroll = useTemplateRef("introListScroll");
 const scrollTop = ref<number>(0);
 const introListOffsetTop = ref<number>(0);
 
@@ -29,14 +29,14 @@ function onScroll() {
 }
 
 onMounted(() => {
-  pageEle.value!.addEventListener('scroll', onScroll);
-  pageEle.value!.addEventListener('resize', onWindowResize);
+  pageEle.value!.addEventListener("scroll", onScroll);
+  pageEle.value!.addEventListener("resize", onWindowResize);
   onWindowResize();
   onScroll();
 });
 onUnmounted(() => {
-  window.removeEventListener('scroll', onScroll);
-  window.removeEventListener('resize', onWindowResize);
+  window.removeEventListener("scroll", onScroll);
+  window.removeEventListener("resize", onWindowResize);
 });
 </script>
 <template>
@@ -72,7 +72,7 @@ onUnmounted(() => {
         '--intro-part-number': introPartNumber,
         '--self-scroll': Math.max(
           0,
-          Math.min(introPartNumber - 1, (scrollTop - introListOffsetTop) / viewportSize.height)
+          Math.min(introPartNumber - 1, (scrollTop - introListOffsetTop) / viewportSize.height),
         ),
       }"
       ref="introListScroll"
@@ -106,7 +106,7 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@use '../../styles/themes.scss' as *;
+@use "../../styles/themes.scss" as *;
 
 $headerHeight: 5em;
 
