@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import utils from "@/common/utils";
-import { showThemeWindow } from "@/common/publicRefs";
+import utils from '@/common/utils';
+import { showThemeWindow } from '@/common/publicRefs';
 
 defineProps<{
   showNavbar: boolean;
@@ -8,10 +8,10 @@ defineProps<{
 
 const fold = ref(false);
 
-const welcome = ref("小井井的网站");
+const welcome = ref('小井井的网站');
 const isLogin = ref(false);
 
-const username = ref("");
+const username = ref('');
 
 const router = useRouter();
 
@@ -33,13 +33,13 @@ if (localStorage.sessionid === undefined) {
 //     });
 // });
 
-if (localStorage.version === undefined || localStorage.version !== "3.0.4") {
+if (localStorage.version === undefined || localStorage.version !== '3.0.4') {
   localStorage.clear();
-  localStorage.version = "3.0.4";
+  localStorage.version = '3.0.4';
 }
 
 if (localStorage.codesession === undefined) {
-  utils.req.post("/generate_token").then((response) => {
+  utils.req.post('/generate_token').then((response) => {
     localStorage.codesession = response.data;
   });
 }
@@ -116,7 +116,7 @@ if (localStorage.codesession === undefined) {
   </div>
 </template>
 <style lang="scss" scoped>
-@use "@/styles/themes.scss" as *;
+@use '@/styles/themes.scss' as *;
 .navbarGroup {
   position: relative;
   .navbar {

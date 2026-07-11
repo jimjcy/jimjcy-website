@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-const pageEle = useTemplateRef("pageEle");
+const pageEle = useTemplateRef('pageEle');
 const introPartNumber = 3;
 
 const introListScrollTop = ref<number>(0);
-const introListScroll = useTemplateRef("introListScroll");
+const introListScroll = useTemplateRef('introListScroll');
 const scrollTop = ref<number>(0);
 const introListOffsetTop = ref<number>(0);
 
@@ -28,15 +28,28 @@ function onScroll() {
   scrollTop.value = pageEle.value?.scrollTop || 0;
 }
 
+interface introType {
+  title: string;
+  subheading: string;
+  content: Array<string>;
+}
+export const introData: Array<introType> = reactive([
+  {
+    title: '基本信息',
+    subheading: 'Basic Information',
+    content: [''],
+  },
+]);
+
 onMounted(() => {
-  pageEle.value!.addEventListener("scroll", onScroll);
-  pageEle.value!.addEventListener("resize", onWindowResize);
+  pageEle.value!.addEventListener('scroll', onScroll);
+  pageEle.value!.addEventListener('resize', onWindowResize);
   onWindowResize();
   onScroll();
 });
 onUnmounted(() => {
-  window.removeEventListener("scroll", onScroll);
-  window.removeEventListener("resize", onWindowResize);
+  window.removeEventListener('scroll', onScroll);
+  window.removeEventListener('resize', onWindowResize);
 });
 </script>
 <template>
@@ -106,7 +119,7 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@use "../../styles/themes.scss" as *;
+@use '../../styles/themes.scss' as *;
 
 $headerHeight: 5em;
 
