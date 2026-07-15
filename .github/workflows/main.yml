@@ -1,1 +1,32 @@
+name: Website Github Actions
 
+on:
+  push:
+  pull_request:
+
+jobs:
+  welcome:
+    name: Welcome
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Welcome Message
+        run: echo "Testing Github Actions for Website"
+
+  type-check:
+    name: TypeScript Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Type Check
+        run: npm run build

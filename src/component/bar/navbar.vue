@@ -87,7 +87,7 @@ if (localStorage.codesession === undefined) {
             <p>个人中心</p>
           </click-button>
 
-          <img src="../assets/pic.jpg" alt="小井井的头像" style="height: 7em; width: 100%" />
+          <img src="../../assets/pic.jpg" alt="小井井的头像" style="height: 7em; width: 100%" />
           <div class="footer">
             <p>Copyright © 2024 - 2026 小井井的网站 jimjcy.top All Rights Reserved.</p>
             <div class="links">

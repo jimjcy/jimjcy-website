@@ -1,16 +1,16 @@
 <script lang="ts" setup>
-import utils from "@/common/utils";
-import navbar from "./component/bar/navbar.vue";
-import windowInfo from "./component/window/windowInfo.vue";
-import { showNavbar, showThemeWindow } from "./common/publicRefs.ts";
-import { changeTheme } from "@/common/theme.ts";
+import utils from '@/common/utils';
+import navbar from './component/bar/navbar.vue';
+import windowInfo from './component/window/windowInfo.vue';
+import { showNavbar, showThemeWindow } from './common/publicRefs.ts';
+import { changeTheme } from '@/common/theme.ts';
 
 const router = useRouter();
 router.beforeEach(async (to, from) => {
-  document.title = to.meta.title + "-小井井的网站";
+  document.title = to.meta.title + '-小井井的网站';
 });
 
-const themeWindow = useTemplateRef("themeWindow");
+const themeWindow = useTemplateRef('themeWindow');
 function openThemeWindow() {
   if (themeWindow.value) {
     themeWindow.value.open();
@@ -25,13 +25,13 @@ watchEffect(() => {
 changeTheme(localStorage.theme);
 
 const viewportHeight = ref(window.innerHeight);
-window.addEventListener("resize", () => {
+window.addEventListener('resize', () => {
   viewportHeight.value = window.innerHeight;
   scrollY.value = window.scrollY;
 });
 console.log(viewportHeight.value);
 const scrollY = ref(window.scrollY);
-window.addEventListener("scroll", () => {
+window.addEventListener('scroll', () => {
   scrollY.value = window.scrollY;
 });
 </script>
@@ -62,16 +62,13 @@ window.addEventListener("scroll", () => {
   </div>
 </template>
 <style lang="scss" scoped>
-@use "@/styles/themes.scss" as *;
+@use '@/styles/themes.scss' as *;
 .pages {
   width: 100%;
   height: 100%;
   // padding-top: 5em;
   // overflow-y: scroll;
 }
-// .bar {
-//   opacity: 0.5;
-// }
 .selection {
   display: flex;
   flex-wrap: wrap;
