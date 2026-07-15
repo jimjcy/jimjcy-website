@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 const pageEle = useTemplateRef('pageEle');
-const introPartNumber = 3;
 
 const introListScrollTop = ref<number>(0);
 const introListScroll = useTemplateRef('introListScroll');
@@ -33,11 +32,85 @@ interface introType {
   subheading: string;
   content: Array<string>;
 }
-export const introData: Array<introType> = reactive([
+const introData = reactive<introType[]>([
   {
     title: '基本信息',
     subheading: 'Basic Information',
-    content: [''],
+    content: [
+      '大家好呀~我是小井井',
+      '今年14，马上要读初三了呢，坐标广东佛山（江西赣州）',
+      '不太喜欢打大型游戏（三分钟热度？），主玩休闲游戏如打歌、Steam上的休闲游戏以及MC',
+      '性格偏内向，如果熟了就不会了，INFJ',
+      '爱好主要为写代码。？',
+      '是个吃货呢，基本啥都能吃？',
+    ],
+  },
+  {
+    title: '网站信息',
+    subheading: 'Website Information',
+    content: [
+      '本网站使用Vue框架+VueRouter与Typescript制作',
+      '后端为Express框架',
+      '如有问题欢迎联系mailto:771732203@qq.com进行反馈',
+      '目前主要的功能有：AI以及聊天（不要问我别的是什么，问就是没写完。。',
+    ],
+  },
+  {
+    title: '未来计划',
+    subheading: 'Future Planning',
+    content: [
+      '一是把这个网站完善了，如果看过我之前这个网站的应该知道我还有很多东西没有写',
+      '二是准备写一个华为的ArkTS应用，暂不透露是什么哦',
+      '三是当一个OIer，把CSP打了',
+      '四是中考加油++rp！',
+    ],
+  },
+]);
+
+const introPartNumber = introData.length;
+
+interface linkType {
+  name: string;
+  showRoute: string;
+  rawRoute: string;
+  isOut: boolean;
+}
+const linksData = reactive<linkType[]>([
+  {
+    name: '主页',
+    showRoute: '/home',
+    rawRoute: '/',
+    isOut: false,
+  },
+  {
+    name: 'ai聊天',
+    showRoute: '/ai_chatting',
+    rawRoute: '/ai_chatting',
+    isOut: false,
+  },
+  {
+    name: '聊天室',
+    showRoute: '/chatting_room',
+    rawRoute: '/chatting_room',
+    isOut: false,
+  },
+  {
+    name: '联系方式',
+    showRoute: '/about',
+    rawRoute: '/about',
+    isOut: false,
+  },
+  {
+    name: 'Github',
+    showRoute: 'github.com',
+    rawRoute: 'https://github.com/jimjcy',
+    isOut: true,
+  },
+  {
+    name: 'Gitee',
+    showRoute: 'gitee.com',
+    rawRoute: 'https://www.gitee.com/jimjcy',
+    isOut: true,
   },
 ]);
 
@@ -62,7 +135,7 @@ onUnmounted(() => {
       '--scroll-top': scrollTop,
     }"
   >
-    <div class="content">
+    <div class="first-page">
       <div class="center">
         <div class="welcome">
           <div class="word" style="--dir: 1; --index: 0">欢</div>
@@ -92,9 +165,31 @@ onUnmounted(() => {
     >
       <div class="intro-list-area">
         <div class="intro-list">
-          <div class="intro" style="background-color: red"></div>
-          <div class="intro" style="background-color: yellow"></div>
-          <div class="intro" style="background-color: blue"></div>
+          <div class="intro" v-for="detail in introData">
+            <p class="heading">{{ detail.title }}</p>
+            <p class="subheading">{{ detail.subheading }}</p>
+            <div class="lines">
+              <p v-for="line in detail.content" v-text="line"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="links-scroll">
+      <div class="links-area">
+        <p class="heading">一些链接</p>
+        <p class="subheading">Some Links</p>
+        <div class="links-list">
+          <div class="link-box" v-for="link in linksData">
+            <RouterLink v-if="!link.isOut" class="link" :to="link.rawRoute">
+              <p class="name">{{ link.name }}</p>
+              <p class="route">{{ link.showRoute }}</p>
+            </RouterLink>
+            <a v-else class="link" :href="link.rawRoute" target="_blank">
+              <p class="name">{{ link.name }}</p>
+              <p class="route">{{ link.showRoute }}</p>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -110,9 +205,6 @@ onUnmounted(() => {
       <p>
         友情链接：<a target="_blank" href="https://kuankuan.site">宽宽的小天地</a>
         <a target="_blank" href="https://python666.cn">crossin的个人博客</a>
-        <a target="_blank" href="http://bsynet.cc">思远的网站</a>
-        <a target="_blank" href="http://hezi.xyxpz.cn">鹤子的网站</a>
-        <a target="_blank" href="https://neongel.github.io">小皮鸭(neongel工作室)的网站</a>
       </p>
     </div>
   </div>
@@ -122,6 +214,7 @@ onUnmounted(() => {
 @use '../../styles/themes.scss' as *;
 
 $headerHeight: 5em;
+$viewportHeight: calc(var(--viewport-height) * 1px);
 
 // .stickybox {
 //   width: 100%;
@@ -136,14 +229,62 @@ $headerHeight: 5em;
   overflow-x: hidden;
 }
 
+.links-scroll {
+  height: calc($viewportHeight * 2);
+  width: 100%;
+  .links-area {
+    position: sticky;
+    height: $viewportHeight;
+    width: 100%;
+    top: 0;
+    box-sizing: border-box;
+    padding: 5em 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    @include useTheme {
+      color: getTheme(text-color);
+    }
+    .heading {
+      margin: 0;
+      font-size: 5em;
+    }
+    .subheading {
+      font-size: 3em;
+      margin: 20px;
+    }
+    .links-list {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 80%;
+      .link-box {
+        .link {
+          all: inherit;
+          cursor: pointer;
+          text-align: center;
+          min-width: 5em;
+          padding: 15px;
+          margin: 10px;
+          border-radius: 0.5em;
+          @include useTheme {
+            background-color: getTheme(background-color);
+          }
+        }
+      }
+    }
+  }
+}
+
 .intro-list-scroll {
-  $partHeight: calc(var(--viewport-height) * 1px);
-  height: calc($partHeight * var(--intro-part-number));
+  height: calc($viewportHeight * var(--intro-part-number));
   width: 100%;
 
   .intro-list-area {
     position: sticky;
-    height: $partHeight;
+    height: $viewportHeight;
     width: 100%;
     top: 0;
 
@@ -157,12 +298,41 @@ $headerHeight: 5em;
         flex: 0 0 auto;
         height: 100%;
         width: 100%;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 5em 0;
+        @include useTheme {
+          color: getTheme(text-color);
+        }
+        .heading {
+          font-size: 5em;
+          margin: 0;
+        }
+        .subheading {
+          font-size: 3em;
+          margin: 20px;
+        }
+        .lines {
+          max-width: 80%;
+          padding: 10px;
+          border-radius: 0.5em;
+          @include useTheme {
+            background-color: getTheme(background-color);
+          }
+          p {
+            font-size: 1.4em;
+            margin: 5px;
+          }
+        }
       }
     }
   }
 }
 
-.content {
+.first-page {
   height: 100%;
   width: 100%;
   display: flex;
@@ -235,18 +405,23 @@ $headerHeight: 5em;
     opacity: 1;
   }
 }
+
 .footer {
-  margin-top: 50px;
-  height: 100px;
-}
-.title {
+  margin: 20px 0;
   width: 100%;
-  height: 100%;
-}
-.block {
   text-align: center;
-  // p {
-  //   font-size: 1vw;
-  // }
+  @include useTheme {
+    color: getTheme(text-color);
+    background-color: getTheme(background-color);
+  }
+  p {
+    margin: 10px;
+  }
+  a {
+    margin: 0 10px;
+    @include useTheme {
+      color: getTheme(text-color);
+    }
+  }
 }
 </style>
