@@ -1,23 +1,24 @@
 <script lang="ts" setup>
-import axios from 'axios'
-import { marked } from 'marked'
-import markedKatex from 'marked-katex-extension'
-import hljs from 'highlight.js'
-import 'highlight.js/styles/dark.css'
-import io from 'socket.io-client'
-import constant from '@/constant'
+import axios from 'axios';
+import { marked } from 'marked';
+import markedKatex from 'marked-katex-extension';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/dark.css';
+import io from 'socket.io-client';
+import utils from '@/common/utils';
+import * as types from '@/common/types/aiChatting';
 
-const username = ref('')
-const message = ref('')
-const message_list = ref([])
-const model = ref('qwen-long')
-const error = ref('')
-const history = useTemplateRef('history')
+const username = ref<string>('');
+const message = ref<string>('');
+const message_list = ref<types.AiChatList[]>([]);
+const model = ref('qwen-long');
+const error = ref('');
+const history = useTemplateRef('history');
 
-const buttonText = ref('发送')
-const isButtonDisabled = ref(false)
+const buttonText = ref('发送');
+const isButtonDisabled = ref(false);
 
-let isConnected = false
+let isConnected = false;
 // const model_list = {
 //   "通义千问-long": "long",
 //   "通义千问-turbo": "turbo",
@@ -28,10 +29,8 @@ let isConnected = false
 marked.use(
   markedKatex({
     throwOnError: false,
-    inlineDelimiters: [['$', '$']],
-    blockDelimiters: [['$$', '$$']],
   }),
-)
+);
 marked.setOptions({
   // highlight: (code, lang) => {
   //   return lang
@@ -40,87 +39,89 @@ marked.setOptions({
   // },
   gfm: true,
   breaks: true,
-  sanitize: false,
-  smartypants: false,
-})
+});
 
 const socket = io('https://api.jimjcy.top', {
   path: '/ai/ws',
   transports: ['websocket'],
-})
+});
 
 socket.on('connect', function () {
-  isConnected = true
-})
-socket.on('result', function (data) {
+  isConnected = true;
+});
+socket.on('result', async function (data: types.AiChatMessage) {
   if (data.id === socket.id) {
-    message_list.value[data.index].rawcontent += data.result
-    message_list.value[data.index].content = marked.parse(message_list.value[data.index].rawcontent)
+    message_list.value[data.index]!.rawcontent += data.result;
+    message_list.value[data.index]!.content = await marked.parse(
+      message_list.value[data.index]!.rawcontent,
+    );
   }
-})
-socket.on('stop', function (data) {
+});
+socket.on('stop', async function (data: types.AiChatMessage) {
   if (socket.id === data.id) {
-    message_list.value[data.index].content = marked.parse(message_list.value[data.index].rawcontent)
-    buttonText.value = '发送'
-    isButtonDisabled.value = false
+    message_list.value[data.index]!.content = await marked.parse(
+      message_list.value[data.index]!.rawcontent,
+    );
+    buttonText.value = '发送';
+    isButtonDisabled.value = false;
   }
-})
+});
 function sendMessage() {
   if (!isConnected) {
-    error.value = '服务连接失败，请稍后再试'
-    return
+    error.value = '服务连接失败，请稍后再试';
+    return;
   }
-  error.value = ''
+  error.value = '';
   if (isButtonDisabled.value) {
-    error.value = '正在生成中，请稍后再试'
-    return
+    error.value = '正在生成中，请稍后再试';
+    return;
   }
   if (message.value.trim() === '') {
-    error.value = '请输入内容'
-    return
+    error.value = '请输入内容';
+    return;
   }
-  message_list.value.push({ role: 'user', content: message.value.trim() })
-  message.value = ''
-  buttonText.value = '生成中······'
-  isButtonDisabled.value = true
+  message_list.value.push({ role: 'user', content: message.value.trim(), rawcontent: '' });
+  message.value = '';
+  buttonText.value = '生成中······';
+  isButtonDisabled.value = true;
   socket.emit('ask', {
     message_list: message_list.value,
     model: model.value,
     index: message_list.value.length,
-  })
-  message_list.value.push({ role: 'assistant', content: '', rawcontent: '' })
+  });
+  message_list.value.push({ role: 'assistant', content: '', rawcontent: '' });
 }
-const router = useRouter()
+const router = useRouter();
 onBeforeMount(() => {
-  constant.req
+  utils.req
     .post('/login/check', {
       sessionid: localStorage.sessionid,
     })
     .then((response) => {
       if (!response.data.status) {
-        router.push('/login')
+        router.push('/login');
       }
-    })
-})
+    });
+});
 onMounted(() => {
-  socket.connect()
+  socket.connect();
   watch(
     message_list,
     () => {
       nextTick(() => {
-        history.value.scrollTo({
-          top: history.value.scrollHeight,
+        history.value!.scrollTo({
+          top: history.value!.scrollHeight,
           behavior: 'smooth',
-        })
-      })
+        });
+      });
     },
     { deep: true },
-  )
-})
+  );
+});
 onUnmounted(() => {
-  socket.disconnect()
-  isConnected = false
-})
+  socket.disconnect();
+  isConnected = false;
+});
 </script>
 
 <template>

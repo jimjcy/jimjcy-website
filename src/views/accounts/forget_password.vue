@@ -1,61 +1,61 @@
 <script lang="ts" setup>
-import constant from '@/constant'
+import utils from '@/common/utils';
 
-const email = ref('')
-const password = ref('')
-const code = ref('')
-const email_code = ref('')
-const error = ref('')
+const email = ref('');
+const password = ref('');
+const code = ref('');
+const email_code = ref('');
+const error = ref('');
 
-const email_code_button = useTemplateRef('')
-const router = useRouter()
+const email_code_button = useTemplateRef('email_code_button');
+const router = useRouter();
 
 if (localStorage.codesession === undefined) {
-  constant.req.post('/generate_token').then((response) => {
-    localStorage.codesession = response.data
-  })
+  utils.req.post('/generate_token').then((response) => {
+    localStorage.codesession = response.data;
+  });
 }
 
 function startCountDown() {
-  let duration = 60
-  let startButton = email_code_button.value
-  startButton.disabled = true
+  let duration = 60;
+  let startButton = email_code_button.value;
+  startButton.disabled = true;
   let timer = setInterval(function () {
     if (duration <= 0) {
-      clearInterval(timer)
-      startButton.value = '发送验证码'
-      startButton.disabled = false
+      clearInterval(timer);
+      startButton.value = '发送验证码';
+      startButton.disabled = false;
     } else {
-      startButton.value = duration + 's'
-      duration--
+      startButton.value = duration + 's';
+      duration--;
     }
-  }, 1000)
+  }, 1000);
 }
 
-const image = ref()
+const image = ref();
 function imageReload() {
-  constant.req
+  utils.req
     .post('/get_image', {
       codesession: localStorage.codesession,
     })
     .then((response) => {
-      image.value = 'data:image/svg+xml;base64,' + btoa(response.data)
-    })
+      image.value = 'data:image/svg+xml;base64,' + btoa(response.data);
+    });
 }
-imageReload()
+imageReload();
 
 function send_email() {
   if (email.value === undefined || password.value === undefined || code.value === undefined) {
-    error.value = '请填写完整的表单'
+    error.value = '请填写完整的表单';
   } else if (email.value.indexOf('@') === -1) {
-    error.value = '请填写正确的邮箱'
+    error.value = '请填写正确的邮箱';
   } else {
-    constant.req.post('/send_email', {
+    utils.req.post('/send_email', {
       email: email.value,
       codesession: localStorage.codesession,
-    })
-    window.alert('请求已发送，请查收邮件')
-    startCountDown()
+    });
+    window.alert('请求已发送，请查收邮件');
+    startCountDown();
   }
 }
 
@@ -66,11 +66,11 @@ function submit_button() {
     code.value === undefined ||
     email_code.value === undefined
   ) {
-    error.value = '请填写完整的表单'
+    error.value = '请填写完整的表单';
   } else if (email.value.indexOf('@') === -1) {
-    error.value = '请填写正确的邮箱'
+    error.value = '请填写正确的邮箱';
   } else {
-    constant.req
+    utils.req
       .post('/forget_password', {
         email: email.value,
         password: password.value,
@@ -80,11 +80,11 @@ function submit_button() {
       })
       .then((response) => {
         if (response.data.status) {
-          router.push('/login')
+          router.push('/login');
         } else {
-          error.value = response.data.errorMessage
+          error.value = response.data.errorMessage;
         }
-      })
+      });
   }
 }
 </script>

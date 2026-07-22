@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import utils from '@/common/utils';
-import navbar from './component/bar/navbar.vue';
-import windowInfo from './component/window/windowInfo.vue';
+import navbar from './common/component/bar/navbar.vue';
+import windowInfo from './common/component/window/windowInfo.vue';
 import { showNavbar, showThemeWindow } from './common/publicRefs.ts';
 import { changeTheme } from '@/common/theme.ts';
 

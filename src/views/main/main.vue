@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import * as types from '@/common/types/main';
 const pageEle = useTemplateRef('pageEle');
 
 const introListScrollTop = ref<number>(0);
@@ -69,13 +70,7 @@ const introData = reactive<introType[]>([
 
 const introPartNumber = introData.length;
 
-interface linkType {
-  name: string;
-  showRoute: string;
-  rawRoute: string;
-  isOut: boolean;
-}
-const linksData = reactive<linkType[]>([
+const linksData = reactive<types.linkType[]>([
   {
     name: '主页',
     showRoute: '/home',

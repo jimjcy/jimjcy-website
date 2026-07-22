@@ -53,7 +53,7 @@ defineExpose({ open, close });
   </transition>
 </template>
 <style scoped lang="scss">
-@use "../../styles/themes.scss" as *;
+@use "../../../styles/themes.scss" as *;
 .window {
   position: fixed;
   @include useTheme {

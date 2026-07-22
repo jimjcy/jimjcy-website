@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-const info = {
+import * as types from '@/common/types/about';
+const info: Record<string, types.Contact> = {
   QQ: {
     name: '771732203',
     url: 'https://qm.qq.com/cgi-bin/qm/qr?k=vqy3IdrB90OaKlwk8BLE8JGass3Ji0Nn',
@@ -12,7 +13,7 @@ const info = {
   抖音: { name: '小井井' },
   Github: { name: 'jimjcy', url: 'https://github.com/jimjcy' },
   Email: { name: '771732203@qq.com', url: 'mailto: 771732203@qq.com' },
-}
+};
 </script>
 <template>
   <h1 class="title">联系我</h1>

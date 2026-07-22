@@ -1,23 +1,24 @@
 <script lang="ts" setup>
-import constant from "@/constant";
-import moment from "moment";
+import utils from '@/common/utils';
+import type * as types from '@/common/types/feedback';
+import moment from 'moment';
 
 const router = useRouter();
 const route = useRoute();
 
-const currentPage = ref(1);
-const currentPageData = ref([]);
-const pagesData = ref({});
+const currentPage = ref<number>(1);
+const currentPageData = ref<types.getFeedbackRow[]>([]);
+const pagesData = ref<Array<types.getFeedbackRow[]>>([]);
 // watchEffect(() => {
 //   localStorage.reportPage = currentPage.value;
 // });
-async function getPageIssue(cp, init = false) {
-  if (pagesData.value[cp] === undefined) {
-    const res = await constant.req.post("/get/feedback", {
+async function getPageIssue(cp: number, init = false) {
+  if (!pagesData.value[cp]) {
+    const res = await utils.req.post('/get/feedback', {
       page: cp,
       id: 0,
     });
-    const data = res.data;
+    const data = res.data as types.getFeedbackResult;
     if (data.status) {
       data.result.reverse();
       pagesData.value[cp] = data.result;
@@ -41,15 +42,15 @@ async function getPageIssue(cp, init = false) {
   }
   pagesData.value[cp].forEach((item, index) => {
     setTimeout(() => {
-      item.date = moment(item.date).format("YYYY-MM-DD HH:mm:ss");
-      item.status =
+      item.date = moment(item.date).format('YYYY-MM-DD HH:mm:ss');
+      item.statusString =
         item.status === 0
-          ? "等待处理"
+          ? '等待处理'
           : item.status === 1
-            ? "已关闭"
+            ? '已关闭'
             : item.status === 2
-              ? "已完成"
-              : "未知状态";
+              ? '已完成'
+              : '未知状态';
       currentPageData.value.push(item);
       // console.log(ind);
     }, 100 * index);
@@ -78,7 +79,7 @@ function tonext() {
 onMounted(() => {
   console.log(route.query);
   if (route.query.page !== undefined) {
-    currentPage.value = parseInt(route.query.page);
+    currentPage.value = parseInt(route.query.page!.toString());
   } else {
     currentPage.value = 1;
   }
@@ -99,18 +100,18 @@ onMounted(() => {
     <click-button @click="tonext" class="but">下一页</click-button>
   </div>
   <TransitionGroup name="content" tag="div">
-    <div class="block center" v-for="issue in currentPageData" :key="issue">
+    <div class="block center" v-for="issue in currentPageData" :key="issue.id">
       <h4>{{ issue.title }}</h4>
       <p>提交用户：{{ issue.username }}</p>
       <p>提交时间：{{ issue.date }}</p>
       <p>提交id：{{ issue.id }}</p>
-      <p>当前状态：{{ issue.status }}</p>
+      <p>当前状态：{{ issue.statusString }}</p>
       <click-button @click="router.push('/feedback/' + issue.id)">详细信息</click-button>
     </div>
   </TransitionGroup>
 </template>
 <style lang="scss" scoped>
-@use "@/styles/themes.scss";
+@use '@/styles/themes.scss';
 
 .block {
   margin: 20px auto;

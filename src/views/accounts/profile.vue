@@ -1,82 +1,82 @@
 <script lang="ts" setup>
-import constant from '@/constant'
+import utils from '@/common/utils';
 
-const router = useRouter()
+const router = useRouter();
 
-const text = ref('')
-const username = ref('')
-const sex = ref('')
-const code = ref('')
-const password_before = ref('')
-const password_new = ref('')
-const email = ref('')
-const email_code = ref('')
-const email_code_button = ref('')
-const error = ref('')
+const text = ref<string>();
+const username = ref<string>();
+const sex = ref<string>();
+const code = ref<string>();
+const password_before = ref<string>();
+const password_new = ref<string>();
+const email = ref<string>();
+const email_code = ref<string>();
+const email_code_button = useTemplateRef('email_code_button');
+const error = ref<string>();
 
-constant.req
+utils.req
   .post('/login/check', {
     sessionid: localStorage.sessionid,
   })
   .then((response) => {
     if (!response.data.status) {
-      router.push('/login')
+      router.push('/login');
     } else {
-      username.value = response.data.username
-      sex.value = response.data.sex
-      text.value = response.data.username + '的个人资料'
+      username.value = response.data.username;
+      sex.value = response.data.sex;
+      text.value = response.data.username + '的个人资料';
     }
-  })
+  });
 
-const image = ref()
+const image = ref();
 function imageReload() {
-  constant.req
+  utils.req
     .post('/get_image', {
       codesession: localStorage.codesession,
     })
     .then((response) => {
-      image.value = 'data:image/svg+xml;base64,' + btoa(response.data)
-    })
+      image.value = 'data:image/svg+xml;base64,' + btoa(response.data);
+    });
 }
-imageReload()
+imageReload();
 
 function startCountDown() {
-  let duration = 60
-  let startButton = email_code_button.value
-  startButton.disabled = true
+  let duration = 60;
+  let startButton = email_code_button.value;
+  startButton.disabled = true;
   let timer = setInterval(function () {
     if (duration <= 0) {
-      clearInterval(timer)
-      startButton.value = '发送验证码'
-      startButton.disabled = false
+      clearInterval(timer);
+      startButton.value = '发送验证码';
+      startButton.disabled = false;
     } else {
-      startButton.value = duration + 's'
-      duration--
+      startButton.value = duration + 's';
+      duration--;
     }
-  }, 1000)
+  }, 1000);
 }
 
 function send_email() {
   if (email.value === undefined || code.value === undefined) {
-    error.value = '请填写完整的表单'
+    error.value = '请填写完整的表单';
   } else if (email.value.indexOf('@') === -1) {
-    error.value = '请填写正确的邮箱'
+    error.value = '请填写正确的邮箱';
   } else {
-    constant.req.post('/send_email', {
+    utils.req.post('/send_email', {
       email: email.value,
       codesession: localStorage.codesession,
-    })
-    window.alert('请求已发送，请查收邮件')
-    startCountDown()
+    });
+    window.alert('请求已发送，请查收邮件');
+    startCountDown();
   }
 }
 
 function reset_username() {
-  error.value = ''
+  error.value = '';
   if (username.value === undefined || code.value === undefined) {
-    error.value = '请填写完整的表单'
+    error.value = '请填写完整的表单';
   } else {
-    constant.req
+    utils.req
       .post('/reset/username', {
         username: username.value,
         code: code.value,
@@ -85,21 +85,21 @@ function reset_username() {
       })
       .then((response) => {
         if (response.data.status) {
-          window.alert('修改成功，将退出登录')
-          logout()
+          window.alert('修改成功，将退出登录');
+          logout();
         } else {
-          error.value = response.data.errorMessage
+          error.value = response.data.errorMessage;
         }
-      })
+      });
   }
 }
 
 function reset_sex() {
-  error.value = ''
+  error.value = '';
   if (sex.value === undefined || code.value === undefined) {
-    error.value = '请填写完整的表单'
+    error.value = '请填写完整的表单';
   } else {
-    constant.req
+    utils.req
       .post('/reset/sex', {
         sex: sex.value,
         code: code.value,
@@ -108,27 +108,27 @@ function reset_sex() {
       })
       .then((response) => {
         if (response.data.status) {
-          window.alert('修改成功')
-          imageReload()
+          window.alert('修改成功');
+          imageReload();
         } else {
-          error.value = response.data.errorMessage
+          error.value = response.data.errorMessage;
         }
-      })
+      });
   }
 }
 
 function reset_password() {
-  error.value = ''
+  error.value = '';
   if (
     password_new.value === undefined ||
     password_before.value === undefined ||
     code.value === undefined
   ) {
-    error.value = '请填写完整的表单'
+    error.value = '请填写完整的表单';
     // } else if (password_new.value.length < 6) {
     //   error.value = '密码长度不能小于6位'
   } else {
-    constant.req
+    utils.req
       .post('/reset/password', {
         password_before: password_before.value,
         password_new: password_new.value,
@@ -138,24 +138,24 @@ function reset_password() {
       })
       .then((response) => {
         if (response.data.status) {
-          window.alert('修改成功')
-          imageReload()
+          window.alert('修改成功');
+          imageReload();
         } else {
-          error.value = response.data.errorMessage
+          error.value = response.data.errorMessage;
         }
-      })
+      });
   }
 }
 
 function reset_email() {
-  error.value = ''
+  error.value = '';
   if (email.value === undefined || code.value === undefined || email_code.value === undefined) {
-    error.value = '请填写完整表单'
+    error.value = '请填写完整表单';
   } else if (email.value.indexOf('@') === -1) {
-    error.value = '请填写正确的邮箱'
+    error.value = '请填写正确的邮箱';
   } // else if ('?') {}
   else {
-    constant.req
+    utils.req
       .post('/reset/email', {
         codesession: localStorage.codesession,
         sessionid: localStorage.sessionid,
@@ -165,18 +165,18 @@ function reset_email() {
       })
       .then((response) => {
         if (response.data.status) {
-          window.alert('修改成功')
-          imageReload()
+          window.alert('修改成功');
+          imageReload();
         } else {
-          error.value = response.data.errorMessage
+          error.value = response.data.errorMessage;
         }
-      })
+      });
   }
 }
 
 function logout() {
-  localStorage.sessionid = constant.LOGOUTSESSIONID
-  window.location.href = '/login'
+  localStorage.sessionid = '';
+  window.location.href = '/login';
 }
 </script>
 

@@ -1,29 +1,29 @@
 <script lang="ts" setup>
-import constant from '@/constant'
+import utils from '@/common/utils';
 
-const username = ref('')
-const password = ref('')
-const code = ref('')
-const error = ref('')
-const image = ref()
+const username = ref('');
+const password = ref('');
+const code = ref('');
+const error = ref('');
+const image = ref();
 
 function imageReload() {
-  constant.req
+  utils.req
     .post('/get_image', {
       codesession: localStorage.codesession,
     })
     .then((response) => {
-      image.value = 'data:image/svg+xml;base64,' + btoa(response.data)
-    })
+      image.value = 'data:image/svg+xml;base64,' + btoa(response.data);
+    });
 }
-imageReload()
+imageReload();
 
 function login() {
-  error.value = ''
+  error.value = '';
   if (username.value === '' || password.value === '' || code.value === '') {
-    error.value = '请输入完整的表单'
+    error.value = '请输入完整的表单';
   } else {
-    constant.req
+    utils.req
       .post('/login', {
         username: username.value,
         password: password.value,
@@ -32,12 +32,12 @@ function login() {
       })
       .then((response) => {
         if (response.data.status) {
-          localStorage.sessionid = response.data.sessionid
-          window.location.href = localStorage.fromUrl
+          localStorage.sessionid = response.data.sessionid;
+          window.location.href = localStorage.fromUrl;
         } else {
-          error.value = response.data.errorMessage
+          error.value = response.data.errorMessage;
         }
-      })
+      });
   }
 }
 </script>

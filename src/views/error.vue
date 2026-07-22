@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import ClickButton from '@/component/input/clickButton.vue'
+import ClickButton from '@/common/component/input/clickButton.vue';
 
-const router = useRouter()
-const route = useRoute()
+const router = useRouter();
+const route = useRoute();
 </script>
 <template>
   <div class="content">
