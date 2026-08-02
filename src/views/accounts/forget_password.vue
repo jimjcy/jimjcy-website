@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import utils from '@/common/utils';
+import utils from '@/common/utils/utils';
 
 const email = ref('');
 const password = ref('');

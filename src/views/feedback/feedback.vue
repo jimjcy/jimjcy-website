@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import utils from '@/common/utils';
+import utils from '@/common/utils/utils';
 import type * as types from '@/common/types/feedback';
 import moment from 'moment';
 

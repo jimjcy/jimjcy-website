@@ -1,39 +1,19 @@
 <script lang="ts" setup>
 import * as types from '@/common/types/main';
-const pageEle = useTemplateRef('pageEle');
 
+const pageEle = useTemplateRef('pageEle');
 const introListScrollTop = ref<number>(0);
 const introListScroll = useTemplateRef('introListScroll');
+const sloganListScroll = useTemplateRef('sloganListScroll');
+const mainSlogan = useTemplateRef('mainSlogan');
+const subSlogan = useTemplateRef('subSlogan');
 const scrollTop = ref<number>(0);
 const introListOffsetTop = ref<number>(0);
+const sloganListOffsetTop = ref<number>(0);
+const mainSloganHeight = ref<number>(0);
+const subSloganHeight = ref<number>(0);
 
-const viewportSize = ref<{
-  width: number;
-  height: number;
-}>({ width: 0, height: 0 });
-
-function getViewportSize() {
-  return {
-    width: pageEle.value?.clientWidth || 0,
-    height: pageEle.value?.clientHeight || 0,
-  };
-}
-function onWindowResize() {
-  viewportSize.value = getViewportSize();
-  introListScrollTop.value = introListScroll.value?.scrollTop || 0;
-  introListOffsetTop.value = introListScroll.value?.offsetTop || 0;
-  scrollTop.value = pageEle.value?.scrollTop || 0;
-}
-function onScroll() {
-  scrollTop.value = pageEle.value?.scrollTop || 0;
-}
-
-interface introType {
-  title: string;
-  subheading: string;
-  content: Array<string>;
-}
-const introData = reactive<introType[]>([
+const introData = reactive<types.introType[]>([
   {
     title: '基本信息',
     subheading: 'Basic Information',
@@ -109,15 +89,75 @@ const linksData = reactive<types.linkType[]>([
   },
 ]);
 
+const sloganData = reactive<types.sloganType[]>([
+  {
+    mainSlogan: '不断学习，向优秀看齐',
+    subSlogan: '人的一生在于学习',
+  },
+  {
+    mainSlogan: '持续调优，不断克服困难',
+    subSlogan: '困难是成长的阶梯',
+  },
+  {
+    mainSlogan: '小井井，大聚聚',
+    subSlogan: 'from kuankuan (?',
+  },
+]);
+
+const sloganNumber = sloganData.length + 1;
+
+const sloganSelfScroll = computed(() => {
+  const val = Math.floor(
+    Math.max(
+      0,
+      Math.min(
+        sloganNumber - 1,
+        (scrollTop.value - sloganListOffsetTop.value) / viewportSize.value.height,
+      ),
+    ),
+  );
+  return val === sloganNumber - 1 ? sloganNumber - 2 : val;
+});
+
+const viewportSize = ref<{
+  width: number;
+  height: number;
+}>({ width: 0, height: 0 });
+
+function getViewportSize() {
+  return {
+    width: pageEle.value?.clientWidth || 0,
+    height: pageEle.value?.clientHeight || 0,
+  };
+}
+function onWindowResize() {
+  viewportSize.value = getViewportSize();
+  introListScrollTop.value = introListScroll.value?.scrollTop || 0;
+  introListOffsetTop.value = introListScroll.value?.offsetTop || 0;
+  sloganListOffsetTop.value = sloganListScroll.value?.offsetTop || 0;
+  mainSloganHeight.value = mainSlogan.value?.children[0]?.clientHeight || 0;
+  subSloganHeight.value = subSlogan.value?.children[0]?.clientHeight || 0;
+  scrollTop.value = pageEle.value?.scrollTop || 0;
+}
+function onScroll() {
+  scrollTop.value = pageEle.value?.scrollTop || 0;
+}
+
+const resizeObserver = new ResizeObserver(onWindowResize);
+
 onMounted(() => {
-  pageEle.value!.addEventListener('scroll', onScroll);
-  pageEle.value!.addEventListener('resize', onWindowResize);
+  pageEle.value?.addEventListener('scroll', onScroll);
+  resizeObserver.observe(pageEle.value!);
   onWindowResize();
   onScroll();
+  watch(sloganSelfScroll, (nxt) => {
+    mainSlogan.value!.style.transform = `translateY(calc(-1 * ${nxt} * ${mainSloganHeight.value}px))`;
+    subSlogan.value!.style.transform = `translateY(calc(-1 * ${nxt} * ${subSloganHeight.value}px))`;
+  });
 });
 onUnmounted(() => {
-  window.removeEventListener('scroll', onScroll);
-  window.removeEventListener('resize', onWindowResize);
+  pageEle.value?.removeEventListener('scroll', onScroll);
+  resizeObserver.disconnect();
 });
 </script>
 <template>
@@ -165,6 +205,32 @@ onUnmounted(() => {
             <p class="subheading">{{ detail.subheading }}</p>
             <div class="lines">
               <p v-for="line in detail.content" v-text="line"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="slogan-list-scroll"
+      :style="{
+        '--slogan-number': sloganNumber,
+        '--self-scroll': sloganSelfScroll,
+      }"
+      ref="sloganListScroll"
+    >
+      <div class="slogan-area">
+        <div class="title">我的slogan?（乐</div>
+        <div class="main-slogan-area" :style="{ '--main-slogan-height': mainSloganHeight }">
+          <div class="main-slogan-list" ref="mainSlogan">
+            <div class="main-slogan" v-for="slo in sloganData">
+              {{ slo.mainSlogan }}
+            </div>
+          </div>
+        </div>
+        <div class="sub-slogan-area" :style="{ '--sub-slogan-height': subSloganHeight }">
+          <div class="sub-slogan-list" ref="subSlogan">
+            <div class="sub-slogan" v-for="slo in sloganData">
+              {{ slo.subSlogan }}
             </div>
           </div>
         </div>
@@ -222,6 +288,55 @@ $viewportHeight: calc(var(--viewport-height) * 1px);
   height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
+}
+
+.slogan-list-scroll {
+  height: calc($viewportHeight * var(--slogan-number));
+  width: 100%;
+  .slogan-area {
+    position: sticky;
+    height: $viewportHeight;
+    width: 100%;
+    top: 0;
+    box-sizing: border-box;
+    padding: 5em 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    @include useTheme {
+      color: getTheme(text-color);
+    }
+    .title {
+      font-size: 2em;
+    }
+    .main-slogan-area {
+      height: calc(1px * var(--main-slogan-height));
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      .main-slogan-list {
+        transition: transform 0.2s ease-in-out;
+        .main-slogan {
+          font-size: 5em;
+          text-align: center;
+        }
+      }
+    }
+    .sub-slogan-area {
+      height: calc(1px * var(--sub-slogan-height));
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      .sub-slogan-list {
+        transition: transform 0.2s ease-in-out;
+        .sub-slogan {
+          font-size: 3em;
+          text-align: center;
+        }
+      }
+    }
+  }
 }
 
 .links-scroll {

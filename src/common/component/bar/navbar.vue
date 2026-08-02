@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import utils from '@/common/utils';
+import utils from '@/common/utils/utils';
 import { showThemeWindow } from '@/common/publicRefs';
 
 defineProps<{
@@ -32,17 +32,6 @@ if (localStorage.sessionid === undefined) {
 //       }
 //     });
 // });
-
-if (localStorage.version === undefined || localStorage.version !== '3.0.4') {
-  localStorage.clear();
-  localStorage.version = '3.0.4';
-}
-
-if (localStorage.codesession === undefined) {
-  utils.req.post('/generate_token').then((response) => {
-    localStorage.codesession = response.data;
-  });
-}
 </script>
 <template>
   <div class="navbarGroup">
@@ -54,7 +43,7 @@ if (localStorage.codesession === undefined) {
       <click-button class="but" @click="showThemeWindow = true">
         <p>主题</p>
       </click-button>
-      <click-button class="but"><p>新闻</p></click-button>
+      <!-- <click-button class="but"><p>新闻</p></click-button> -->
       <click-button @click="router.push('/login')" class="but" v-if="!isLogin"
         ><p>登录</p></click-button
       >
@@ -123,6 +112,7 @@ if (localStorage.codesession === undefined) {
     display: flex;
     position: fixed;
     height: 5em;
+    // width: calc(100% - 15px);
     width: 100%;
     top: 0;
     align-items: center;

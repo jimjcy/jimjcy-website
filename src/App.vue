@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import utils from '@/common/utils';
+import utils from '@/common/utils/utils.ts';
 import navbar from './common/component/bar/navbar.vue';
 import windowInfo from './common/component/window/windowInfo.vue';
 import { showNavbar, showThemeWindow } from './common/publicRefs.ts';
@@ -24,16 +24,16 @@ watchEffect(() => {
 });
 changeTheme(localStorage.theme);
 
-const viewportHeight = ref(window.innerHeight);
-window.addEventListener('resize', () => {
-  viewportHeight.value = window.innerHeight;
-  scrollY.value = window.scrollY;
-});
-console.log(viewportHeight.value);
-const scrollY = ref(window.scrollY);
-window.addEventListener('scroll', () => {
-  scrollY.value = window.scrollY;
-});
+if (localStorage.version === undefined || localStorage.version !== '3.0.4') {
+  localStorage.clear();
+  localStorage.version = '3.0.4';
+}
+
+if (localStorage.codesession === undefined) {
+  utils.req.post('/generate_token').then((response) => {
+    localStorage.codesession = response.data;
+  });
+}
 </script>
 <template>
   <navbar class="bar" :show-navbar="showNavbar" />

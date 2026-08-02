@@ -6,7 +6,7 @@ import 'highlight.js/styles/dark.css';
 import io from 'socket.io-client';
 import moment from 'moment';
 import * as types from '@/common/types/chattingRoom';
-import utils from '@/common/utils';
+import utils from '@/common/utils/utils';
 
 const username = ref<string>('');
 const message = ref<string>('');
