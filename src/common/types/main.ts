@@ -8,6 +8,7 @@ export interface linkType {
   showRoute: string;
   rawRoute: string;
   isOut: boolean;
+  icon: string;
 }
 export interface sloganType {
   mainSlogan: string;

@@ -27,7 +27,7 @@ const status = computed(() => {
   </div>
 </template>
 <style lang="scss" scoped>
-@use '../../../styles/themes.scss' as *;
+@use '@/styles/themes.scss' as *;
 
 .group {
   position: relative;

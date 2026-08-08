@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import ClickButton from '@/common/component/input/clickButton.vue';
+import ClickButton from '@/common/component/clickButton.vue';
 
 const router = useRouter();
 const route = useRoute();

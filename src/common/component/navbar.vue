@@ -37,31 +37,29 @@ if (localStorage.sessionid === undefined) {
   <div class="navbarGroup">
     <header class="navbar" v-show="showNavbar">
       <click-button class="but" @click="fold = fold === true ? false : true">
-        <p>菜单</p>
+        <!-- <p>菜单</p> -->
+        <show-icon icon="menu" class="icon" />
       </click-button>
       <p v-text="welcome" class="welcome"></p>
       <click-button class="but" @click="showThemeWindow = true">
-        <p>主题</p>
+        <!-- <p>主题</p> -->
+        <show-icon icon="color" class="icon" />
       </click-button>
       <!-- <click-button class="but"><p>新闻</p></click-button> -->
       <click-button @click="router.push('/login')" class="but" v-if="!isLogin"
         ><p>登录</p></click-button
       >
-      <click-button @click="router.push('/profile')" class="link" v-if="isLogin">
+      <click-button @click="router.push('/profile')" class="but" v-if="isLogin">
         {{ username }}
       </click-button>
     </header>
     <div class="content">
       <Transition name="sidebar">
         <div class="sidebar" v-if="fold">
-          <click-button
-            class="but"
-            v-for="(value, key) in utils.routes"
-            :key="key"
-            @click="router.push(key)"
-          >
+          <click-button class="but" v-for="link in utils.menuList" @click="router.push(link.path)">
             <!-- <RouterLink :to="key">{{ value }}</RouterLink> -->
-            <p>{{ value }}</p>
+            <show-icon :icon="link.icon" class="icon" />
+            <span class="name">{{ link.name }}</span>
           </click-button>
           <click-button class="but" v-if="!isLogin" @click="router.push('/login')">
             <!-- <RouterLink to="/login">登录</RouterLink> -->
@@ -76,7 +74,7 @@ if (localStorage.sessionid === undefined) {
             <p>个人中心</p>
           </click-button>
 
-          <img src="../../../assets/pic.jpg" alt="小井井的头像" style="height: 7em; width: 100%" />
+          <img src="@/assets/pic.jpg" alt="小井井的头像" style="height: 7em; width: 100%" />
           <div class="footer">
             <p>Copyright © 2024 - 2026 小井井的网站 jimjcy.top All Rights Reserved.</p>
             <div class="links">
@@ -88,8 +86,8 @@ if (localStorage.sessionid === undefined) {
               >
             </div>
             <p>
-              Powered by Vue+Vite+VueRouter Designed by Xiaojingjing &
-              <a target="_blank" href="https://github.com/grassblock123">grassblock</a>
+              Powered by Vue+Vite+VueRouter Designed by jimjcy123
+              <!-- <a target="_blank" href="https://github.com/grassblock123">grassblock</a> -->
             </p>
             <p>
               友情链接：<a target="_blank" href="https://kuankuan.site">宽宽的小天地</a>
@@ -138,8 +136,11 @@ if (localStorage.sessionid === undefined) {
 
     .but {
       font-size: 1.3em;
+      .icon {
+        font-size: 2em;
+      }
       height: calc(100% - 5px);
-      width: 4em;
+      padding: 10px 10px;
       margin: 0 10px;
     }
   }
@@ -169,12 +170,18 @@ if (localStorage.sessionid === undefined) {
         box-shadow: 3px 0 5px getTheme(border-color);
       }
       .but {
-        margin: 0.5em 0.5em;
+        margin: 5px;
         height: 2.3em;
-        border-radius: 1.2em;
-        border-width: 0.15em;
-        width: calc(100% - 1em);
-        font-size: 1.4em;
+        border-radius: 0.5em;
+        border-width: 0.1em;
+        width: calc(100% - 10px);
+        font-size: 2em;
+        .icon {
+          flex: 0 0 auto;
+        }
+        .name {
+          flex: 1 1 auto;
+        }
       }
       .footer {
         width: 100%;

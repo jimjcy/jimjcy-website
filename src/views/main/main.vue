@@ -56,36 +56,42 @@ const linksData = reactive<types.linkType[]>([
     showRoute: '/home',
     rawRoute: '/',
     isOut: false,
+    icon: 'home',
   },
   {
     name: 'ai聊天',
     showRoute: '/ai_chatting',
     rawRoute: '/ai_chatting',
     isOut: false,
+    icon: 'openai',
   },
   {
     name: '聊天室',
     showRoute: '/chatting_room',
     rawRoute: '/chatting_room',
     isOut: false,
+    icon: 'chat',
   },
   {
     name: '联系方式',
     showRoute: '/about',
     rawRoute: '/about',
     isOut: false,
+    icon: 'texts',
   },
   {
     name: 'Github',
     showRoute: 'github.com',
     rawRoute: 'https://github.com/jimjcy',
     isOut: true,
+    icon: 'github',
   },
   {
     name: 'Gitee',
     showRoute: 'gitee.com',
     rawRoute: 'https://www.gitee.com/jimjcy',
     isOut: true,
+    icon: 'gitee',
   },
 ]);
 
@@ -243,10 +249,13 @@ onUnmounted(() => {
         <div class="links-list">
           <div class="link-box" v-for="link in linksData">
             <RouterLink v-if="!link.isOut" class="link" :to="link.rawRoute">
+              <!-- <p class="name">{{ link.name }}</p> -->
+              <show-icon :icon="link.icon" class="icon" inline />
               <p class="name">{{ link.name }}</p>
               <p class="route">{{ link.showRoute }}</p>
             </RouterLink>
             <a v-else class="link" :href="link.rawRoute" target="_blank">
+              <show-icon :icon="link.icon" class="icon" inline />
               <p class="name">{{ link.name }}</p>
               <p class="route">{{ link.showRoute }}</p>
             </a>
@@ -379,8 +388,16 @@ $viewportHeight: calc(var(--viewport-height) * 1px);
           padding: 15px;
           margin: 10px;
           border-radius: 0.5em;
+          font-size: 1.3em;
           @include useTheme {
             background-color: getTheme(background-color);
+            color: getTheme(text-color);
+          }
+          .icon {
+            font-size: 2em;
+          }
+          p {
+            margin: 5px;
           }
         }
       }

@@ -10,7 +10,7 @@ const props = defineProps({
   </button>
 </template>
 <style lang="scss" scoped>
-@use '../../../styles/themes.scss' as *;
+@use '@/styles/themes.scss' as *;
 .but {
   display: flex;
   align-items: center;
