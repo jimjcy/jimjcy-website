@@ -37,7 +37,13 @@ export const menuList: menuItem[] = [
   { name: '联系方式', path: '/about', icon: 'texts' },
 ];
 
-export const theme = [
+interface themeItem {
+  name: string;
+  display: string;
+  color: string;
+}
+
+export const theme: themeItem[] = [
   { name: 'light', display: '浅色主题', color: '#e0e0e0' },
   { name: 'dark', display: '深色主题', color: '#0d1117' },
   { name: 'orange', display: '橙色主题', color: '#ffc107' },
