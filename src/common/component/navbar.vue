@@ -106,6 +106,7 @@ if (localStorage.sessionid === undefined) {
 @use '@/styles/themes.scss' as *;
 .navbarGroup {
   position: relative;
+  z-index: 10;
   .navbar {
     display: flex;
     position: fixed;

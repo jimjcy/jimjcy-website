@@ -84,6 +84,7 @@ const router = createRouter({
       component: () => import('./views/chattingRoom/chattingRoom.vue'),
       meta: {
         title: '聊天室',
+        fullscreen: true,
       },
     },
     {
@@ -92,6 +93,7 @@ const router = createRouter({
       component: () => import('./views/aiChatting/aiChatting.vue'),
       meta: {
         title: 'AI聊天',
+        fullscreen: true,
       },
     },
     {

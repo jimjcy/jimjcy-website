@@ -5,7 +5,7 @@ import hljs from 'highlight.js';
 import 'highlight.js/styles/dark.css';
 import io from 'socket.io-client';
 import moment from 'moment';
-import * as types from '@/common/types/chattingRoom';
+import * as types from '@/views/chattingRoom/types';
 import utils from '@/common/utils/utils';
 
 const username = ref<string>('');
@@ -17,7 +17,7 @@ const history = useTemplateRef('history');
 let isConnected: boolean = false;
 let lastId: number;
 
-const socket = io('https://api.jimjcy.top', {
+const socket = io(import.meta.env.VITE_API_URL, {
   path: '/chat/ws',
   transports: ['websocket'],
 });
@@ -121,7 +121,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="chat">
+  <div class="chat page">
     <div class="history" ref="history">
       <div class="middle">
         <click-button @click="getMore" v-if="lastId !== 1" class="but"

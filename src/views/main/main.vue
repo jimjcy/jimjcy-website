@@ -286,19 +286,6 @@ onUnmounted(() => {
 $headerHeight: 5em;
 $viewportHeight: calc(var(--viewport-height) * 1px);
 
-// .stickybox {
-//   width: 100%;
-// }
-
-.page {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-
 .slogan-list-scroll {
   height: calc($viewportHeight * var(--slogan-number));
   width: 100%;

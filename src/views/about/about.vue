@@ -16,10 +16,12 @@ const info: Record<string, types.Contact> = {
 };
 </script>
 <template>
-  <h1 class="title">联系我</h1>
-  <div class="block" v-for="(value, key) in info" :key="key">
-    <h1 class="method">{{ key }}</h1>
-    <a class="content" :href="value.url" target="_blank">{{ value.name }}</a>
+  <div class="page">
+    <h1 class="title">联系我</h1>
+    <div class="block" v-for="(value, key) in info" :key="key">
+      <h1 class="method">{{ key }}</h1>
+      <a class="content" :href="value.url" target="_blank">{{ value.name }}</a>
+    </div>
   </div>
 </template>
 <style lang="scss" scoped>
