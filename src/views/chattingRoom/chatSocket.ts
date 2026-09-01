@@ -66,8 +66,8 @@ class SocketClient extends EventCenter<{
    */
   public connect(): void {
     this.socket.connect();
-    this.socket.on('respond', this.respond);
-    this.socket.on('push', this.push);
+    this.socket.on('respond', this.respond.bind(this));
+    this.socket.on('push', this.push.bind(this));
   }
   /**
    * 断连
