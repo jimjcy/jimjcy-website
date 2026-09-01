@@ -46,12 +46,15 @@ class UnknownCodeError extends Error {
   }
 }
 
-class SocketClient {
+class SocketClient extends EventCenter<{
+  [key: string]: unknown;
+  "request": RequestType;
+}> {
   protected config: SocketConfig | undefined;
   protected socket: Socket;
   protected callbacks: Map<string, PromiseWithResolvers<ResponseType>> = new Map();
-  protected eventCenter: EventCenter = new EventCenter();
-  constructor(config?: SocketConfig | undefined) {
+  constructor (config?: SocketConfig | undefined) {
+    super();
     this.config = config;
     this.socket = io(config?.addr || '', {
       path: config?.path || '/socket.io',
@@ -122,24 +125,6 @@ class SocketClient {
       reject(response);
       throw new UnknownCodeError(`Unknown code: ${code}`);
     }
-  }
-  /**
-   * 同事件中心
-   */
-  public on(eventName: string, callback: Callback): void {
-    this.eventCenter.on(eventName, callback);
-  }
-  /**
-   * 同事件中心
-   */
-  public off(eventName: string): void {
-    this.eventCenter.off(eventName);
-  }
-  /**
-   * 同事件中心
-   */
-  protected emit(eventName: string, ...args: any[]): void {
-    this.eventCenter.emit(eventName, ...args);
   }
   /**
    * 推送消息
