@@ -2,21 +2,46 @@ import { type ChatRow } from './types';
 
 type HandleConfig = Record<string, (data: any) => any>;
 export class DataCenter<DataType extends { [key: string]: any } = Record<string, unknown>> {
-  protected data: DataType = {} as DataType;
+  protected storageData: DataType = {} as DataType;
   protected readonly handles: HandleConfig = {};
   constructor(initData: DataType, handleFunction: HandleConfig) {
-    this.data = initData;
+    this.storageData = initData;
     this.handles = handleFunction;
   }
-  protected get(keyName: keyof DataType): DataType[keyof DataType] {
+  protected get<K extends keyof DataType | keyof HandleConfig>(keyName: K): DataType[K] {
     if (this.handles[keyName as string]) {
-      return this.handles[keyName as string]!(this.data[keyName]);
+      return this.handles[keyName as string]!(this.storageData[keyName]);
     }
-    return this.data[keyName];
+    return this.storageData[keyName];
   }
-  protected set(keyName: keyof DataType, value: DataType[keyof DataType]): void {
-    this.data[keyName] = value;
+  protected set<K extends keyof DataType | keyof HandleConfig>(
+    keyName: K,
+    value: DataType[K],
+  ): void {
+    this.storageData[keyName] = value;
   }
 }
 
-export class ChatDataCenter extends DataCenter<ChatRow> {}
+export class ChatDataCenter extends DataCenter<ChatRow> {
+  get id(): number {
+    return this.get('id');
+  }
+  get username(): string {
+    return this.get('username');
+  }
+  get type(): string {
+    return this.get('type');
+  }
+  get content(): string {
+    return this.get('content');
+  }
+  get date(): string {
+    return this.get('date');
+  }
+  get day(): string {
+    return this.date.split(' ')[0]!;
+  }
+  get time(): string {
+    return this.date.split(' ')[1]!;
+  }
+}

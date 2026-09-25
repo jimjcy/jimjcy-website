@@ -8,10 +8,25 @@ import moment from 'moment';
 import * as types from '@/views/chattingRoom/types';
 import utils from '@/common/utils/utils';
 
-const username = ref<string>('');
+import { ChatDataCenter } from './chatData';
+
+const messageList = ref<ChatDataCenter[]>([]);
+
+function createMessage(message: types.ChatRow) {
+  const messageCenter = new ChatDataCenter(message, {
+    day: (data: string) => {
+      return moment(data).format('YYYY-MM-DD');
+    },
+    time: (data: string) => {
+      return moment(data).format('HH:mm:ss');
+    },
+  });
+  messageList.value.push(messageCenter);
+}
+
 const message = ref<string>('');
-const message_list = ref<types.ChatRow[]>([]);
-const error = ref<string>('');
+// const message_list = ref<types.ChatRow[]>([]);
+// const error = ref<string>('');
 const history = useTemplateRef('history');
 
 let isConnected: boolean = false;
@@ -27,16 +42,15 @@ socket.on('connect', function () {
 });
 socket.on('history', function (data: types.ChatResult) {
   if (data.id === socket.id) {
-    console.log(data.result);
-    for (let i = data.result.length - 1; i >= 0; i--) {
-      data.result[i]!.date = moment(data.result[i]!.date).format('YYYY-MM-DD HH:mm:ss');
-      message_list.value.unshift(data.result[i]!);
+    const result = data.result;
+    for (let i = 0; i < result.length; i++) {
+      createMessage(result[i]!);
     }
     lastId = data.result[0]!.id;
   }
 });
 socket.on('new', (data: types.ChatRow) => {
-  message_list.value.push(data);
+  createMessage(data);
   nextTick(() => {
     history.value!.scrollTo({
       top: history.value!.scrollHeight,
@@ -46,29 +60,29 @@ socket.on('new', (data: types.ChatRow) => {
 });
 function getMore() {
   if (!isConnected) {
-    error.value = '服务连接失败，请稍后再试';
+    // error.value = '服务连接失败，请稍后再试';
     return;
   }
   socket.emit('get', { end: lastId, length: 15 });
 }
 function sendMessage() {
-  error.value = '';
+  // error.value = '';
   if (!isConnected) {
-    error.value = '服务连接失败，请稍后再试';
+    // error.value = '服务连接失败，请稍后再试';
     return;
   }
   if (message.value.trim() === '') {
-    error.value = '请输入内容';
+    // error.value = '请输入内容';
     return;
   }
   // if (message.value.length > 300) {
   //   error.value = "内容过长";
   //   return;
   // }
-  socket.emit('send', {
-    username: username.value,
-    content: message.value.trim(),
-  });
+  // socket.emit('send', {
+  //   username: username.value,
+  //   content: message.value.trim(),
+  // });
   message.value = '';
 }
 const router = useRouter();
@@ -81,7 +95,7 @@ onBeforeMount(() => {
       if (!response.data.status) {
         router.push('/login');
       } else {
-        username.value = response.data.username;
+        // username.value = response.data.username;
       }
     });
 });
@@ -101,7 +115,7 @@ onMounted(() => {
   // );
   socket.connect();
   watch(
-    message_list,
+    messageList,
     () => {
       nextTick(() => {
         history.value!.scrollTo({
@@ -130,9 +144,9 @@ onUnmounted(() => {
         <p class="text" v-else>好像没有更多了哦~</p>
       </div>
       <div
-        v-for="message in message_list"
+        v-for="message in messageList"
         :key="message.id"
-        :class="message.username !== username ? 'left' : 'right'"
+        :class="message.username !== 'username' ? 'left' : 'right'"
       >
         <div class="message-box">
           <div class="info">
