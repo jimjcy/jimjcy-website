@@ -12,13 +12,13 @@ interface SocketConfig {
 
 interface SendType {
   event: string;
-  data: Record<any, any>;
+  data: Record<string, any>;
 }
 
 interface RequestType {
   event: string;
   requestId: string;
-  data: Record<any, any>;
+  data: Record<string, any>;
 }
 
 interface ResponseType {
@@ -27,12 +27,12 @@ interface ResponseType {
   status?: string;
   msg?: string;
   event?: string;
-  data: Record<any, any>;
+  data: Record<string, any>;
 }
 
 interface PushType {
   event: string;
-  data: Record<any, any>;
+  data: Record<string, any>;
 }
 
 function generateRequestId(): string {
@@ -47,13 +47,13 @@ class UnknownCodeError extends Error {
 }
 
 class SocketClient extends EventCenter<{
-  [key: string]: unknown;
-  "request": RequestType;
+  [key: string]: PushType['data'];
+  // request: RequestType['data'] | SendType['data'];
 }> {
   protected config: SocketConfig | undefined;
   protected socket: Socket;
   protected callbacks: Map<string, PromiseWithResolvers<ResponseType>> = new Map();
-  constructor (config?: SocketConfig | undefined) {
+  constructor(config?: SocketConfig | undefined) {
     super();
     this.config = config;
     this.socket = io(config?.addr || '', {
@@ -87,10 +87,10 @@ class SocketClient extends EventCenter<{
    * @param eventName 事件名称
    * @param ...args 事件参数
    */
-  public send(eventName: string, ...args: any[]): void {
+  public send(eventName: string, data: SendType['data'], ...args: any[]): void {
     this.socket.emit('request', {
       event: eventName,
-      data: args,
+      data: data,
     } as SendType);
   }
   /**
@@ -100,13 +100,17 @@ class SocketClient extends EventCenter<{
    * @param ...args 事件参数
    * @return Promise<ResponseType> 返回一个Promise<ResponseType>
    */
-  public request(eventName: string, ...args: any[]): Promise<ResponseType> {
+  public request(
+    eventName: string,
+    data: RequestType['data'],
+    ...args: any[]
+  ): Promise<ResponseType> {
     const currentRequestId = generateRequestId();
     const { promise, resolve, reject } = Promise.withResolvers<ResponseType>();
     this.socket.emit('request', {
       event: eventName,
       requestId: currentRequestId,
-      data: args,
+      data: data,
     } as RequestType);
     this.callbacks.set(currentRequestId, { promise, resolve, reject });
     return promise;
