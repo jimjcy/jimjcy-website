@@ -6,7 +6,7 @@ import hljs from 'highlight.js';
 import 'highlight.js/styles/dark.css';
 import io from 'socket.io-client';
 import utils from '@/common/utils/utils';
-import * as types from '@/common/types/aiChatting';
+import * as types from '@/views/aiChatting/aiChatting';
 
 const username = ref<string>('');
 const message = ref<string>('');

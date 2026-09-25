@@ -8,7 +8,6 @@ import moment from 'moment';
 import * as types from '@/views/chattingRoom/types';
 import utils from '@/common/utils/utils';
 
-const username = ref<string>('');
 const message = ref<string>('');
 const message_list = ref<types.ChatRow[]>([]);
 const error = ref<string>('');

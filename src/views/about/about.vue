@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import * as types from '@/common/types/about';
+import * as types from '@/views/about/about';
 const info: Record<string, types.Contact> = {
   QQ: {
     name: '771732203',
