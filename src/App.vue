@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import utils from '@/common/utils/utils.ts';
+import utils from '@/common/utils/common.ts';
 import navbar from './common/component/navbar.vue';
 import windowInfo from './common/component/windowInfo.vue';
-import { showNavbar, showThemeWindow } from './common/publicRefs.ts';
-import { changeTheme } from '@/common/theme.ts';
+import { showNavbar, showThemeWindow } from './common/utils/publicRefs.ts';
+import { changeTheme } from '@/common/utils/theme.ts';
 
 const fullscreen = ref<boolean>(false);
 

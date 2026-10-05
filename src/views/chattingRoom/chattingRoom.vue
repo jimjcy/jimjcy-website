@@ -6,7 +6,9 @@ import 'highlight.js/styles/dark.css';
 import io from 'socket.io-client';
 import moment from 'moment';
 import * as types from '@/views/chattingRoom/types';
-import utils from '@/common/utils/utils';
+import utils from '@/common/utils/common';
+
+import { username } from '@/common/utils/publicRefs';
 
 const message = ref<string>('');
 const message_list = ref<types.ChatRow[]>([]);

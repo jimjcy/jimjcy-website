@@ -21,3 +21,7 @@ app.component('select-item', selectItem);
 app.component('show-icon', showIcon);
 app.directive('slide', slide);
 app.mount('#app');
+
+//TODO: add background (animation)
+//TODO: colors mixing
+//TODO: improve contact information
