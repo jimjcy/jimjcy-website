@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import utils from '@/common/utils/utils';
-import type * as types from '@/common/types/feedback';
+import utils from '@/common/utils/common';
+import type * as types from '@/views/feedback/feedback';
 import moment from 'moment';
 const route = useRoute();
 const router = useRouter();

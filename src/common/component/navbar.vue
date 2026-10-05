@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import utils from '@/common/utils/utils';
-import { showThemeWindow } from '@/common/publicRefs';
+import utils from '@/common/utils/common';
+import { showThemeWindow, username, isLogin } from '@/common/utils/publicRefs';
 
 defineProps<{
   showNavbar: boolean;
@@ -9,9 +9,6 @@ defineProps<{
 const fold = ref(false);
 
 const welcome = ref('小井井的网站');
-const isLogin = ref(false);
-
-const username = ref('');
 
 const router = useRouter();
 

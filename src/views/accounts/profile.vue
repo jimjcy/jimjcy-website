@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import utils from '@/common/utils/utils';
+import utils from '@/common/utils/common';
 
 const router = useRouter();
 

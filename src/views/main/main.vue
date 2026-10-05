@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import * as types from '@/views/main/main';
+import * as types from './types';
 
 const pageEle = useTemplateRef('pageEle');
 const introListScrollTop = ref<number>(0);
