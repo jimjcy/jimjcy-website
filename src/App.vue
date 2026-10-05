@@ -1,13 +1,17 @@
 <script lang="ts" setup>
-import utils from '@/common/utils/utils.ts';
+import utils from '@/common/utils/common.ts';
 import navbar from './common/component/navbar.vue';
 import windowInfo from './common/component/windowInfo.vue';
-import { showNavbar, showThemeWindow } from './common/publicRefs.ts';
-import { changeTheme } from '@/common/theme.ts';
+import { showNavbar, showThemeWindow } from './common/utils/publicRefs.ts';
+import { changeTheme } from '@/common/utils/theme.ts';
+
+const fullscreen = ref<boolean>(false);
 
 const router = useRouter();
 router.beforeEach(async (to, from) => {
+  if (to === from) return;
   document.title = to.meta.title + '-小井井的网站';
+  fullscreen.value = to.meta.fullscreen || false;
 });
 
 const themeWindow = useTemplateRef('themeWindow');
@@ -58,17 +62,11 @@ if (localStorage.codesession === undefined) {
     </div>
   </window-info>
   <div class="pages">
-    <router-view></router-view>
+    <router-view :class="{ fullscreen: fullscreen }"></router-view>
   </div>
 </template>
 <style lang="scss" scoped>
 @use '@/styles/themes.scss' as *;
-.pages {
-  width: 100%;
-  height: 100%;
-  // padding-top: 5em;
-  // overflow-y: scroll;
-}
 .selection {
   display: flex;
   flex-wrap: wrap;
@@ -101,6 +99,21 @@ if (localStorage.codesession === undefined) {
         }
       }
     }
+  }
+}
+
+.pages {
+  .page {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+  .fullscreen {
+    padding: 5em 0 0 0;
   }
 }
 </style>

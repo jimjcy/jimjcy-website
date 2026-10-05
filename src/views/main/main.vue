@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import * as types from '@/common/types/main';
+import * as types from './types';
 
 const pageEle = useTemplateRef('pageEle');
 const introListScrollTop = ref<number>(0);
@@ -285,19 +285,6 @@ onUnmounted(() => {
 
 $headerHeight: 5em;
 $viewportHeight: calc(var(--viewport-height) * 1px);
-
-// .stickybox {
-//   width: 100%;
-// }
-
-.page {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
 
 .slogan-list-scroll {
   height: calc($viewportHeight * var(--slogan-number));

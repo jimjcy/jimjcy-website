@@ -5,8 +5,8 @@ import markedKatex from 'marked-katex-extension';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/dark.css';
 import io from 'socket.io-client';
-import utils from '@/common/utils/utils';
-import * as types from '@/common/types/aiChatting';
+import utils from '@/common/utils/common';
+import * as types from '@/views/aiChatting/aiChatting';
 
 const username = ref<string>('');
 const message = ref<string>('');
@@ -41,7 +41,7 @@ marked.setOptions({
   breaks: true,
 });
 
-const socket = io('https://api.jimjcy.top', {
+const socket = io(import.meta.env.VITE_API_URL, {
   path: '/ai/ws',
   transports: ['websocket'],
 });
@@ -125,7 +125,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="chat">
+  <div class="chat page">
     <div class="history" ref="history">
       <div class="left">
         <div class="message-box">
@@ -195,8 +195,7 @@ onUnmounted(() => {
   }
   .history {
     height: calc(100% - 10em - 6px);
-    overflow-y: scroll;
-    overflow-x: auto;
+    overflow-y: auto;
     padding: 0 2px;
     scrollbar-width: thin;
     display: flex;
