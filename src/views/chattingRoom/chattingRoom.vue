@@ -7,8 +7,7 @@ import io from 'socket.io-client';
 import moment from 'moment';
 import * as types from '@/views/chattingRoom/types';
 import utils from '@/common/utils/common';
-
-import { username } from '@/common/utils/publicRefs';
+import { username } from '@/common/utils/publicConstants';
 
 const message = ref<string>('');
 const message_list = ref<types.ChatRow[]>([]);

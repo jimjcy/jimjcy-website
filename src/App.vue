@@ -2,7 +2,7 @@
 import utils from '@/common/utils/common.ts';
 import navbar from './common/component/navbar.vue';
 import windowInfo from './common/component/windowInfo.vue';
-import { showNavbar, showThemeWindow } from './common/utils/publicRefs.ts';
+import { showNavbar, showThemeWindow } from './common/utils/publicConstants.ts';
 import { changeTheme } from '@/common/utils/theme.ts';
 
 const fullscreen = ref<boolean>(false);
@@ -13,6 +13,21 @@ router.beforeEach(async (to, from) => {
   document.title = to.meta.title + '-小井井的网站';
   fullscreen.value = to.meta.fullscreen || false;
 });
+
+interface themeItem {
+  name: string;
+  display: string;
+  color: string;
+}
+
+const themeList: themeItem[] = [
+  { name: 'light', display: '浅色主题', color: '#e0e0e0' },
+  { name: 'dark', display: '深色主题', color: '#0d1117' },
+  { name: 'orange', display: '橙色主题', color: '#ffc107' },
+  { name: 'cyan', display: '青绿色主题', color: '#a6ffcb' },
+  { name: 'purple', display: '紫色主题', color: '#5e3f8c' },
+  // { name: "auto", display: "跟随系统", color: "linear-gradient(to right, #0d1117, #e0e0e0)"}
+];
 
 const themeWindow = useTemplateRef('themeWindow');
 function openThemeWindow() {
@@ -49,11 +64,7 @@ if (localStorage.codesession === undefined) {
     @closeWindow="closeThemeWindow"
   >
     <div class="selection">
-      <click-button
-        v-for="color in utils.theme"
-        class="themeButton"
-        @click="changeTheme(color.name)"
-      >
+      <click-button v-for="color in themeList" class="themeButton" @click="changeTheme(color.name)">
         <div class="theme-box">
           <div class="color" :style="{ backgroundColor: color.color }"></div>
           <p v-text="color.display" class="name"></p>

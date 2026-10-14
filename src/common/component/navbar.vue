@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import utils from '@/common/utils/common';
-import { showThemeWindow, username, isLogin } from '@/common/utils/publicRefs';
+import { LOGOUTSESSID, showThemeWindow, username, isLogin } from '@/common/utils/publicConstants';
 
 defineProps<{
   showNavbar: boolean;
@@ -13,8 +12,21 @@ const welcome = ref('小井井的网站');
 const router = useRouter();
 
 if (localStorage.sessionid === undefined) {
-  localStorage.sessionid = utils.LOGOUTSESSID;
+  localStorage.sessionid = LOGOUTSESSID;
 }
+
+interface menuItem {
+  name: string;
+  path: string;
+  icon: string;
+}
+
+const menuList: menuItem[] = [
+  { name: '主页', path: '/', icon: 'home' },
+  { name: 'ai聊天', path: '/ai_chatting', icon: 'openai' },
+  { name: '聊天室', path: '/chatting_room', icon: 'chat' },
+  { name: '联系方式', path: '/about', icon: 'texts' },
+];
 
 // onBeforeMount(() => {
 //   utils.req
@@ -53,7 +65,7 @@ if (localStorage.sessionid === undefined) {
     <div class="content">
       <Transition name="sidebar">
         <div class="sidebar" v-if="fold">
-          <click-button class="but" v-for="link in utils.menuList" @click="router.push(link.path)">
+          <click-button class="but" v-for="link in menuList" @click="router.push(link.path)">
             <!-- <RouterLink :to="key">{{ value }}</RouterLink> -->
             <show-icon :icon="link.icon" class="icon" />
             <span class="name">{{ link.name }}</span>
